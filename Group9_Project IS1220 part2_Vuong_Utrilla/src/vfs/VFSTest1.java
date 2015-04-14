@@ -169,7 +169,7 @@ public class VFSTest1 {
 		try { 
 			vfs1.changePosition("Root", "/D1/D11/");			
 			System.out.println(vfs1.getVirtualDisks().get("Root").getCurrentPosition());
-			assertEquals("/D1/D11",vfs1.getVirtualDisks().get("Root").getCurrentPosition());
+			assertEquals("\\D1\\D11",vfs1.getVirtualDisks().get("Root").getCurrentPosition());
 		}
 		catch (Exception e) {assertTrue(false);}
 	}
