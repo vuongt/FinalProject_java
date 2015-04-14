@@ -14,7 +14,7 @@ public class VFSTest2 {
 	
 	VFS vfs2;
 	VirtualDisk vd2;
-	String s="";
+	String s="/home/vuong/javatest/";
 	
 
 	@Before
@@ -33,7 +33,6 @@ public class VFSTest2 {
 			vd2.getFileMap().put("file1.txt",file1);
 			D1.getFileMap().put("file2.png", file2);
 			D1.getFileMap().put("file3.jpg", file3);
-			s="C:\\Users\\Tuyet VUONG\\Documents\\javatest\\";
 			
 			
 		}catch(Exception e){

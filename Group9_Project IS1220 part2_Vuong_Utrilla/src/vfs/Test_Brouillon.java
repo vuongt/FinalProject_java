@@ -2,7 +2,6 @@ package vfs;
 
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 
 public class Test_Brouillon {
@@ -38,7 +37,6 @@ public class Test_Brouillon {
 		for (Fichier f : a){
 			System.out.println(f.getAbsolutePath());
 		}
-		
 	}
 		
 		
