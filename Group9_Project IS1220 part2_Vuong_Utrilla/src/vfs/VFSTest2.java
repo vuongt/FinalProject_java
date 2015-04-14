@@ -14,7 +14,7 @@ public class VFSTest2 {
 	
 	VFS vfs2;
 	VirtualDisk vd2;
-	String s="C:\\Users\\Tuyet VUONG\\Documents\\javatest\\";
+	String s="";
 	
 
 	@Before
