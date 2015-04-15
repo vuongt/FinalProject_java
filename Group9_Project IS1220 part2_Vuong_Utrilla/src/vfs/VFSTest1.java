@@ -70,7 +70,7 @@ public class VFSTest1 {
 	}
 
 	@Test
-	public void testCreateVirtualDisk() throws InvalidInput, DuplicatedNameException {
+	public void testCreateVirtualDisk()  {
 		try{
 		vfs1.createVirtualDisk("testdisk", 10000);
 		assertTrue(vfs1.getVirtualDisks().containsKey("testdisk"));}

@@ -18,27 +18,40 @@ public class Directory implements Serializable {
 		this.absolutePath = "";
 	}
 	
-	public void addFile(String name){
-		Fichier file = new Fichier(name);
-		file.setAbsolutePath(this.absolutePath + "/" + name);
-		this.fileMap.put(name, file);
+	public void addFile(String name) throws DuplicatedNameException{
+		if (this.getFileMap().containsKey(name)) throw new DuplicatedNameException("there is already a file named " + name+ "in this directory");
+		else {
+			Fichier file = new Fichier(name);
+			file.setAbsolutePath(this.absolutePath + "/" + name);
+			this.fileMap.put(name, file);
+		}
+		
 	}
-	public void addFile(Fichier file){
+	public void addFile(Fichier file) throws DuplicatedNameException{
+		if (this.getFileMap().containsKey(file.getName())) throw new DuplicatedNameException("there is already a file named " + file.getName()+ "in this directory");
 		if (file == null) return;
-		this.fileMap.put(file.getName(),file);
-		this.fileMap.get(file.getName()).setAbsolutePath(this.absolutePath + "/" + file.getName());
+		else {
+			this.fileMap.put(file.getName(),file);
+			this.fileMap.get(file.getName()).setAbsolutePath(this.absolutePath + "/" + file.getName());
+			}
 	}
 	
-	public void addDirectory(String name){
-		Directory d = new Directory(name);
-		d.setAbsolutePath(this.absolutePath + "/" + name);
-		this.directoryMap.put(name, d);	
+	public void addDirectory(String name) throws DuplicatedNameException{
+		if (this.getDirectoryMap().containsKey(name)) throw new DuplicatedNameException("there is already a directory named " + name+ "in this directory");
+		else {
+			Directory d = new Directory(name);
+			d.setAbsolutePath(this.absolutePath + "/" + name);
+			this.directoryMap.put(name, d);
+			}
 	}
 	
-	public void addDirectory(Directory d){
+	public void addDirectory(Directory d) throws DuplicatedNameException{
+		if (this.getDirectoryMap().containsKey(d.getName())) throw new DuplicatedNameException("there is already a directory named " + d.getName()+ "in this directory");
 		if (d == null) return;
+		else{ 
 		this.directoryMap.put(d.getName(),d);
 		this.directoryMap.get(d.getName()).setAbsolutePath(this.absolutePath + "/" + d.getName());
+		}
 	}
 	
 	public void deleteFile(String name){

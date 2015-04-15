@@ -16,11 +16,11 @@ public class Fichier implements Serializable{
 	
 	
 	
-	public Fichier(String name, long size, String path) {
+	public Fichier(String name, long size) {
 		super();
 		this.name = name;
 		this.size = size;
-		this.absolutePath = path;
+		this.absolutePath = "";
 		this.data =  new ArrayList<Byte>();
 	}
 
@@ -31,11 +31,11 @@ public class Fichier implements Serializable{
 		this.data =  new ArrayList<Byte>();
 		this.absolutePath = "";
 	}
-	public Fichier(String name, long size, String path, ArrayList<Byte> data) {
+	public Fichier(String name, long size,  ArrayList<Byte> data) {
 		super();
 		this.name = name;
 		this.size = size;
-		this.absolutePath = path;
+		this.absolutePath = "";
 		this.data = data;
 	}
 	
