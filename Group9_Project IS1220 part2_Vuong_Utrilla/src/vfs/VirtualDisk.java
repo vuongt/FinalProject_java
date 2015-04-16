@@ -1,6 +1,7 @@
 package vfs;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VirtualDisk extends Directory implements Serializable {
 	/**
@@ -19,9 +20,21 @@ public class VirtualDisk extends Directory implements Serializable {
 		if (size < 0 ) throw new InvalidInput("the size must be positive");
 		this.sizeMax = size;
 		this.hostPath = new ArrayList<String>();
-		this.currentPosition = "";
+		this.currentPosition = "/";
 	}
 	
+	
+	public VirtualDisk(String name, String currentPosition, long sizeMax,
+			ArrayList<String> hostPath,String absolutePath,
+			HashMap<String, Fichier> fileMap,
+			HashMap<String, Directory> directoryMap) {
+		super(name,absolutePath,fileMap,directoryMap);
+		this.currentPosition = currentPosition;
+		this.sizeMax = sizeMax;
+		this.hostPath = hostPath;
+	}
+
+
 	public long getOccupiedSpace() {
 		return this.getSize();
 	}

@@ -39,6 +39,14 @@ public class Fichier implements Serializable{
 		this.data = data;
 	}
 	
+	public Fichier(String name, long size,String absolutePath,  ArrayList<Byte> data) {
+		super();
+		this.name = name;
+		this.size = size;
+		this.absolutePath =absolutePath;
+		this.data = data;
+	}
+	
 	
 	public void setName(String name) {
 		this.name = name;

@@ -18,6 +18,27 @@ public class Directory implements Serializable {
 		this.absolutePath = "";
 	}
 	
+	public Directory(String name, String absolutePath) {
+		super();
+		this.name = name;
+		this.absolutePath = absolutePath;
+		this.fileMap = new HashMap<String,Fichier>();
+		this.directoryMap =  new HashMap<String,Directory>();
+	}
+	
+	public Directory(String name, String absolutePath,
+			HashMap<String, Fichier> fileMap,
+			HashMap<String, Directory> directoryMap) {
+		super();
+		this.name = name;
+		this.absolutePath = absolutePath;
+		this.fileMap = fileMap;
+		this.directoryMap = directoryMap;
+	}
+
+	
+
+
 	public void addFile(String name) throws DuplicatedNameException{
 		if (this.getFileMap().containsKey(name)) throw new DuplicatedNameException("there is already a file named " + name+ "in this directory");
 		else {
