@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class VirtualDisk extends Directory implements Serializable {
+public class VirtualDisk extends Directory implements Serializable, Item {
 	/**
 	 * 
 	 */
@@ -20,6 +20,7 @@ public class VirtualDisk extends Directory implements Serializable {
 		if (size < 0 ) throw new InvalidInput("the size must be positive");
 		this.sizeMax = size;
 		this.hostPath = new ArrayList<String>();
+		this.absolutePath = "/";
 		this.currentPosition = "/";
 	}
 	
@@ -32,6 +33,7 @@ public class VirtualDisk extends Directory implements Serializable {
 		this.currentPosition = currentPosition;
 		this.sizeMax = sizeMax;
 		this.hostPath = hostPath;
+		this.absolutePath = "/";
 	}
 
 

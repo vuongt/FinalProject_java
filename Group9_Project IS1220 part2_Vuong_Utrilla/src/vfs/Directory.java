@@ -3,7 +3,7 @@ package vfs;
 import java.util.*;//hello
 import java.io.Serializable;
 
-public class Directory implements Serializable {
+public class Directory implements Serializable, Item {
 	private String name;
 	protected String absolutePath;
 	protected HashMap<String,Fichier> fileMap;
@@ -50,8 +50,7 @@ public class Directory implements Serializable {
 	}
 	public void addFile(Fichier file) throws DuplicatedNameException{
 		if (this.getFileMap().containsKey(file.getName())) throw new DuplicatedNameException("there is already a file named " + file.getName()+ "in this directory");
-		if (file == null) return;
-		else {
+		if (file != null){
 			this.fileMap.put(file.getName(),file);
 			this.fileMap.get(file.getName()).setAbsolutePath(this.absolutePath + "/" + file.getName());
 			}
@@ -68,8 +67,7 @@ public class Directory implements Serializable {
 	
 	public void addDirectory(Directory d) throws DuplicatedNameException{
 		if (this.getDirectoryMap().containsKey(d.getName())) throw new DuplicatedNameException("there is already a directory named " + d.getName()+ "in this directory");
-		if (d == null) return;
-		else{ 
+		if (d != null){ 
 		this.directoryMap.put(d.getName(),d);
 		this.directoryMap.get(d.getName()).setAbsolutePath(this.absolutePath + "/" + d.getName());
 		}
@@ -82,6 +80,10 @@ public class Directory implements Serializable {
 		this.directoryMap.remove(name);
 	}
 	
+	/**
+	 * Calculate the size of a directory by recurrence
+	 */
+	@Override
 	public long getSize(){
 		long size=0;
 		for (Fichier file : this.fileMap.values()){
@@ -93,6 +95,7 @@ public class Directory implements Serializable {
 		return size;
 	}
 
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -101,24 +104,25 @@ public class Directory implements Serializable {
 		return name;
 	}
 
-
-	public HashMap<String, Fichier> getFileMap() {
-		return fileMap;
-	}
-
-	public HashMap<String, Directory> getDirectoryMap() {
-		return directoryMap;
-	}
-	
-	
-	public String getAbsolutePath() {
-		return absolutePath;
-	}
-
 	public void setAbsolutePath(String absolutePath) {
 		this.absolutePath = absolutePath;
 	}
 
+
+	public HashMap<String, Fichier> getFileMap() {
+		return fileMap;
+	}
+	
+	public HashMap<String, Directory> getDirectoryMap() {
+		return directoryMap;
+	}
+	
+	@Override
+	public String getAbsolutePath() {
+		return absolutePath;
+	}
+
+	
 	@Override
 	public boolean equals(Object o){
 		

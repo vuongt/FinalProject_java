@@ -138,7 +138,7 @@ public class VFSTest1 {
 	@Test
 	public void testShow() throws InvalidInput {
 		try{
-			ArrayList<String> result = vfs1.show("Root", "", "/D1/");
+			ArrayList<ArrayList<String>> result = vfs1.show("Root", "", "/D1/");
 			System.out.println(result);
 			assertTrue(result.get(0).equals("file11    f"));
 			assertTrue(result.get(1).equals("D11    d"));
