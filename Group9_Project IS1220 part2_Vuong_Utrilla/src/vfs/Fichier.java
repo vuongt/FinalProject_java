@@ -3,7 +3,6 @@ package vfs;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Fichier implements Serializable, Item{
 	/**
