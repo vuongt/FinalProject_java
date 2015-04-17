@@ -656,6 +656,7 @@ public class VFS {
 		//The path is correct, then we change current position
 	}
 	
+	
 	/**
 	 * list the information concerning files and directories contained in a directory
 	 * @param vfsname : name of the virtual disk
@@ -675,24 +676,9 @@ public class VFS {
 		}
 		
 		Directory currentDirectory = goPath(vfsname,path,1);
-		if (arg == ""){
-			for (String name : currentDirectory.getFileMap().keySet()){
-				
-				ArrayList<String> list=new ArrayList<String>();
-				list.add(name);
-				list.add("f");
-				result.add(list);
-			}
-				
-			for (String name : currentDirectory.getDirectoryMap().keySet()){
-				ArrayList<String> list=new ArrayList<String>();
-				list.add(name);
-				list.add("d");
-				result.add(list);
-			}
-		}
+		
 			
-		if (arg == "-l"||arg==""){
+		if (arg == "-l"|| arg == ""){
 			for ( Fichier file : currentDirectory.getFileMap().values()){
 				ArrayList<String> list=new ArrayList<String>();
 				list.add(file.getName());
@@ -716,8 +702,6 @@ public class VFS {
 			}	
 		}
 		return result;
-		/*else
-			throw new InvalidInput("Wrong argument.");*/
 	}
 	
 	
@@ -765,17 +749,6 @@ public class VFS {
 		}
 		if (foundFiles.isEmpty()) return null;
 		else{return foundFiles;}
-	}
-	
-	/**
-	 * Search for a file inside a VFS with a given name, starting from the root.
-	 * @param nameFile, the name of the file
-	 * @param vDName, the name of the VirtualDisk
-	 * @return the list of found files (Fichier), null if none where found
-	 * @throws InvalidInput
-	 */
-	public ArrayList<Fichier> findFile(String nameFile,String vDName) throws InvalidInput{
-		return findFile(nameFile,vDName,"/");
 	}
 
 

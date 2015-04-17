@@ -24,7 +24,7 @@ public class Interface {
 		CommandBehaviour behaviour=null;
 		
 		while(on){
-			System.out.println("vfs:");//????
+			System.out.println("vfs:");
 			
 			
 			s=sc.nextLine();
@@ -43,7 +43,6 @@ public class Interface {
 					System.out.println("Invalid input. Type 'help ls' to display instructions.");
 					break;
 				}
-				
 				vdName=st.nextToken();
 				
 				if(st.countTokens()==0){//No path, no arg are given. 
@@ -54,7 +53,7 @@ public class Interface {
 					String argOrPath=st.nextToken();
 					
 					if(argOrPath.equals("-l")){
-						
+						int arg = 1;
 						//TO DO:Display list (names,size,type) in current directory
 					
 					}else{//The second token is read as a vfspath
@@ -62,7 +61,7 @@ public class Interface {
 						vfsPath=st.nextToken();
 						//TO DO:Display list (names,type) in specified path
 					}
-				}else if(st.countTokens()==2){//An argument an a path are given
+				}else if(st.countTokens()==2){//An argument and a path are given
 					String arg=st.nextToken();
 					
 					if(arg.equals("-l")){
@@ -148,10 +147,10 @@ public class Interface {
 					System.out.println("Invalid input. Type 'help exp' to display instructions.");
 					break;
 				}
-				
+				hostPath=st.nextToken();
 				vdName=st.nextToken();
 				vfsPath=st.nextToken();//includes the item to export
-				hostPath=st.nextToken();
+				
 				
 				//TO DO
 				break;

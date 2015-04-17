@@ -86,16 +86,36 @@ public class Directory implements Serializable, Item {
 	@Override
 	public long getSize(){
 		long size=0;
-		for (Fichier file : this.fileMap.values()){
-			size = size + file.getSize();
-		}
-		for (Directory d : this.directoryMap.values()){
-			size = size + d.getSize();
-		}
+		for (Item i : this.getElement())
+			size = size + i.getSize();
 		return size;
 	}
 
+	@Override
+	public String getAbsolutePath() {
+		return absolutePath;
+	}
+
 	
+	@Override
+	public boolean equals(Object o){
+		
+		if(!(o instanceof Directory)) return false;
+		Directory d=(Directory)o;
+		return (this.name.equals(d.name) && this.fileMap.equals(d.fileMap) && this.directoryMap.equals(d.directoryMap));
+	
+	}
+	
+	public ArrayList<Item> getElement(){
+		ArrayList<Item> list = new ArrayList<Item>();
+		for (Directory d : this.directoryMap.values())
+			list.add(d);
+		for (Fichier f : this.fileMap.values())
+			list.add(f);
+		return list;
+	}
+	
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -117,19 +137,5 @@ public class Directory implements Serializable, Item {
 		return directoryMap;
 	}
 	
-	@Override
-	public String getAbsolutePath() {
-		return absolutePath;
-	}
-
 	
-	@Override
-	public boolean equals(Object o){
-		
-		if(!(o instanceof Directory)) return false;
-		Directory d=(Directory)o;
-		return (this.name.equals(d.name) && this.fileMap.equals(d.fileMap) && this.directoryMap.equals(d.directoryMap));
-	
-	}
-
 }
