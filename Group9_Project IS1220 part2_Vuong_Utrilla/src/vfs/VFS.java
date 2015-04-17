@@ -108,7 +108,7 @@ public class VFS {
 			
 			return this.getVirtualDisks().get(vdName);
 			
-		}else{//The path is longer than the root.
+		}else{//The path is longer than the roo t.
 		
 		
 			if(n<=0||n>length+1){
