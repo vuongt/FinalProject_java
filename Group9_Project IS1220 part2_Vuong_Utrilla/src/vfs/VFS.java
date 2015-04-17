@@ -49,23 +49,24 @@ public class VFS {
 		else {
 			Path currentPath = Paths.get(this.getVirtualDisks().get(vfsName).getCurrentPosition());
 			
-			
 			if (path.equals(".")){
 				absolutePath = currentPath;
 
-			}else if(path.equals("..")){
+			}
+			else if(path.equals("..")){
 				if (currentPath.getNameCount()==0){
 					//The current path is root
 					throw new InvalidInput("Can not go up further. Already in the root.");
-				}else{
-					absolutePath = currentPath.getParent();
 				}
+				else
+					absolutePath = currentPath.getParent();
 			
-				
-			}else if(path.substring(0, 2).equals("./")){
+			}
+			else if(path.substring(0, 2).equals("./")){
 				absolutePath = currentPath.resolve(path.substring(2));
 				
-			}else if(path.substring(0, 3).equals("../")){
+			}
+			else if(path.substring(0, 3).equals("../")){
 				if (currentPath.getNameCount()==0){
 					//The current path is root
 					throw new InvalidInput("Can not go up further. Already in the root.");
@@ -74,81 +75,90 @@ public class VFS {
 				}
 				
 			}else{ //path is of type "London/"
-				
 				absolutePath = currentPath.resolve(path);
-				
 			}
 		}
 		return absolutePath;
 	}
 	
+	/**
+	 * This method check if a path is correct ( if all the directories and files exist in the virtual disk named vdName)
+	 * @param vdName : name of the virtual disk we are looking at
+	 * @param vfsPath : path to check
+	 * @return : true if vfsPath is the path of a file
+	 * false if vfsPath is the path of a directory
+	 * if there are a file and a directory with the same name, it returns false ( we will take the path of the directory)
+	 * @throws InvalidInput 
+	 */
+	public boolean checkPath(String vdName, String vfsPath) throws InvalidInput{
+		boolean isFile;
+		
+		// We check if the virtual disk named vdName exists
+		if(!this.getVirtualDisks().containsKey(vdName))
+			throw new InvalidInput("None existing virtual disk.");
+		
+		else{
+			Path path = this.toAbsolutePath(vdName,vfsPath);
+			int length=path.getNameCount();
+			
+			Directory current= this.getVirtualDisks().get(vdName);
+			
+			if(length == 0) // vfspath is the path of the root
+				isFile= false;
+			
+			else if(length == 1){;}
+			// the directory current is still the virtual disk 
+			else {//The path length is bigger than 2			
+				for(int i=0;i<=(length-2);i++){
+					String next = path.getName(i).toString();
+					if(!(current.getDirectoryMap().containsKey(next))){
+						throw new InvalidInput("Invalid vfs path.");
+					}
+					current=current.getDirectoryMap().get(next);
+				}
+			}
+			String finalName = path.getFileName().toString();
+			if (current.getDirectoryMap().containsKey(finalName)) isFile= false;
+			else if (current.getFileMap().containsKey(finalName)) isFile= true;
+			else throw new InvalidInput("Invalid vfs path.");
+			}
+		return isFile;
+	}
 
 	/**
 	 * This method is used to navigate in a virtual disk using a path.
 	 * @param vfsname : name of the virtual disk
 	 * @param path : a given path of type Path
 	 * @param n : an integer positive
-	 * @return the directory at the n-th position counting from the end of the path. If n is  bigger than the size of the path, then it throws an exception
+	 * @return the directory at the n-th position counting from the end of the path. If n is  bigger than the size of the path, then this method return root
 	 * @throws InvalidInput
 	 */
 	public Directory goPath(String vdName,Path path, int n)throws InvalidInput{
-
 		int length=path.getNameCount();
-		
-		
-		//The path contains just a root. We can just check if it's contained in the list of Virtual Disks.
-		if(path.getNameCount()==0){
-			
+		//The path contains just a root.
+		if(length==0){
 			if(n!=1){
 				throw new InvalidInput("Invalid position.");
 			}
-			if(!this.getVirtualDisks().containsKey(vdName)){
-				throw new InvalidInput("None existing virtual disk.");//I'd create another one...
-			}
-			
 			return this.getVirtualDisks().get(vdName);
-			
-		}else{//The path is longer than the root.
-		
-		
+	
+		}
+		else{//The path is longer than the root.
 			if(n<=0||n>length+1){
 				throw new InvalidInput("Invalid position");
 			}
-			
-			
 			if(n==length+1){//The directory we search is the root
-				
-				if(!this.getVirtualDisks().containsKey(vdName)){
-					throw new InvalidInput("None existing virtual disk.");//I'd create another one...
-				}
-				
 				return  this.getVirtualDisks().get(vdName);
-				
-			}else{//The directory we search is a child of the root
-				if(!this.getVirtualDisks().containsKey(vdName)){
-					throw new InvalidInput("None existing virtual disk.");//I'd create another one...
-				}
-				
-				Directory destination=this.getVirtualDisks().get(vdName);
-				
-				int i;
-				for(i=0;i<=(length-n);i++){
-					String currentDirectory=path.getName(i).toString();
-					if(!destination.getDirectoryMap().containsKey(currentDirectory)){
-						throw new InvalidInput("Invalid vfs path.");
-						
-					}
-					
-					destination=destination.getDirectoryMap().get(currentDirectory);
-					
-				}
-				
-				return destination;
-			
 			}
-			
+			else{//The directory we search is a child of the root				
+				Directory current=this.getVirtualDisks().get(vdName);
+				for(int i=0;i<=(length-n);i++){
+					String next =path.getName(i).toString();				
+					current=current.getDirectoryMap().get(next);
+				}
+				return current;
+			}
 		}
-		
 	}
 	
 	/**
@@ -172,16 +182,13 @@ public class VFS {
 	 * @throws IOException
 	 */
 	public void deleteVirtualDisk(String name)throws InvalidInput, IOException{
-		if (virtualDisks.containsKey(name)){
-			this.virtualDisks.remove(name);}
+			this.virtualDisks.remove(name);
 			//delete the virtual disk file in the host file system
 			/*for (String pathString : hostPath){
 				Path path = Paths.get(pathString);
 				Files.delete(path);
 			}
 		}*/
-		else 
-			throw new InvalidInput("There isn't a virtual disk with the given name");
 		}
 	
 	
@@ -198,14 +205,11 @@ public class VFS {
 		ObjectOutputStream out=null;
 		
 		try{
-			/*if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");*/
 			VirtualDisk vd=virtualDisks.get(vDName);
 					
 			//We create the complete hostPath containing the name of the virtual disk
-			
 			Path p1=Paths.get(hostPath);
 			Path completeHostPath=p1.resolve(vDName);
-		
 		
 			File file=new File(completeHostPath.toString());//The file where we'll export the VD
 			if(file.exists()) throw new DuplicatedNameException("A file with name "+vDName+" already exists in this location of the host file system");
@@ -220,18 +224,12 @@ public class VFS {
 			//Adding the host path to the list of host paths to which the vfs has been exported
 			vd.getHostPath().add(completeHostPath.toString());
 			
-			
 		}catch(IOException e){
 			throw new IOException();
 		}finally{
 			out.close();
 			fileOut.close();
 		}
-		
-
-		
-		
-	
 	}
 	
 	
@@ -247,8 +245,7 @@ public class VFS {
 		ObjectOutputStream out=null;
 		
 		try{
-			/*We make sure the disk exists
-			if(!virtualDisks.containsKey(vfsname)) throw new InvalidInput("None existing disk.");*/
+			//We make sure the disk exists
 			VirtualDisk vd=virtualDisks.get(vfsname);
 			
 			if (vd.getHostPath().isEmpty()) throw new InvalidInput("You have to export the virtual disk before saving it");
@@ -375,17 +372,11 @@ public class VFS {
 	 */
 	public void exportFile(String hostPath,String vDName, String vfsPath) throws FileNotFoundException,IOException,InvalidInput, DuplicatedNameException{
 		FileOutputStream out=null;
-		try{
-			/*if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//The vfs	*/	
-			
+		try{			
 			Path pVfs=toAbsolutePath(vDName,vfsPath);//Path in the vfs
 	
-	
 			Directory dir=goPath(vDName,pVfs,2);//this is the directory which contains the file to export
-			//goPath makes sure the path is correct up to this directory
 	
-			//We check the directory contains the file to export
-			/*if(!(dir.getFileMap().containsKey(pVfs.getFileName().toString()))) throw new InvalidInput("Wrong path");*/
 			Fichier fileToExport = dir.getFileMap().get(pVfs.getFileName().toString());
 			
 			//We create the hostPath containing the name of the file
@@ -411,7 +402,6 @@ public class VFS {
 				throw new InvalidInput("No file");
 			}else{
 				for(i=0;i<fileToExport.getSize();i++){
-					
 					out.write((fileToExport.getData().get(i)));
 				}
 			}
@@ -440,7 +430,6 @@ public class VFS {
    public void importFile(String hostPath,String vDName, String vfsPath) throws FileNotFoundException,IOException,InvalidInput,SizeException,DuplicatedNameException{
 	   FileInputStream in=null;
 	   try{
-			/*if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk*/
 			VirtualDisk vd=virtualDisks.get(vDName);
 			
 			File file=new File(hostPath); //We create a file object associated to the one given by the user
@@ -495,7 +484,7 @@ public class VFS {
 	  */
    public void exportDirectory(String hostPath,String vDName, String vfsPathString) throws FileNotFoundException,IOException,InvalidInput,DuplicatedNameException{
 	   
-		/*if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk*/
+		//if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk
 		
 		
 		//We create the vfsPath
@@ -550,7 +539,7 @@ public class VFS {
     * @throws IOException
     */
    public void importDirectory(String hostPathString,String vDName, String vfsPathString) throws InvalidInput,DuplicatedNameException,DirectoryNotFoundException,SizeException,FileNotFoundException,IOException{
-	   /*if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk*/
+	   //if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk
 	   
 	   //We get directory of the vfs into which the directory will be imported
 	   Path vfsPath=toAbsolutePath(vDName,vfsPathString);
@@ -559,7 +548,7 @@ public class VFS {
 	   Path hostPath=Paths.get(hostPathString);
 	   
 	   File dirToImport=new File(hostPathString);
-	   /*if(!dirToImport.isDirectory()) throw new DirectoryNotFoundException("The specified directory  doesn't exist in the host file system");//We make sure the directory exists*/
+	   if(!dirToImport.isDirectory()) throw new DirectoryNotFoundException("The specified directory  doesn't exist in the host file system");//We make sure the directory exists
 	   
 	   //We create the imported directory in the virtual disk
 	   Directory importedDirectory=new Directory(hostPath.getFileName().toString());
@@ -581,21 +570,14 @@ public class VFS {
 		   //We check whether the item is a file or a directory
 		   File item=new File(newHostPath.toString());
 		   
-		   
-		   
-		   if(item.isFile()){
-			   
+		   if(item.isFile())			   
 			   importFile(newHostPath.toString(),vDName,newVfsPath.toString());
 			   
-		   }else if(item.isDirectory()){
-			   
+		   else if(item.isDirectory())			   
 			   importDirectory(newHostPath.toString(),vDName,newVfsPath.toString());
 			   
-		   }
 	   }
    }
-	
-	
 	/**
 	 * to copy within the virtual disk named vfsName, the content of a file /directory whose absolute name is sourcePath 
 	 * into a file/directory whose absolute name is targetPath
@@ -613,7 +595,7 @@ public class VFS {
 			target.addDirectory(source.getDirectoryMap().get(name));
 		if (source.getFileMap().containsKey(name))
 			target.addFile(source.getFileMap().get(name));
-		/*else throw new InvalidInput("The file/directory you want to copy doesn't exist");*/
+		//else throw new InvalidInput("The file/directory you want to copy doesn't exist");
 	}
 	
 	
@@ -629,6 +611,7 @@ public class VFS {
 		Directory source = goPath(vfsname,Paths.get(oldpath),2);
 		Directory target = goPath(vfsname, Paths.get(newpath),1);
 		String name = Paths.get(oldpath).getFileName().toString();
+		// can we exploit checkPath here ? 
 		if (source.getDirectoryMap().containsKey(name)){
 			target.addDirectory(source.getDirectoryMap().get(name));
 			source.getDirectoryMap().remove(name);
@@ -646,42 +629,31 @@ public class VFS {
 	 * @throws InvalidInput 
 	 */
 	public void changePosition(String vdName, String path) throws InvalidInput{
-		
-		Path newPosition = toAbsolutePath(vdName,path);
+		this.getVirtualDisks().get(vdName).setCurrentPosition(path);
+		/*Path newPosition = toAbsolutePath(vdName,path);
 		int length=newPosition.getNameCount();
 		
 		//We check if the newPosition path is correct
 		if(length==0){//new position is the root
-			
-			/*if(!this.getVirtualDisks().containsKey(vdName)){
+			if(!this.getVirtualDisks().containsKey(vdName)){
 				throw new InvalidInput("None existing virtual disk.");
 			}
-			*/
-			
 		}else{//new position is a bigger path
 			/*if(!this.getVirtualDisks().containsKey(vdName)){
 				throw new InvalidInput("None existing virtual disk.");
 			}
-			*/
 			Directory destination=this.getVirtualDisks().get(vdName);
-			
 			int i;
 			for(i=0;i<length;i++){
 				String currentDirectory=newPosition.getName(i).toString();
-				/*if(!destination.getDirectoryMap().containsKey(currentDirectory)){
-					throw new InvalidInput("Invalid vfs path.");
-					
+				if(!destination.getDirectoryMap().containsKey(currentDirectory)){
+					throw new InvalidInput("Invalid vfs path.")
 				}
-				*/
 				destination=destination.getDirectoryMap().get(currentDirectory);
-				
-			}
-			
-			
-		}
+			}			
+		}*/
 			
 		//The path is correct, then we change current position
-		this.getVirtualDisks().get(vdName).setCurrentPosition(newPosition.toString());
 	}
 	
 	/**
@@ -741,15 +713,11 @@ public class VFS {
 				
 				result.add(listd);
 				
-			}
-			
-			return result;
-		}else{
-			throw new InvalidInput("Wrong argument.");
+			}	
 		}
-		
-		
-		
+		return result;
+		/*else
+			throw new InvalidInput("Wrong argument.");*/
 	}
 	
 	
@@ -769,7 +737,7 @@ public class VFS {
 		boolean test;
 		
 		Path p=toAbsolutePath(vDName,vfsPath);
-		Directory dir = goPath(vDName,p,1);//Throws exception if the path is wrong
+		Directory dir = goPath(vDName,p,1);
 	
 	
 		visited.add(dir);
@@ -793,9 +761,8 @@ public class VFS {
 				if(dos.getFileMap().containsKey(nameFile)){
 					foundFiles.add(dos.getFileMap().get(nameFile));
 				}
-			}
-		
-	}
+			}		
+		}
 		if (foundFiles.isEmpty()) return null;
 		else{return foundFiles;}
 	}
@@ -808,20 +775,12 @@ public class VFS {
 	 * @throws InvalidInput
 	 */
 	public ArrayList<Fichier> findFile(String nameFile,String vDName) throws InvalidInput{
-		
-		if(!virtualDisks.containsKey(vDName)) {
-			throw new InvalidInput("None existing disk.");//We check whether the disk exists
-		}
 		return findFile(nameFile,vDName,"/");
 	}
 
 
 	public HashMap<String, VirtualDisk> getVirtualDisks() {
 		return virtualDisks;
-	}
-
-	public void setVirtualDisks(HashMap<String, VirtualDisk> virtualDisks) {
-		this.virtualDisks = virtualDisks;
 	}
 	
 }
