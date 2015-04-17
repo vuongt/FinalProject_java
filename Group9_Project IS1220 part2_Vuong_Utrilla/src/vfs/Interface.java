@@ -90,9 +90,8 @@ public class Interface {
 				vdName=st.nextToken();
 				vfsPath=st.nextToken();
 				
+				//update of behaviour
 				behaviour=new CommandCD(vfs,vdName,vfsPath);
-				
-				
 				
 				break;
 				
@@ -106,8 +105,10 @@ public class Interface {
 				String fileName=st.nextToken();
 				vfsPath=st.nextToken();
 				
-				//TO DO: create a file vdName,fileName,vfsPath
+				//update of behaviour
+				behaviour=new CommandTOUCH(vfs,vdName,fileName,vfsPath);
 				break;
+				
 			case "mkdir"://create directory
 				
 				if(!(st.countTokens()==3)){
@@ -119,8 +120,10 @@ public class Interface {
 				String dirName=st.nextToken();				
 				vfsPath=st.nextToken();
 				
-				//TO DO: create a dir vdName, dirName, vfsPath
+				//update of behaviour
+				behaviour=new CommandMKDIR(vfs,vdName,dirName,vfsPath);
 				break;
+				
 			case "rm"://remove a file or directory
 				
 				if(!(st.countTokens()==2)){
@@ -131,8 +134,10 @@ public class Interface {
 				vdName=st.nextToken();
 				vfsPath=st.nextToken();
 				
-				//TO DO: remove file or directory vdName, vfsPath
+				//update of behaviour
+				behaviour=new CommandRM(vfs,vdName,vfsPath);
 				break;
+				
 			//FALTA	
 			case "rename"://rename file or directory
 				break;
@@ -152,7 +157,8 @@ public class Interface {
 				vfsPath=st.nextToken();//includes the item to export
 				
 				
-				//TO DO
+				//update of behaviour
+				behaviour=new CommandEXP(vfs,vdName,hostPath);
 				break;
 				
 			case "impvfs"://import file or dir
@@ -165,7 +171,8 @@ public class Interface {
 				vdName=st.nextToken();
 				vfsPath=st.nextToken();
 				
-				//TO DO hostPath, vdName, vfsPath
+				//update of behaviour
+				behaviour=new CommandIMPVFS(vfs,hostPath,vdName,vfsPath);
 				break;
 				
 			case "crvfs"://create VD
@@ -183,7 +190,8 @@ public class Interface {
 					
 				}
 				
-				//TO  DO vdName size
+				//update of behaviour
+				behaviour=new CommandCRVFS(vfs,vdName,dirName,vfsPath);
 				break;
 			case "rmvfs"://remove VD
 				if(!(st.countTokens()==1)){
@@ -193,7 +201,8 @@ public class Interface {
 				
 				vdName=st.nextToken();
 				
-				//TO DO vdName 
+				//update of behaviour
+				behaviour=new CommandRMVFS(vfs,vdName);
 				break;
 			case "expvfs"://export VD
 				if(!(st.countTokens()==2)){
@@ -204,8 +213,8 @@ public class Interface {
 				vdName=st.nextToken();
 				hostPath=st.nextToken(); //path of the directory where we will export (not containing the name of the file, automatically assigned by the method)
 				
-				//TO DO vdName hostPath
-				
+				//update of behaviour
+				behaviour=new CommandEXPVFS(vfs,vdName,hostPath);
 				break;
 			case "savevfs"://saveVD
 				
@@ -216,9 +225,10 @@ public class Interface {
 				
 				vdName=st.nextToken();
 				
-				//TO DO vdName 
-				
+				//update of behaviour
+				behaviour=new CommandSAVEVFS(vfs,vdName);
 				break;
+				
 			case "free":
 				
 				if(!(st.countTokens()==1)){
@@ -228,8 +238,9 @@ public class Interface {
 				
 				vdName=st.nextToken();
 				
-				//TO DO vdName
+				behaviour=new CommandFREE(vfs,vdName);
 				break;
+				
 			case "pwd"://current position
 				if(!(st.countTokens()==1)){
 					System.out.println("Invalid input. Type 'help pwd' to display instructions.");
@@ -238,7 +249,7 @@ public class Interface {
 				
 				vdName=st.nextToken();
 				
-				//TO DO vdName
+				behaviour=new CommandPWD(vfs,vdName);
 				break;
 	
 			case "find":
@@ -250,7 +261,7 @@ public class Interface {
 				vdName=st.nextToken();
 				String searchFile=st.nextToken();
 				
-				//TO DO vdName searchFile
+				behaviour=new CommandFIND(vfs,vdName,searchFile);
 				break;
 				
 			case "stop":
@@ -274,32 +285,7 @@ public class Interface {
 			case "help":
 				
 				if(!st.hasMoreTokens()){
-					System.out.println("******************VFS INTERFACE******************\n");
 					
-					System.out.println("CLUI command: <commandName> <Argument1> <Argument2> ...\n\n");
-					
-					System.out.println("Type 'help <commandName>' to get the instructions of each command.\n\n");
-					
-					System.out.println("COMMANDS:\n");
-					System.out.println("ls-List the elements in a position of a virtual disk");
-					System.out.println("cd-Change current position of a virtual disk");
-					System.out.println("touch-Create a file");
-					System.out.println("mkdir-Create a directory");
-					System.out.println("rm-Remove a file/directory");
-					System.out.println("cp");
-					System.out.println("mv");
-					System.out.println("exp-Export a file/directory into the host file system");
-					System.out.println("impvfs-Import a file/directory into the host file system");
-					System.out.println("crvfs-Create a new virtual disk");
-					System.out.println("rmvfs-Remove a virtual disk");
-					System.out.println("expvfs-Export a virtual disk");
-					System.out.println("savevfs-Save the state of a virtual disk");
-					System.out.println("free-Show the free space of a virtual disk");
-					System.out.println("pwd-Show the current position in a virtual disk");
-					System.out.println("expvfs-Export a virtual disk");
-					System.out.println("find-Find a file in a virtual disk");
-					System.out.println("stop-Close the vfs");
-					System.out.println("help-Help instructions");
 					
 				}else if(st.countTokens()==1){
 					String command=st.nextToken();
