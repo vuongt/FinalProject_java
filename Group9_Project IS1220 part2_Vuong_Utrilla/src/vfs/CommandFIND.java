@@ -25,8 +25,7 @@ public class CommandFIND extends CommandBehaviour{
 	public void go() throws InvalidInput{
 		vfs.checkPath(vdName, vfsPath);
 		ArrayList<Fichier> result = vfs.findFile(searchFile, vdName, vfsPath);
-		System.out.println(result.size() + " files found" +
-				"Their absolute path in " + vdName + "are : ");
+		System.out.println("Search result in " + vdName + " : ");
 		for (Fichier f : result){
 			System.out.println(f.getAbsolutePath());
 		}

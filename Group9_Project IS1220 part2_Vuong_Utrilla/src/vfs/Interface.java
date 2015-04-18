@@ -40,28 +40,31 @@ public class Interface {
 					break;
 				}
 				vdName=st.nextToken();
-				
+				int intarg;
 				if(st.countTokens()==0){//No path, no arg are given. 
-					behaviour = new CommandLS(vfs,vdName);
+					intarg =0;
+					behaviour = new CommandLS(vfs,vdName,intarg);
 					
 				}else if(st.countTokens()==1){//A path or an arg is given
 					String argOrPath=st.nextToken();
 					
 					if(argOrPath.equals("-l")){
-						int arg = 1;
-						behaviour = new CommandLS(vfs,vdName,arg);
+						intarg = 1;
+						behaviour = new CommandLS(vfs,vdName,intarg);
 					
 					}else{//The second token is read as a vfspath
 						vfsPath=st.nextToken();
 						//Display list (names,type) in specified path
-						behaviour = new CommandLS(vfs,vdName,vfsPath);
+						intarg=1;
+						behaviour = new CommandLS(vfs,vdName,intarg,vfsPath);
 					}
 				}else if(st.countTokens()==2){//An argument and a path are given
-					String arg=st.nextToken();
+					String arg =st.nextToken();
 					if(arg.equals("-l")){
 						vfsPath=st.nextToken();
 						//Display list(names,size,type) in specified path
-						behaviour = new CommandLS(vfs,vdName,arg,vfsPath);
+						intarg = 1;
+						behaviour = new CommandLS(vfs,vdName,intarg,vfsPath);
 					}else{
 						System.out.println("Invalid input. Type 'help ls' to display instructions.");
 						break;
@@ -287,16 +290,24 @@ public class Interface {
 			}
 			catch (InvalidInput e){
 				System.out.println(e.getMessage());
+				break;
 			}
 			catch(SizeException e){
 				System.out.println(e.getMessage());
+				break;
 			}
 			catch(IOException e){
 				System.out.println(e.getMessage());
+				break;
 			}
 			catch(ElementNotFoundException e){
 				System.out.println(e.getMessage());
+				break;
 			}	
+			catch(DuplicatedNameException e){
+				System.out.println(e.getMessage());
+				break;
+			}
 		}
 		sc.close();
 		

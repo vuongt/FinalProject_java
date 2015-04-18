@@ -1,23 +1,21 @@
 package vfs;
 
-
 public class CommandCRVFS extends CommandBehaviour {
+
 	private String vdName;
 	private long sizeMax;
-
-	public CommandCRVFS(VFS vfs,String vdName,long sizeMax) {
+	
+	
+	public CommandCRVFS(VFS vfs, String vdName, long sizeMax) {
 		super(vfs);
-		this.sizeMax = sizeMax;
 		this.vdName = vdName;
-		
+		this.sizeMax = sizeMax;
 	}
-
-	@Override
-	public void go() throws InvalidInput, DuplicatedNameException {
+	
+	public void go() throws DuplicatedNameException,InvalidInput{
 		vfs.createVirtualDisk(vdName, sizeMax);
-		System.out.println("A virtual disk named " + vdName + " is created");
-		
+		System.out.println("Virtual disk created.");
 	}
-
+	
 	
 }

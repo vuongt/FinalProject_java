@@ -130,7 +130,7 @@ public class VFSTest2 {
 			}
 			
 			Fichier file1=vd2.getFileMap().get("file1.txt");
-			Fichier test=new Fichier("file1.txt",size,"/file1.txt",data);
+			Fichier test=new Fichier("file1.txt","/file1.txt",data);
 			
 			assertEquals(test,file1);
 
