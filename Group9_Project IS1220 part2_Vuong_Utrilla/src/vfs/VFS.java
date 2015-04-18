@@ -170,7 +170,7 @@ public class VFS {
 	 */
 	public void createVirtualDisk(String name, long size) throws DuplicatedNameException, InvalidInput{
 		if (virtualDisks.containsKey(name))
-			throw new DuplicatedNameException();
+			throw new DuplicatedNameException("A virtual disk of name '"+name+"' already exists.");
 		else this.virtualDisks.put(name,new VirtualDisk(name,size));
 	}
 	

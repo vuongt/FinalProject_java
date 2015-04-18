@@ -21,16 +21,20 @@ public class Interface {
 		String vdName;//common elements in most commands
 		String vfsPath;
 		String hostPath;
+		
+		
+		//Behaviour
 		CommandBehaviour behaviour=null;
 		
 		while(on){
+			
+			
+			//Demand of a command
 			System.out.println("vfs:");
-			
-			
 			s=sc.nextLine();
 			st=new StringTokenizer(s," ");
 			
-			//if the user introduces no input we run the loop again
+			//If the user introduces no input we run the loop again
 			if(!st.hasMoreTokens()){
 				continue;
 			}
@@ -46,28 +50,31 @@ public class Interface {
 				vdName=st.nextToken();
 				
 				if(st.countTokens()==0){//No path, no arg are given. 
-					
-					//TO DO:Display list (names,type) in current directory
+					//update of behaviour
+					behaviour=new CommandLS(vfs,vdName);
 					
 				}else if(st.countTokens()==1){//A path or an arg is given
 					String argOrPath=st.nextToken();
 					
 					if(argOrPath.equals("-l")){
-						int arg = 1;
-						//TO DO:Display list (names,size,type) in current directory
+						int argInt = 1;
+						behaviour=new CommandLS(vfs,vdName,argInt);
 					
 					}else{//The second token is read as a vfspath
 						
 						vfsPath=st.nextToken();
-						//TO DO:Display list (names,type) in specified path
+						//update of behaviour
+						behaviour=new CommandLS(vfs,vdName,vfsPath);
 					}
 				}else if(st.countTokens()==2){//An argument and a path are given
 					String arg=st.nextToken();
 					
 					if(arg.equals("-l")){
+						int argInt=1;
 						vfsPath=st.nextToken();
 						
-						//TO DO: Display list(names,size,type) in specified path
+						//update of behaviour
+						behaviour=new CommandLS(vfs,vdName,argInt,vfsPath);
 						
 					}else{
 						System.out.println("Invalid input. Type 'help ls' to display instructions.");
@@ -158,7 +165,7 @@ public class Interface {
 				
 				
 				//update of behaviour
-				behaviour=new CommandEXP(vfs,vdName,hostPath);
+				behaviour=new CommandEXP(vfs,hostPath,vdName,vfsPath);
 				break;
 				
 			case "impvfs"://import file or dir
@@ -182,8 +189,9 @@ public class Interface {
 				}
 				
 				vdName=st.nextToken();
+				int size=0;
 				try{
-					int size=Integer.parseInt(st.nextToken());
+					size=Integer.parseInt(st.nextToken());
 				}catch(NumberFormatException e){
 					System.out.println("Invalid input. Type 'help crvfs' to display instructions.");
 					break;
@@ -191,7 +199,7 @@ public class Interface {
 				}
 				
 				//update of behaviour
-				behaviour=new CommandCRVFS(vfs,vdName,dirName,vfsPath);
+				behaviour=new CommandCRVFS(vfs,vdName,size);
 				break;
 			case "rmvfs"://remove VD
 				if(!(st.countTokens()==1)){
