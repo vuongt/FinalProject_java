@@ -14,10 +14,10 @@ public class CommandEXPVFS extends CommandBehaviour {
 	}
 
 	@Override
-	public void go() throws InvalidInput, IOException, DuplicatedNameException,
-			FileNotFoundException, DirectoryNotFoundException, SizeException {
+	public void go() throws InvalidInput, IOException, DuplicatedNameException{
 		vfs.checkPath(vdName,"/");
 		vfs.exportVfs(vdName, hostPath);
+		System.out.println("the virtual disk named" + vdName + "is expeorted to" + hostPath);
 	}
 
 }

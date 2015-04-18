@@ -7,7 +7,7 @@ public abstract class CommandBehaviour {
 		this.vfs=vfs;
 	}
 	
-	public abstract void go() throws InvalidInput,IOException,DuplicatedNameException, FileNotFoundException, DirectoryNotFoundException, SizeException;
+	public abstract void go() throws InvalidInput,IOException,DuplicatedNameException, FileNotFoundException, ElementNotFoundException, SizeException;
 	
 
 }

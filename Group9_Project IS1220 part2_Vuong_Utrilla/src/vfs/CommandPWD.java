@@ -1,10 +1,10 @@
 package vfs;
 
 
-public class commandPWD extends CommandBehaviour {
+public class CommandPWD extends CommandBehaviour {
 	private String vdName;
 
-	public commandPWD(VFS vfs, String vdName) {
+	public CommandPWD(VFS vfs, String vdName) {
 		super(vfs);
 	}
 

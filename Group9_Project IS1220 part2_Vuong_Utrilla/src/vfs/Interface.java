@@ -1,14 +1,11 @@
 package vfs;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Interface {
 
-	
-	
-	
-	
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException, DuplicatedNameException, ElementNotFoundException, SizeException{
 		
 		VFS vfs=new VFS();
 		Scanner sc=new Scanner(System.in);
@@ -16,7 +13,6 @@ public class Interface {
 		StringTokenizer st;
 		String s;
 		boolean on=true;
-		int n;
 		
 		String vdName;//common elements in most commands
 		String vfsPath;
@@ -46,29 +42,26 @@ public class Interface {
 				vdName=st.nextToken();
 				
 				if(st.countTokens()==0){//No path, no arg are given. 
-					
-					//TO DO:Display list (names,type) in current directory
+					behaviour = new CommandLS(vfs,vdName);
 					
 				}else if(st.countTokens()==1){//A path or an arg is given
 					String argOrPath=st.nextToken();
 					
 					if(argOrPath.equals("-l")){
 						int arg = 1;
-						//TO DO:Display list (names,size,type) in current directory
+						behaviour = new CommandLS(vfs,vdName,arg);
 					
 					}else{//The second token is read as a vfspath
-						
 						vfsPath=st.nextToken();
-						//TO DO:Display list (names,type) in specified path
+						//Display list (names,type) in specified path
+						behaviour = new CommandLS(vfs,vdName,vfsPath);
 					}
 				}else if(st.countTokens()==2){//An argument and a path are given
 					String arg=st.nextToken();
-					
 					if(arg.equals("-l")){
 						vfsPath=st.nextToken();
-						
-						//TO DO: Display list(names,size,type) in specified path
-						
+						//Display list(names,size,type) in specified path
+						behaviour = new CommandLS(vfs,vdName,arg,vfsPath);
 					}else{
 						System.out.println("Invalid input. Type 'help ls' to display instructions.");
 						break;
@@ -79,20 +72,14 @@ public class Interface {
 				}
 				break;
 				
-				
 			case "cd"://Change current position
-				
 				if(!(st.countTokens()==2)){
 					System.out.println("Invalid input. Type 'help cd' to display instructions.");
 					break;
 				}
-			
 				vdName=st.nextToken();
 				vfsPath=st.nextToken();
-				
-				//update of behaviour
 				behaviour=new CommandCD(vfs,vdName,vfsPath);
-				
 				break;
 				
 			case "touch"://create file
@@ -100,12 +87,10 @@ public class Interface {
 					System.out.println("Invalid input. Type 'help touch' to display instructions.");
 					break;
 				}
-				
 				vdName=st.nextToken();
 				String fileName=st.nextToken();
 				vfsPath=st.nextToken();
 				
-				//update of behaviour
 				behaviour=new CommandTOUCH(vfs,vdName,fileName,vfsPath);
 				break;
 				
@@ -119,8 +104,6 @@ public class Interface {
 				vdName=st.nextToken();
 				String dirName=st.nextToken();				
 				vfsPath=st.nextToken();
-				
-				//update of behaviour
 				behaviour=new CommandMKDIR(vfs,vdName,dirName,vfsPath);
 				break;
 				
@@ -158,7 +141,7 @@ public class Interface {
 				
 				
 				//update of behaviour
-				behaviour=new CommandEXP(vfs,vdName,hostPath);
+				behaviour=new CommandEXP(vfs,hostPath,vdName,vfsPath);
 				break;
 				
 			case "impvfs"://import file or dir
@@ -182,8 +165,9 @@ public class Interface {
 				}
 				
 				vdName=st.nextToken();
+				long sizeMax;
 				try{
-					int size=Integer.parseInt(st.nextToken());
+					sizeMax=Long.parseLong(st.nextToken());
 				}catch(NumberFormatException e){
 					System.out.println("Invalid input. Type 'help crvfs' to display instructions.");
 					break;
@@ -191,7 +175,7 @@ public class Interface {
 				}
 				
 				//update of behaviour
-				behaviour=new CommandCRVFS(vfs,vdName,dirName,vfsPath);
+				behaviour = new CommandCRVFS(vfs,vdName,sizeMax);
 				break;
 			case "rmvfs"://remove VD
 				if(!(st.countTokens()==1)){
@@ -241,7 +225,7 @@ public class Interface {
 				behaviour=new CommandFREE(vfs,vdName);
 				break;
 				
-			case "pwd"://current position
+			case "pwd"://print current position
 				if(!(st.countTokens()==1)){
 					System.out.println("Invalid input. Type 'help pwd' to display instructions.");
 					break;
@@ -265,63 +249,55 @@ public class Interface {
 				break;
 				
 			case "stop":
-				if(!(st.hasMoreTokens())){
+				if(st.hasMoreTokens()){
 					System.out.println("Invalid input. Type 'help stop' to display instructions.");
 					break;
 				}
-				
-				System.out.println("Would you like to close the system?:");
+				System.out.println("Would you like to close the system?(yes/no):");
 				String answer=sc.nextLine();
 				if(answer.equalsIgnoreCase("yes")){
 					on=false;
 					System.out.println("**************************************************");
 				}else if(answer.equalsIgnoreCase("no")){
 					
-				}else{
-					System.out.println("Invalid input. Type 'help stop' to display instructions.");
-					break;
 				}
 				
 			case "help":
 				
 				if(!st.hasMoreTokens()){
-					
+					behaviour = new CommandHELP(vfs);
 					
 				}else if(st.countTokens()==1){
-					String command=st.nextToken();
-					
-					
-					
-					//************* TO DOOOOOOOO
-					
-					
-					
-					
-					
+					String command =st.nextToken();
+					behaviour = new CommandHELP(vfs,command);
 					
 				}else{
 					System.out.println("Invalid input. Type 'help' to display instructions.");
 					break;
 				}
-				
 				break;
 			default:
-				
 				System.out.println("Invalid input. Type 'help' to display instructions.");
 				break;
-			
-			
+	
 			}
 			
-			
-			
+			try {
+				behaviour.go();
+			}
+			catch (InvalidInput e){
+				System.out.println(e.getMessage());
+			}
+			catch(SizeException e){
+				System.out.println(e.getMessage());
+			}
+			catch(IOException e){
+				System.out.println(e.getMessage());
+			}
+			catch(ElementNotFoundException e){
+				System.out.println(e.getMessage());
+			}	
 		}
-		
-		
-		
-		
-		
-		//
 		sc.close();
 		
 	}

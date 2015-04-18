@@ -1,6 +1,6 @@
 package vfs;
 
-import java.io.IOException;
+
 
 public class CommandRM extends CommandBehaviour{
 	
@@ -14,10 +14,15 @@ public class CommandRM extends CommandBehaviour{
 	}
 
 	@Override
-	public void go() throws InvalidInput, IOException, DuplicatedNameException {
-		if (vfs.checkPath(vdName, vfsPath))
+	public void go() throws InvalidInput {
+		if (vfs.checkPath(vdName, vfsPath)){
 			vfs.deleteFile(vdName, vfsPath);// the path correspond to a file
-		else vfs.deleteDirectory(vdName, vfsPath);// the path correspond to a directory
+			System.out.println("The file is deleted");
+		}
+		else {
+			vfs.deleteDirectory(vdName, vfsPath);// the path correspond to a directory
+			System.out.println("The directory is deleted");
+		}
 		
 	}
 

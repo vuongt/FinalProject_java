@@ -16,10 +16,16 @@ public class CommandEXP extends CommandBehaviour{
 	}
 
 	@Override
-	public void go() throws InvalidInput, IOException, DuplicatedNameException, FileNotFoundException {
-		if (vfs.checkPath(vdName, vfsPath))
+	public void go() throws InvalidInput, IOException, DuplicatedNameException, ElementNotFoundException{
+		if (vfs.checkPath(vdName, vfsPath)){
 			vfs.exportFile(hostPath, vdName, vfsPath);// the path correspond to a file
-		else vfs.exportDirectory(hostPath, vdName, vfsPath);// the path correspond to a directory
+			System.out.println("A file is exported to" + hostPath);
+		}
+		else {
+			vfs.exportDirectory(hostPath, vdName, vfsPath);// the path correspond to a directory
+			System.out.println("A directory is exported to" + hostPath);
+		}
+		
 	}
 
 }

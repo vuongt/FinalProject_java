@@ -1,6 +1,6 @@
 package vfs;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 
 public class CommandLS extends CommandBehaviour{
@@ -27,10 +27,17 @@ public class CommandLS extends CommandBehaviour{
 		this.vdName = vdName;
 		this.arg = "";
 		this.vfsPath = vfsPath;
+		
+	}
+	public CommandLS(VFS vfs, String vdName,String arg, String vfsPath){
+		super(vfs);
+		this.vdName = vdName;
+		this.arg = arg;
+		this.vfsPath = vfsPath;
 	}
 
 	@Override
-	public void go() throws InvalidInput, IOException, DuplicatedNameException {
+	public void go() throws InvalidInput{
 		vfs.checkPath(vdName, vfsPath);
 		ArrayList<ArrayList<String>> list = vfs.show(vdName, arg, vfsPath);
 		for (ArrayList<String> smallList : list){
