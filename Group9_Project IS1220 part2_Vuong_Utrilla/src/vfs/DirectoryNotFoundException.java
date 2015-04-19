@@ -1,6 +1,7 @@
 package vfs;
+import java.io.IOException;
 
-public class DirectoryNotFoundException extends Exception {
+public class DirectoryNotFoundException extends IOException {
 
 	/**
 	 * 
@@ -12,25 +13,21 @@ public class DirectoryNotFoundException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
-	public DirectoryNotFoundException(String arg0, Throwable arg1,
-			boolean arg2, boolean arg3) {
-		super(arg0, arg1, arg2, arg3);
+	public DirectoryNotFoundException(String message, Throwable cause) {
+		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public DirectoryNotFoundException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
+	public DirectoryNotFoundException(String message) {
+		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public DirectoryNotFoundException(String arg0) {
-		super(arg0);
+	public DirectoryNotFoundException(Throwable cause) {
+		super(cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public DirectoryNotFoundException(Throwable arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
+	
 
 }

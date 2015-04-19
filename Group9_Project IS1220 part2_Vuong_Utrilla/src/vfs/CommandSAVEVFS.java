@@ -12,9 +12,10 @@ public class CommandSAVEVFS extends CommandBehaviour{
 
 	@Override
 	public void go() throws InvalidInput, IOException, DuplicatedNameException,
-			FileNotFoundException, DirectoryNotFoundException, SizeException {
+			  SizeException {
 		vfs.checkPath(vdName, "/");
 		vfs.save(vdName);
+		System.out.println("Virtual disk saved.");
 	}
 
 	

@@ -17,7 +17,7 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 	 */
 	public VirtualDisk(String name, long size) throws InvalidInput{
 		super(name);
-		if (size < 0 ) throw new InvalidInput("The size must be positive");
+		if (size < 0 ) throw new InvalidInput("The size must be positive.");
 		this.sizeMax = size;
 		this.hostPath = new ArrayList<String>();
 		this.absolutePath = "/";
@@ -31,7 +31,7 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 			HashMap<String, Directory> directoryMap) throws InvalidInput {
 		super(name,absolutePath,fileMap,directoryMap);
 		this.currentPosition = currentPosition;
-		if (sizeMax < 0 ) throw new InvalidInput("The size must be positive");
+		if (sizeMax < 0 ) throw new InvalidInput("The size must be positive.");
 		this.sizeMax = sizeMax;
 		this.hostPath = hostPath;
 		this.absolutePath = "/";

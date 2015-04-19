@@ -1,6 +1,7 @@
 package vfs;
 
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 public class CommandEXP extends CommandBehaviour{
 	private String hostPath;

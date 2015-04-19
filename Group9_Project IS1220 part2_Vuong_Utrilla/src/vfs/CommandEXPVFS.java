@@ -1,6 +1,7 @@
 package vfs;
 
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 public class CommandEXPVFS extends CommandBehaviour {
 	
@@ -18,6 +19,7 @@ public class CommandEXPVFS extends CommandBehaviour {
 			FileNotFoundException, DirectoryNotFoundException, SizeException {
 		vfs.checkPath(vdName,"/");
 		vfs.exportVfs(vdName, hostPath);
+		System.out.println("Virtual disk exported.");
 	}
 
 }

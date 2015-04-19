@@ -133,9 +133,8 @@ public class CommandHELP extends CommandBehaviour{
 					+ "Usage: stop");
 			break;
 		case "help":
-			System.out.println("Show help instructions\n"
+			System.out.println("Show instructions to use the command 'commandname'\n"
 					+ "Usage: help [commandname]\n"
-					+ "commandname--name of the studied command.\n"
 					+ "If no commandname specified, general instructions showed.");
 			break;
 			

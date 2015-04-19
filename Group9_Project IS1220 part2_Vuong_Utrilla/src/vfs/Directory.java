@@ -49,7 +49,7 @@ public class Directory implements Serializable, Item {
 		
 	}
 	public void addFile(Fichier file) throws DuplicatedNameException{
-		if (this.getFileMap().containsKey(file.getName())) throw new DuplicatedNameException("there is already a file named " + file.getName()+ "in this directory");
+		if (this.getFileMap().containsKey(file.getName())) throw new DuplicatedNameException("There is already a file named " + file.getName()+ "in this directory");
 		if (file != null){
 			this.fileMap.put(file.getName(),file);
 			this.fileMap.get(file.getName()).setAbsolutePath(this.absolutePath + "/" + file.getName());
@@ -57,7 +57,7 @@ public class Directory implements Serializable, Item {
 	}
 	
 	public void addDirectory(String name) throws DuplicatedNameException{
-		if (this.getDirectoryMap().containsKey(name)) throw new DuplicatedNameException("there is already a directory named " + name+ "in this directory");
+		if (this.getDirectoryMap().containsKey(name)) throw new DuplicatedNameException("There is already a directory named " + name+ "in this directory");
 		else {
 			Directory d = new Directory(name);
 			d.setAbsolutePath(this.absolutePath + "/" + name);

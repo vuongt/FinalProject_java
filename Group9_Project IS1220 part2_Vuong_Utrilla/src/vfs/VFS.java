@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.io.FileNotFoundException;
 
 public class VFS {
 	private HashMap<String,VirtualDisk> virtualDisks;
@@ -42,6 +43,7 @@ public class VFS {
 	 * @param vfsName ; the name of the virtual disk
 	 * @param path : the path to convert
 	 * @return an absolute path of type Path
+	 * @throws InvalidInput
 	 */
 	public Path toAbsolutePath(String vfsName ,String path) throws InvalidInput{
 		Path absolutePath = null;
@@ -178,10 +180,10 @@ public class VFS {
 	/**
 	 * Delete a virtual disk named "name" from the vfs core
 	 * @param name
-	 * @throws InvalidInput
-	 * @throws IOException
+	 
 	 */
-	public void deleteVirtualDisk(String name)throws InvalidInput, IOException{
+	//@throws IOException 
+	public void deleteVirtualDisk(String name){//IOException
 			this.virtualDisks.remove(name);
 			//delete the virtual disk file in the host file system
 			/*for (String pathString : hostPath){
@@ -196,11 +198,10 @@ public class VFS {
 	 * Export a virtual disk to the host file system
 	 * @param vDName : name of the virtual disk to export
 	 * @param hostPath : path to the directory in the host file system where we will export the virtual disk
-	 * @throws InvalidInput
 	 * @throws IOException
 	 * @throws DuplicatedNameException
 	 */
-	public void exportVfs(String vDName,String hostPath) throws InvalidInput,IOException,DuplicatedNameException{
+	public void exportVfs(String vDName,String hostPath) throws IOException,DuplicatedNameException{
 		FileOutputStream fileOut=null;
 		ObjectOutputStream out=null;
 		
@@ -212,8 +213,10 @@ public class VFS {
 			Path completeHostPath=p1.resolve(vDName);
 		
 			File file=new File(completeHostPath.toString());//The file where we'll export the VD
-			if(file.exists()) throw new DuplicatedNameException("A file with name "+vDName+" already exists in this location of the host file system");
-			file.createNewFile();
+			boolean created=file.createNewFile();
+			//We check a file with the same name doesn't exist already in the host file system
+			if(!created) throw new DuplicatedNameException("A file with name "+vDName+" already exists in this location of the host file system");
+			
 			
 			fileOut=new FileOutputStream(file);
 			out=new ObjectOutputStream(fileOut);
@@ -296,6 +299,7 @@ public class VFS {
 	 * @param directoryName : name of the directory
 	 * @param vfsPath : path ( absolute or not) of the directory
 	 * @throws InvalidInput
+	 * @throws DuplicatedNameException
 	 */
 	public void createDirectory(String vfsName, String directoryName,String vfsPath) throws InvalidInput,DuplicatedNameException{
 		Path path = toAbsolutePath(vfsName,vfsPath);
@@ -365,12 +369,11 @@ public class VFS {
      * @param hostPath, the path in the host file system where the file has to be exported.
      * @param vDName, the name of the VirtualDisk.
      * @param vfsPath, the path of the VFS, including the name of the file.
-	 * @throws FileNotFoundException
 	 * @throws IOException
 	 * @throws InvalidInput
 	 * @throws DuplicatedNameException
 	 */
-	public void exportFile(String hostPath,String vDName, String vfsPath) throws FileNotFoundException,IOException,InvalidInput, DuplicatedNameException{
+	public void exportFile(String hostPath,String vDName, String vfsPath) throws IOException,InvalidInput, DuplicatedNameException{
 		FileOutputStream out=null;
 		try{			
 			Path pVfs=toAbsolutePath(vDName,vfsPath);//Path in the vfs
@@ -386,24 +389,24 @@ public class VFS {
 			
 			//We create the File object that'll be linked to the new file in the host file system
 			File exportedFile=new File(completeHostPath.toString());
-			//We check a file with the same name doesn't exist already in the host file system
-			if(exportedFile.isFile()) throw new DuplicatedNameException(pVfs.getFileName().toString()+" exits already in the specified location of the host file system.");//We check a file with the same name doesn't exist in the same location
 			
-			exportedFile.createNewFile();//We create the file in the host system
 			
+			boolean created=exportedFile.createNewFile();//We create the file in the host system
+			//We check a file with the same name doesn't exist already in the host file system (createNewFile returns false in this case)
+			if(!created) throw new DuplicatedNameException(pVfs.getFileName().toString()+" exits already in the specified location of the host file system.");//We check a file with the same name doesn't exist in the same location
 			//Creating the byte stream
 			out=new FileOutputStream(exportedFile);
 			
 			//Copying the content
 			
-			int i;
-			if(fileToExport.equals(null)) {
+			int i;//NOW IT'S IMPOSSIBLE FOR IT TO BE NULL SINCE WE DO A CHECKPATH BEFORE...IF WE ERASE IT THE CODE GIVES NO PROBLEM
+			/*if(fileToExport.equals(null)) {
 				out.close();
-				throw new InvalidInput("No file");
-			}else{
+				throw new InvalidInput("No file");*/
+			//}else{
 				for(i=0;i<fileToExport.getSize();i++){
 					out.write((fileToExport.getData().get(i)));
-				}
+				//}
 			}
 		}catch(IOException e){
 			throw new IOException();
@@ -447,15 +450,11 @@ public class VFS {
 			
 			if((vd.getSizeMax() - vd.getOccupiedSpace())< size) {
 				in.close();
-				throw new SizeException("Not enough free space in the virtual disk");
+				throw new SizeException("Not enough free space in the virtual disk.");
 			}
 			
 			//The NAME of the imported file
 			String fileName=pHost.getFileName().toString();
-			if(dir.getFileMap().containsKey(fileName)) {
-				in.close();
-				throw new DuplicatedNameException(fileName+" exists already in the specified location of the virtual file system.");//we make sure the file doesn't exist already in the directory of the vfs
-			}
 			
 			//The DATA of the file
 			byte b;
@@ -465,6 +464,10 @@ public class VFS {
 			}
 			
 			dir.addFile(new Fichier(fileName,data));//We add the file into the vfs
+			
+	   }catch(FileNotFoundException e){//to separate FileNotFound from other IOExceptions
+		   
+		   throw new FileNotFoundException("The file "+Paths.get(hostPath).getFileName().toString()+" doesn't exist in the host file system. Unable to import.");
 	   }catch(IOException e){
 		   throw new IOException();
 	   }finally{
@@ -478,11 +481,10 @@ public class VFS {
 	  * @param hostPath, the path in the host file system where the directory has to be exported.
 	  * @param vDName, the name of the VirtualDisk.
 	  * @param vfsPathString, the path of the VFS, including the name of the directory.
-	  * @throws FileNotFoundException
 	  * @throws IOException
 	  * @throws InvalidInput
 	  */
-   public void exportDirectory(String hostPath,String vDName, String vfsPathString) throws FileNotFoundException,IOException,InvalidInput,DuplicatedNameException{
+   public void exportDirectory(String hostPath,String vDName, String vfsPathString) throws IOException,InvalidInput,DuplicatedNameException{
 	   
 		//if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk
 		
@@ -538,7 +540,7 @@ public class VFS {
     * @throws FileNotFoundException
     * @throws IOException
     */
-   public void importDirectory(String hostPathString,String vDName, String vfsPathString) throws InvalidInput,DuplicatedNameException,DirectoryNotFoundException,SizeException,FileNotFoundException,IOException{
+   public void importDirectory(String hostPathString,String vDName, String vfsPathString) throws InvalidInput,DuplicatedNameException,DirectoryNotFoundException,SizeException,FileNotFoundException,FileNotFoundException,IOException{
 	   //if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk
 	   
 	   //We get directory of the vfs into which the directory will be imported
@@ -548,7 +550,7 @@ public class VFS {
 	   Path hostPath=Paths.get(hostPathString);
 	   
 	   File dirToImport=new File(hostPathString);
-	   if(!dirToImport.isDirectory()) throw new DirectoryNotFoundException("The specified directory  doesn't exist in the host file system");//We make sure the directory exists
+	   if(!dirToImport.isDirectory()) throw new DirectoryNotFoundException("The directory "+hostPath.getFileName().toString() +" doesn't exist in the host file system");//We make sure the directory exists
 	   
 	   //We create the imported directory in the virtual disk
 	   Directory importedDirectory=new Directory(hostPath.getFileName().toString());
@@ -626,9 +628,9 @@ public class VFS {
 	 * This method change the currentPosition of a virtual disk to a new position
 	 * @param vfsname : name of the virtual disk whose currentPosition is changed
 	 * @param path : the new currentPosition
-	 * @throws InvalidInput 
 	 */
-	public void changePosition(String vdName, String path) throws InvalidInput{
+	//* @throws InvalidInput 
+	public void changePosition(String vdName, String path){//throws InvalidInput
 		this.getVirtualDisks().get(vdName).setCurrentPosition(path);
 		/*Path newPosition = toAbsolutePath(vdName,path);
 		int length=newPosition.getNameCount();

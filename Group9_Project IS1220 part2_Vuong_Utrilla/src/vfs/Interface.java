@@ -1,4 +1,6 @@
 package vfs;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -84,6 +86,7 @@ public class Interface {
 					System.out.println("Invalid input. Type 'help ls' to display instructions.");
 					break;
 				}
+				
 				break;
 				
 				
@@ -245,7 +248,7 @@ public class Interface {
 				}
 				
 				vdName=st.nextToken();
-				
+				//update of behaviour
 				behaviour=new CommandFREE(vfs,vdName);
 				break;
 				
@@ -257,19 +260,52 @@ public class Interface {
 				
 				vdName=st.nextToken();
 				
+				//update of behaviour
 				behaviour=new CommandPWD(vfs,vdName);
 				break;
 	
 			case "find":
-				if(!(st.countTokens()==2)){
+				
+			
+				if(st.countTokens()==2){
+					vdName=st.nextToken();
+					String searchFile=st.nextToken();
+					
+					//update of behaviour
+					behaviour=new CommandFIND(vfs,vdName,searchFile);
+				}else if(st.countTokens()==3){
+					vdName=st.nextToken();
+					String searchFile=st.nextToken();
+					vfsPath=st.nextToken();
+					
+					//update of behaviour
+					behaviour=new CommandFIND(vfs,vdName,searchFile,vfsPath);
+				}else{
 					System.out.println("Invalid input. Type 'help find' to display instructions.");
 					break;
 				}
 				
-				vdName=st.nextToken();
-				String searchFile=st.nextToken();
 				
-				behaviour=new CommandFIND(vfs,vdName,searchFile);
+				break;
+				
+			case "help":
+				
+				if(!st.hasMoreTokens()){
+					
+					//update of behaviour
+					behaviour=new CommandHELP(vfs);
+					
+				}else if(st.countTokens()==1){
+					String command=st.nextToken();
+					
+					//update of behaviour
+					behaviour=new CommandHELP(vfs,command);
+			
+				}else{
+					System.out.println("Invalid input. Type 'help' to display instructions.");
+					break;
+				}
+				
 				break;
 				
 			case "stop":
@@ -290,36 +326,48 @@ public class Interface {
 					break;
 				}
 				
-			case "help":
-				
-				if(!st.hasMoreTokens()){
-					
-					
-				}else if(st.countTokens()==1){
-					String command=st.nextToken();
-					
-					
-					
-					//************* TO DOOOOOOOO
-					
-					
-					
-					
-					
-					
-				}else{
-					System.out.println("Invalid input. Type 'help' to display instructions.");
-					break;
-				}
-				
-				break;
 			default:
 				
 				System.out.println("Invalid input. Type 'help' to display instructions.");
 				break;
-			
-			
 			}
+			
+			
+			
+			
+			
+			
+			
+			//Executing the command chosen by the user (by the method 'go()' of the attribute 'behaviour'.
+			//This method perform different strategies depending on how 'behaviour' has been updated (with which class among the ones that extend CommandBehaviour)
+			//(Application of strategy pattern)
+			//Handling of the different exceptions thrown by the vfs methods.
+			
+			if(!behaviour.equals(null)){
+				try{
+					behaviour.go();
+					
+				}catch(DirectoryNotFoundException e){//To distinguish from IOException
+					System.out.println(e.getMessage());
+					
+				}catch(FileNotFoundException e){//To distinguish from IOException
+					System.out.println(e.getMessage());
+					
+				}catch(IOException e){
+					System.out.println("An I/O exception occurred while trying to connect with the host file system.");
+					
+				//catch(PathSyntaxException e) show instructions!!!!
+					
+				}catch(Exception e){//For the moment, no further specialization in the treatment of exception
+					System.out.println(e.getMessage());
+				}finally{
+					
+					behaviour=null;//Reseting behaviour for the next iteration. 
+				}
+				
+			}
+			
+			
 			
 			
 			
@@ -329,7 +377,10 @@ public class Interface {
 		
 		
 		
-		//
+		
+		
+		
+		
 		sc.close();
 		
 	}
