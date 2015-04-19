@@ -46,7 +46,7 @@ public class VFSTest2 {
 		
 	}
 	
-	/*@Test
+	@Test
 	public void testSave() {
 		
 		FileInputStream filein=null;
@@ -93,14 +93,14 @@ public class VFSTest2 {
 				}catch(IOException e){}	
 			}
 		}
-	}*/
+	}
 	/**
 	 * TestExportFile.
 	 * Test of the basic functionality of ExportFile 
 	 * (Exporting /file1.txt, then importing it manually (FileInputStream) and comparing it to the initial one.
 	 * The exported file is then deleted from the host file system.)
 	 */
-	/*@Test
+	@Test
 	public void testExportFile() {
 		File fileIn=null;
 		FileInputStream in=null;
@@ -152,7 +152,7 @@ public class VFSTest2 {
 		
 		
 	
-	}*/
+	}
 	
 	/**
 	 * TestExportFile2. 
@@ -164,7 +164,7 @@ public class VFSTest2 {
 	 * @throws InvalidInput 
 	 * @throws IOException 
 	 */
-	/*@Test (expected= DuplicatedNameException.class)
+	@Test (expected= DuplicatedNameException.class)
 	public void testExportFile2() throws InvalidInput, DuplicatedNameException, IOException {
 					//Adding a file to export
 					vfs2.createFile("Root", "testExportFile2.txt", "/");
@@ -182,7 +182,7 @@ public class VFSTest2 {
 	 * it was saved in 'VFSTest2/testImportFile.txt' when this file was created.)
 	 */
 	
-	/*@Test
+	@Test
 	public void testImportFile() {
 		try{
 		
@@ -209,7 +209,7 @@ public class VFSTest2 {
 			assertTrue(false);
 		}
 		
-	}*/
+	}
 	
 	/**
 	 * TestImportFile2
@@ -221,7 +221,7 @@ public class VFSTest2 {
 	 * @throws SizeException
 	 * @throws DuplicatedNameException
 	 */
-	/*@Test (expected=FileNotFoundException.class)
+	@Test (expected=FileNotFoundException.class)
 	public void testImportFile2() throws FileNotFoundException, IOException, InvalidInput, SizeException, DuplicatedNameException {
 
 					
@@ -229,7 +229,7 @@ public class VFSTest2 {
 					vfs2.importFile(p.toString(),"Root","/D2/");
 				
 
-	}*/
+	}
 	
 	/**
 	 * TestImportFile3.
@@ -242,14 +242,14 @@ public class VFSTest2 {
 	 * @throws SizeException
 	 * @throws DuplicatedNameException
 	 */
-	/*@Test (expected=SizeException.class)
+	@Test (expected=SizeException.class)
 	public void testImportFile3() throws FileNotFoundException, IOException, InvalidInput, SizeException, DuplicatedNameException  {
 		
 		
 		Path p=Paths.get(s).resolve("testImportFile3.txt");//testImportFile3 size is 41KB. The virtual disk free space is smaller than 1KB (size)
 		vfs2.importFile(p.toString(), "Root", "/");
 	}
-	*/
+	
 	/**
 	 * testExportDirectory.
 	 * Tests the main functionality of exportDirectory().
@@ -314,7 +314,7 @@ public class VFSTest2 {
 		vfs2.exportDirectory(s, "Root", "/testExportDirectory2");
 	}
 
-	@Test
+	/*@Test
 	public void testImportDirectory() {
 		try{
 		
