@@ -59,15 +59,21 @@ public class VFS {
 			 * and so on...
 			 * it can't resolve path such as london/../picture or london/./picture
 			 */
+			/*
+			 * ATTENTION: About the method getParent: 
+			 * it will return null if the path don't have a parent, (it means that if the path is root "/")
+			 * if the path is "/Dir1", it will return "/"
+			 * instead of verifying if the path is root, i will check if its parent is null
+			 * I do this to fix the NullPointerException
+			 */
 			Path currentPath = Paths.get(this.getVirtualDisks().get(vfsName).getCurrentPosition());
-			if (path.substring(0,1) == ".")
 				
 				if (path.equals(".")){
 					absolutePath = currentPath;
 	
 				}
 				else if(path.equals("..")){
-					if (currentPath.getNameCount()==0){
+					if (currentPath.getParent() == null){
 						//The current path is root
 						throw new InvalidInput("Can not go up further. Already in the root.");
 					}
@@ -76,16 +82,17 @@ public class VFS {
 				
 				}
 				else {
-					//I use startsWith in condition of if to avoid IndexOutOfRangeException, and the expression is also shorter
 					String pathNext = path;
-					while (pathNext.startsWith(".")){ //if pathNext is still relative, we restart the process with pathNext
+					//I use startsWith in condition of if to avoid IndexOutOfRangeException, and the expression is also shorter
+					//if pathNext is still relative, we restart the process with pathNext
+					while (pathNext.startsWith(".")){ 
 						if(pathNext.startsWith("./")){
 							//currentPath doesn't change
 							pathNext = pathNext.substring(2);
 							
 						}
 						else if(pathNext.startsWith("../")){
-							if (currentPath.getNameCount()==0){
+							if (currentPath.getParent() == null){
 								//The current path is root
 								throw new InvalidInput("Can not go up further. Already in the root.");
 							}
