@@ -22,7 +22,7 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 
 		this.sizeMax = size;
 		this.hostPath = new ArrayList<String>();
-		this.absolutePath = "/";
+		this.absolutePath = "";
 		this.currentPosition = "/";
 	}
 	
