@@ -43,7 +43,7 @@ public class Directory implements Serializable, Item {
 		if (this.getFileMap().containsKey(name)) throw new DuplicatedNameException("there is already a file named " + name+ "in this directory");
 		else {
 			Fichier file = new Fichier(name);
-			file.setAbsolutePath(this.absolutePath + "/" + name);
+			file.setAbsolutePath(this.absolutePath + name);
 			this.fileMap.put(name, file);
 		}
 		
@@ -52,7 +52,7 @@ public class Directory implements Serializable, Item {
 		if (this.getFileMap().containsKey(file.getName())) throw new DuplicatedNameException("There is already a file named " + file.getName()+ "in this directory");
 		if (file != null){
 			this.fileMap.put(file.getName(),file);
-			this.fileMap.get(file.getName()).setAbsolutePath(this.absolutePath + "/" + file.getName());
+			this.fileMap.get(file.getName()).setAbsolutePath(this.absolutePath + file.getName());
 			}
 	}
 	
@@ -60,7 +60,7 @@ public class Directory implements Serializable, Item {
 		if (this.getDirectoryMap().containsKey(name)) throw new DuplicatedNameException("There is already a directory named " + name+ "in this directory");
 		else {
 			Directory d = new Directory(name);
-			d.setAbsolutePath(this.absolutePath + "/" + name);
+			d.setAbsolutePath(this.absolutePath + name + "/" );
 			this.directoryMap.put(name, d);
 			}
 	}
@@ -69,7 +69,7 @@ public class Directory implements Serializable, Item {
 		if (this.getDirectoryMap().containsKey(d.getName())) throw new DuplicatedNameException("there is already a directory named " + d.getName()+ "in this directory");
 		if (d != null){ 
 		this.directoryMap.put(d.getName(),d);
-		this.directoryMap.get(d.getName()).setAbsolutePath(this.absolutePath + "/" + d.getName());
+		this.directoryMap.get(d.getName()).setAbsolutePath(this.absolutePath + d.getName() + "/");
 		}
 	}
 	
