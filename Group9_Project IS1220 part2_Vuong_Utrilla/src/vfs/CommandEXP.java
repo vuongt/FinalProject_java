@@ -1,7 +1,8 @@
 package vfs;
 
 import java.io.IOException;
-import java.io.FileNotFoundException;
+
+
 
 public class CommandEXP extends CommandBehaviour{
 	private String hostPath;
@@ -17,10 +18,14 @@ public class CommandEXP extends CommandBehaviour{
 	}
 
 	@Override
-	public void go() throws InvalidInput, IOException, DuplicatedNameException, FileNotFoundException {
-		if (vfs.checkPath(vdName, vfsPath))
+	public void go() throws InvalidInput, IOException, DuplicatedNameException{
+		if (vfs.checkPath(vdName, vfsPath)){
 			vfs.exportFile(hostPath, vdName, vfsPath);// the path correspond to a file
-		else vfs.exportDirectory(hostPath, vdName, vfsPath);// the path correspond to a directory
+			System.out.println("The file is exported to" + hostPath);
+		}else {
+			vfs.exportDirectory(hostPath, vdName, vfsPath);// the path correspond to a directory
+			System.out.println("The directory is exported to" + hostPath);
+		}
 	}
 
 }

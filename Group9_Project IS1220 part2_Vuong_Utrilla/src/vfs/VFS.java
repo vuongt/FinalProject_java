@@ -108,21 +108,24 @@ public class VFS {
 			if(length == 0) // vfspath is the path of the root
 				isFile= false;
 			
-			else if(length == 1){;}
-			// the directory current is still the virtual disk 
-			else {//The path length is bigger than 2			
-				for(int i=0;i<=(length-2);i++){
-					String next = path.getName(i).toString();
-					if(!(current.getDirectoryMap().containsKey(next))){
-						throw new InvalidInput("Invalid vfs path.");
-					}
-					current=current.getDirectoryMap().get(next);
+			else {
+					if(length == 1){;}
+					// the directory current is still the virtual disk 
+					else {//The path length is bigger than 2			
+						for(int i=0;i<=(length-2);i++){
+							String next = path.getName(i).toString();
+							if(!(current.getDirectoryMap().containsKey(next))){
+								throw new InvalidInput("Invalid vfs path.");
+							}
+							current=current.getDirectoryMap().get(next);
+	 					}
+
+	 				}
+					String finalName = path.getFileName().toString();
+					if (current.getDirectoryMap().containsKey(finalName)) isFile= false;
+					else if (current.getFileMap().containsKey(finalName)) isFile= true;
+					else throw new InvalidInput("Invalid vfs path.");
 				}
-			}
-			String finalName = path.getFileName().toString();
-			if (current.getDirectoryMap().containsKey(finalName)) isFile= false;
-			else if (current.getFileMap().containsKey(finalName)) isFile= true;
-			else throw new InvalidInput("Invalid vfs path.");
 			}
 		return isFile;
 	}

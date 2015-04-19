@@ -1,7 +1,4 @@
 package vfs;
-
-import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class CommandFIND extends CommandBehaviour{
@@ -24,17 +21,18 @@ public class CommandFIND extends CommandBehaviour{
 	}
 
 	@Override
-	public void go() throws InvalidInput, IOException, DuplicatedNameException,
-			FileNotFoundException, DirectoryNotFoundException, SizeException {
+	public void go() throws InvalidInput {
 		vfs.checkPath(vdName, vfsPath);
-		ArrayList<Fichier> list=vfs.findFile(searchFile, vdName, vfsPath);
+		ArrayList<Fichier> result = vfs.findFile(searchFile, vdName, vfsPath);
 		
-		if(list.equals(null)){
-			System.out.println("No file named "+searchFile+" exists in "+vdName);
-		}else{
-			for(Fichier f:list){
-				System.out.println(f.getName()+"--"+f.getAbsolutePath());
+		if(!result.equals(null)){
+			System.out.println(result.size() + " files found" +
+					"Their absolute path in " + vdName + "are : ");
+			for (Fichier f : result){
+				System.out.println(f.getAbsolutePath());
 			}
+		}else{
+			System.out.println("No file named '"+searchFile+"' was found");
 		}
 		
 	}

@@ -8,7 +8,7 @@ public class CommandIMPVFS extends CommandBehaviour{
 	private String vdName;
 	private String vfsPath;
 	
-	public CommandIMPVFS(VFS vfs,String vdName, String vfsPath, String hostPath) {
+	public CommandIMPVFS(VFS vfs, String hostPath,String vdName, String vfsPath) {
 		super(vfs);
 		this.hostPath = hostPath;
 		this.vdName = vdName;
@@ -18,10 +18,14 @@ public class CommandIMPVFS extends CommandBehaviour{
 
 	@Override
 	public void go() throws InvalidInput, IOException, DuplicatedNameException,FileNotFoundException, DirectoryNotFoundException, SizeException {
-		if (vfs.checkPath(vdName, vfsPath))
-			vfs.importFile(hostPath, vdName, vfsPath);// the path correspond to a file
-		else vfs.importDirectory(hostPath, vdName, vfsPath);// the path correspond to a directory
-		
+	if (vfs.checkPath(vdName, vfsPath)){
+		vfs.importFile(hostPath, vdName, vfsPath);// the path correspond to a file
+		System.out.println("The file was imported to the virtual disk");
+	}else {
+		vfs.importDirectory(hostPath, vdName, vfsPath);// the path correspond to a directory
+		System.out.println("The directory was imported to the virtual disk");
+
+ }
 	}
 
 }

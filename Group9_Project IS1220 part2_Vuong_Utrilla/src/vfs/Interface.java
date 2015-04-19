@@ -18,7 +18,6 @@ public class Interface {
 		StringTokenizer st;
 		String s;
 		boolean on=true;
-		int n;
 		
 		String vdName;//common elements in most commands
 		String vfsPath;
@@ -51,22 +50,26 @@ public class Interface {
 				}
 				vdName=st.nextToken();
 				
-				if(st.countTokens()==0){//No path, no arg are given. 
+				int intarg;
+				if(st.countTokens()==0){//No path, no arg are given.
+					
+					intarg=0;
 					//update of behaviour
-					behaviour=new CommandLS(vfs,vdName);
+					behaviour=new CommandLS(vfs,vdName,intarg);
 					
 				}else if(st.countTokens()==1){//A path or an arg is given
 					String argOrPath=st.nextToken();
 					
 					if(argOrPath.equals("-l")){
-						int argInt = 1;
-						behaviour=new CommandLS(vfs,vdName,argInt);
+						intarg = 1;
+						behaviour=new CommandLS(vfs,vdName,intarg);
 					
-					}else{//The second token is read as a vfspath
-						
+					}else{//The second token is read as a vfspath, no argument 'arg'
+						intarg=0;
 						vfsPath=st.nextToken();
+						
 						//update of behaviour
-						behaviour=new CommandLS(vfs,vdName,vfsPath);
+						behaviour=new CommandLS(vfs,vdName,intarg,vfsPath);
 					}
 				}else if(st.countTokens()==2){//An argument and a path are given
 					String arg=st.nextToken();
@@ -192,9 +195,9 @@ public class Interface {
 				}
 				
 				vdName=st.nextToken();
-				int size=0;
+				long sizeMax;
 				try{
-					size=Integer.parseInt(st.nextToken());
+					sizeMax=Long.parseLong(st.nextToken());
 				}catch(NumberFormatException e){
 					System.out.println("Invalid input. Type 'help crvfs' to display instructions.");
 					break;
@@ -202,7 +205,7 @@ public class Interface {
 				}
 				
 				//update of behaviour
-				behaviour=new CommandCRVFS(vfs,vdName,size);
+				behaviour=new CommandCRVFS(vfs,vdName,sizeMax);
 				break;
 			case "rmvfs"://remove VD
 				if(!(st.countTokens()==1)){
@@ -252,7 +255,7 @@ public class Interface {
 				behaviour=new CommandFREE(vfs,vdName);
 				break;
 				
-			case "pwd"://current position
+			case "pwd":// print current position
 				if(!(st.countTokens()==1)){
 					System.out.println("Invalid input. Type 'help pwd' to display instructions.");
 					break;
@@ -309,12 +312,12 @@ public class Interface {
 				break;
 				
 			case "stop":
-				if(!(st.hasMoreTokens())){
+				if(st.hasMoreTokens()){
 					System.out.println("Invalid input. Type 'help stop' to display instructions.");
 					break;
 				}
 				
-				System.out.println("Would you like to close the system?:");
+				System.out.println("Would you like to close the system?(yes/no):");
 				String answer=sc.nextLine();
 				if(answer.equalsIgnoreCase("yes")){
 					on=false;

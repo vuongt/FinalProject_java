@@ -16,8 +16,10 @@ public class CommandFREE extends CommandBehaviour{
 	public void go() throws InvalidInput, IOException, DuplicatedNameException,
 			FileNotFoundException, DirectoryNotFoundException, SizeException {
 		vfs.checkPath(vdName, "/");
-		System.out.println("Occupied space : " + vfs.getVirtualDisks().get(vdName).getSize());
-		System.out.println("Free space : " + (vfs.getVirtualDisks().get(vdName).getSizeMax() - vfs.getVirtualDisks().get(vdName).getSize()));
+		System.out.println("Occupied space of the virtual disk " + vdName + " :"
+				+ vfs.getVirtualDisks().get(vdName).getSize());
+		System.out.println("Free space of the virtual disk " + vdName+ " :" 
+				 + (vfs.getVirtualDisks().get(vdName).getSizeMax() - vfs.getVirtualDisks().get(vdName).getSize()));
 	}
 
 }

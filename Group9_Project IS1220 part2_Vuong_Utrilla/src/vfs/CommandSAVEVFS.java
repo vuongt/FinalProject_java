@@ -15,7 +15,8 @@ public class CommandSAVEVFS extends CommandBehaviour{
 			  SizeException {
 		vfs.checkPath(vdName, "/");
 		vfs.save(vdName);
-		System.out.println("Virtual disk saved.");
+		System.out.println(vdName + " is saved");
+
 	}
 
 	
