@@ -47,6 +47,7 @@ public class VFS {
 	 */
 	public Path toAbsolutePath(String vfsName ,String path) throws InvalidInput{
 		Path absolutePath = null;
+		
 		if (isAbsolute(path)) absolutePath = Paths.get(path);//If it's already absolute,we simply return it
 		else {
 			/* handle relative paths such as : 
@@ -163,6 +164,9 @@ public class VFS {
 	 */
 	public Directory goPath(String vdName,Path path, int n)throws InvalidInput{
 		int length=path.getNameCount();
+		
+		
+		
 		//The path contains just a root.
 		if(length==0){
 			if(n!=1){
@@ -405,7 +409,6 @@ public class VFS {
 		FileOutputStream out=null;
 		try{			
 			Path pVfs=toAbsolutePath(vDName,vfsPath);//Path in the vfs
-	
 			Directory dir=goPath(vDName,pVfs,2);//this is the directory which contains the file to export
 	
 			Fichier fileToExport = dir.getFileMap().get(pVfs.getFileName().toString());
@@ -439,7 +442,11 @@ public class VFS {
 		}catch(IOException e){
 			throw new IOException();
 		}finally{
-			out.close();
+			if(out!=null){
+				try{
+					out.close();
+				}catch(IOException e){}
+			}
 			
 		}
 		
@@ -500,7 +507,12 @@ public class VFS {
 	   }catch(IOException e){
 		   throw new IOException();
 	   }finally{
-		in.close();
+		   if(in!=null){
+			  try{
+				  in.close();
+			  }catch(IOException e){}
+		   }
+		
 	   }
 	}
    
@@ -522,11 +534,10 @@ public class VFS {
 		
 		//We create the vfsPath
 		Path vfsPath=toAbsolutePath(vDName,vfsPathString);
-
 		
 		//We get the directory to be exported
 		Directory dirToExport=goPath(vDName,vfsPath,1);
-;
+		
 		
 		//We create the hostpath including the directory to export
 		Path p1=Paths.get(hostPath);
@@ -541,9 +552,7 @@ public class VFS {
 		//We export the files contained in the directory
 		for(Fichier f:dirToExport.getFileMap().values()){
 			
-			//Creating the path of the file in the vfs
-			Path filePath=vfsPath.resolve(f.getName());
-			exportFile(completePath.toString(),vDName, filePath.toString());
+			exportFile(completePath.toString(),vDName, vfsPathString+"/"+f.getName());
 			
 			
 		}
@@ -552,9 +561,7 @@ public class VFS {
 		
 		for(Directory d:dirToExport.getDirectoryMap().values()){
 			
-			//Creating the path of the directory in the vfs
-			Path dirPath=vfsPath.resolve(d.getName());
-			exportDirectory(completePath.toString(),vDName,dirPath.toString());
+			exportDirectory(completePath.toString(),vDName,vfsPathString+"/"+d.getName());
 			
 		}
 	   
@@ -602,16 +609,16 @@ public class VFS {
 		   Path newHostPath=p1.resolve(dirToImport.list()[i]);
 		   
 		 //We create the new vfs path into which the elements will be imported
-		   Path newVfsPath=vfsPath.resolve(importedDirectory.getName());
+		   String newVfsPath=vfsPathString + importedDirectory.getName();
 		   
 		   //We check whether the item is a file or a directory
 		   File item=new File(newHostPath.toString());
 		   
 		   if(item.isFile())			   
-			   importFile(newHostPath.toString(),vDName,newVfsPath.toString());
+			   importFile(newHostPath.toString(),vDName,newVfsPath);
 			   
 		   else if(item.isDirectory())			   
-			   importDirectory(newHostPath.toString(),vDName,newVfsPath.toString());
+			   importDirectory(newHostPath.toString(),vDName,newVfsPath);
 			   
 	   }
    }
