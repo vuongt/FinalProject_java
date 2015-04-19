@@ -21,9 +21,12 @@ public class CommandFIND extends CommandBehaviour{
 	}
 
 	@Override
+
 	public void go() throws InvalidInput {
+
 		vfs.checkPath(vdName, vfsPath);
 		ArrayList<Fichier> result = vfs.findFile(searchFile, vdName, vfsPath);
+
 		
 		if(!result.equals(null)){
 			System.out.println(result.size() + " files found" +
@@ -35,6 +38,6 @@ public class CommandFIND extends CommandBehaviour{
 			System.out.println("No file named '"+searchFile+"' was found");
 		}
 		
-	}
 
+	}
 }

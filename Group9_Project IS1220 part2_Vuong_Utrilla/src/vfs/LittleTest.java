@@ -1,6 +1,7 @@
 package vfs;
 
 import java.nio.file.Path;
+
 import java.util.Scanner;
 import java.nio.file.Paths;
 import java.io.File;
@@ -9,14 +10,16 @@ public class LittleTest {
 	
 	
 	public static void main(String[] args){
+		while(true)
+			{Scanner sc=new Scanner(System.in);
+		System.out.println("introduce:");
 		
-		CommandBehaviour cd=new CommandCD(new VFS(),"hola","hola");
+		String s=sc.nextLine();
 		
-		try{
-			cd.go();
-		}catch(Exception e){
-			
-		}
+		System.out.println(Paths.get(s).getName(0));
+		System.out.println(Paths.get(s).getName(1));
+		System.out.println(Paths.get(s).toString());}
+		
 		
 		
 		
@@ -24,4 +27,5 @@ public class LittleTest {
 		
 	}
 
+	
 }

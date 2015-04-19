@@ -3,6 +3,7 @@ package vfs;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -10,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.io.FileNotFoundException;
 
 public class VFS {
 	private HashMap<String,VirtualDisk> virtualDisks;
@@ -109,6 +109,7 @@ public class VFS {
 				isFile= false;
 			
 			else {
+
 					if(length == 1){;}
 					// the directory current is still the virtual disk 
 					else {//The path length is bigger than 2			
@@ -125,7 +126,9 @@ public class VFS {
 					if (current.getDirectoryMap().containsKey(finalName)) isFile= false;
 					else if (current.getFileMap().containsKey(finalName)) isFile= true;
 					else throw new InvalidInput("Invalid vfs path.");
+
 				}
+
 			}
 		return isFile;
 	}
@@ -376,7 +379,9 @@ public class VFS {
 	 * @throws InvalidInput
 	 * @throws DuplicatedNameException
 	 */
+
 	public void exportFile(String hostPath,String vDName, String vfsPath) throws IOException,InvalidInput, DuplicatedNameException{
+
 		FileOutputStream out=null;
 		try{			
 			Path pVfs=toAbsolutePath(vDName,vfsPath);//Path in the vfs
@@ -436,6 +441,7 @@ public class VFS {
    public void importFile(String hostPath,String vDName, String vfsPath) throws FileNotFoundException,IOException,InvalidInput,SizeException,DuplicatedNameException{
 	   FileInputStream in=null;
 	   try{
+		   
 			VirtualDisk vd=virtualDisks.get(vDName);
 			
 			File file=new File(hostPath); //We create a file object associated to the one given by the user
@@ -487,7 +493,9 @@ public class VFS {
 	  * @throws IOException
 	  * @throws InvalidInput
 	  */
+
    public void exportDirectory(String hostPath,String vDName, String vfsPathString) throws IOException,InvalidInput,DuplicatedNameException{
+
 	   
 		//if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk
 		
@@ -543,7 +551,9 @@ public class VFS {
     * @throws FileNotFoundException
     * @throws IOException
     */
-   public void importDirectory(String hostPathString,String vDName, String vfsPathString) throws InvalidInput,DuplicatedNameException,DirectoryNotFoundException,SizeException,FileNotFoundException,FileNotFoundException,IOException{
+
+   public void importDirectory(String hostPathString,String vDName, String vfsPathString) throws InvalidInput,DuplicatedNameException,DirectoryNotFoundException,SizeException,FileNotFoundException,IOException{
+
 	   //if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk
 	   
 	   //We get directory of the vfs into which the directory will be imported
@@ -553,7 +563,9 @@ public class VFS {
 	   Path hostPath=Paths.get(hostPathString);
 	   
 	   File dirToImport=new File(hostPathString);
+
 	   if(!dirToImport.isDirectory()) throw new DirectoryNotFoundException("The directory "+hostPath.getFileName().toString() +" doesn't exist in the host file system");//We make sure the directory exists
+
 	   
 	   //We create the imported directory in the virtual disk
 	   Directory importedDirectory=new Directory(hostPath.getFileName().toString());

@@ -18,7 +18,9 @@ public class CommandTOUCH extends CommandBehaviour {
 		
 		vfs.checkPath(vdName, vfsPath);
 		vfs.createFile(vdName, fileName, vfsPath);
-		System.out.println(fileName+"was created.");
+
+		System.out.println(fileName+"was created");
+
 	}
 	
 	

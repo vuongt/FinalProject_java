@@ -1,6 +1,8 @@
+
 package vfs;
 
 import java.io.IOException;
+
 
 public class CommandRMVFS extends CommandBehaviour{
 
@@ -18,3 +20,4 @@ public class CommandRMVFS extends CommandBehaviour{
 		
 	}
 }
+

@@ -13,6 +13,7 @@ public class CommandRM extends CommandBehaviour{
 
 	@Override
 	public void go() throws InvalidInput {
+
 			if (vfs.checkPath(vdName, vfsPath)){
 	 			vfs.deleteFile(vdName, vfsPath);// the path correspond to a file
 	
@@ -23,5 +24,6 @@ public class CommandRM extends CommandBehaviour{
 				System.out.println("The directory is deleted");
 			}
 	 }
+
 
 }
