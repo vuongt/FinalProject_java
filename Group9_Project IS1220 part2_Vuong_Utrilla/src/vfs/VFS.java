@@ -47,39 +47,59 @@ public class VFS {
 	 */
 	public Path toAbsolutePath(String vfsName ,String path) throws InvalidInput{
 		Path absolutePath = null;
-		if (isAbsolute(path)) absolutePath = Paths.get(path);//If it's only the root, it's absolute.
+		if (isAbsolute(path)) absolutePath = Paths.get(path);//If it's already absolute,we simply return it
 		else {
+			/* handle relative paths such as : 
+			 * .
+			 * ..
+			 * ./london
+			 * ../london
+			 * ./././london
+			 * ../../london 
+			 * and so on...
+			 * it can't resolve path such as london/../picture or london/./picture
+			 */
 			Path currentPath = Paths.get(this.getVirtualDisks().get(vfsName).getCurrentPosition());
-			
-			if (path.equals(".")){
-				absolutePath = currentPath;
-
-			}
-			else if(path.equals("..")){
-				if (currentPath.getNameCount()==0){
-					//The current path is root
-					throw new InvalidInput("Can not go up further. Already in the root.");
+			if (path.substring(0,1) == ".")
+				
+				if (path.equals(".")){
+					absolutePath = currentPath;
+	
 				}
-				else
-					absolutePath = currentPath.getParent();
-			
-			}
-			else if(path.substring(0, 2).equals("./")){
-				absolutePath = currentPath.resolve(path.substring(2));
+				else if(path.equals("..")){
+					if (currentPath.getNameCount()==0){
+						//The current path is root
+						throw new InvalidInput("Can not go up further. Already in the root.");
+					}
+					else
+						absolutePath = currentPath.getParent();
+				
+				}
+				else {
+					//I use startsWith in condition of if to avoid IndexOutOfRangeException, and the expression is also shorter
+					String pathNext = path;
+					while (pathNext.startsWith(".")){ //if pathNext is still relative, we restart the process with pathNext
+						if(pathNext.startsWith("./")){
+							//currentPath doesn't change
+							pathNext = pathNext.substring(2);
+							
+						}
+						else if(pathNext.startsWith("../")){
+							if (currentPath.getNameCount()==0){
+								//The current path is root
+								throw new InvalidInput("Can not go up further. Already in the root.");
+							}
+							else{
+								currentPath = currentPath.getParent();//we go up on currentPath
+								pathNext = pathNext.substring(3);
+							}
+						}
+					}
+					//at this point, pathNext is such as : London/picture/pic1 and we have done all the necessary change to currentPath
+					absolutePath = currentPath.resolve(pathNext);
+				}
 				
 			}
-			else if(path.substring(0, 3).equals("../")){
-				if (currentPath.getNameCount()==0){
-					//The current path is root
-					throw new InvalidInput("Can not go up further. Already in the root.");
-				}else{
-					absolutePath = currentPath.getParent().resolve(path.substring(3));
-				}
-				
-			}else{ //path is of type "London/"
-				absolutePath = currentPath.resolve(path);
-			}
-		}
 		return absolutePath;
 	}
 	
