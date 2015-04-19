@@ -48,14 +48,20 @@ public class VFSTest1 {
 	@Test
 	public void testToAbsolutePath() {
 		try {
-			String path1 = new String("/this/is/an/absolute/path/vfs/");
-			String path2 = new String("../this/is/a/relative/path/");
-			Path expected1 = Paths.get("/this/is/an/absolute/path/vfs/");
-			Path expected2 = Paths.get("/this/is/a/relative/path/");
+			vfs1.changePosition("Root", "/D1/D11");
+			String path1 = new String("/D1/D11");
+			String path2 = new String("../../D2");
+			String path3 = new String("././file11");
+			Path expected1 = Paths.get("/D1/D11");
+			Path expected2 = Paths.get("/D2");
+			Path expected3 = Paths.get("/D1/D11/file11");
 			assertTrue(vfs1.toAbsolutePath("Root",path1).equals(expected1));
 			assertTrue(vfs1.toAbsolutePath("Root",path2).equals(expected2));
+			assertTrue(vfs1.toAbsolutePath("Root",path3).equals(expected3));
 		}
-		catch (Exception e) {assertTrue(false);}
+		catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(false);}
 	}
 
 	@Test
@@ -139,11 +145,20 @@ public class VFSTest1 {
 	public void testShow() throws InvalidInput {
 		try{
 			ArrayList<ArrayList<String>> result = vfs1.show("Root", "", "/D1/");
-			System.out.println(result);
-			assertTrue(result.get(0).equals("file11    f"));
-			assertTrue(result.get(1).equals("D11    d"));
+			ArrayList<ArrayList<String>> expected = new ArrayList<ArrayList<String>>();
+			ArrayList<String> list0 = new ArrayList<String>();
+			ArrayList<String> list1 = new ArrayList<String>();
+			list0.add("file11");
+			list0.add("f");
+			list1.add("D11");
+			list1.add("d");
+			expected.add(list0);
+			expected.add(list1);
+			assertTrue(result.equals(expected));
 		}
-		catch (Exception e) {assertTrue(false);}
+		catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(false);}
 	}
 
 	@Test
@@ -169,7 +184,7 @@ public class VFSTest1 {
 		try { 
 			vfs1.changePosition("Root", "/D1/D11/");			
 			System.out.println(vfs1.getVirtualDisks().get("Root").getCurrentPosition());
-			assertEquals("/D1/D11",vfs1.getVirtualDisks().get("Root").getCurrentPosition());
+			assertEquals("/D1/D11/",vfs1.getVirtualDisks().get("Root").getCurrentPosition());
 		}
 		catch (Exception e) {assertTrue(false);}
 	}
