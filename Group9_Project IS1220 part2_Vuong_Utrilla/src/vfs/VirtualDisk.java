@@ -22,7 +22,7 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 
 		this.sizeMax = size;
 		this.hostPath = new ArrayList<String>();
-		this.absolutePath = "";
+		this.absolutePath = "/";
 		this.currentPosition = "/";
 	}
 	
@@ -68,7 +68,7 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 		if(!(o instanceof VirtualDisk))return false;
 		VirtualDisk vd = (VirtualDisk) o;
 		
-		return (this.currentPosition.equals(vd.currentPosition)&&this.getName().equals(vd.getName())&&this.getFileMap().equals(vd.getFileMap())&&this.getDirectoryMap().equals(vd.getDirectoryMap())&&this.sizeMax==vd.sizeMax&&this.hostPath.equals(vd.hostPath));
+		return (this.currentPosition.equals(vd.currentPosition)&&this.getAbsolutePath().equals(vd.getAbsolutePath())&&this.getName().equals(vd.getName())&&this.getFileMap().equals(vd.getFileMap())&&this.getDirectoryMap().equals(vd.getDirectoryMap())&&this.sizeMax==vd.sizeMax&&this.hostPath.equals(vd.hostPath));
 			
 	}
 

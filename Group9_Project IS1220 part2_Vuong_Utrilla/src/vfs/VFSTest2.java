@@ -26,17 +26,12 @@ public class VFSTest2 {
 			
 			//using commands tested in the first set of tests
 			vfs2=new VFS();
-			vfs2.createVirtualDisk("Root", 1000);
+			vfs2.createVirtualDisk("Root", 30000);
 			vd2=vfs2.getVirtualDisks().get("Root");
 			
 			vfs2.createDirectory("Root", "D1", "/");
-			vfs2.createDirectory("Root", "D2", "/");
-			vfs2.createFile("Root", "file1.txt", "/");
-			vfs2.createFile("Root", "file2.png", "/D1/");
-			vfs2.createFile("Root", "file3.jpg", "/D1/");
-			vfs2.createFile("Root", "file4.txt", "/D2/");
-			vfs2.createDirectory("Root", "D3", "/D2/");
-			
+			vfs2.createDirectory("Root", "D2", "/D1/");
+			vfs2.createFile("Root", "file2.txt", "/D1/");
 			
 			
 		}catch(Exception e){
@@ -46,7 +41,71 @@ public class VFSTest2 {
 		
 	}
 	
+	/**
+	 * testExportVfs
+	 * testing the main functionality of exportVfs.
+	 * (Exporting the virtual disk 'Root'using exportVfs()- which is based on serialization. Then deserializing 
+	 * 'manually' the serialized object and comparing it to the first v
+	 * irtual disk.
+	 */
 	@Test
+	public void testExportVfs(){
+		FileInputStream fileIn=null;
+		ObjectInputStream in=null;
+		Path p1=Paths.get(s);
+		Path p2=p1.resolve("Root");
+		
+		try{
+			
+			vfs2.exportVfs("Root", s);
+			
+			
+			fileIn=new FileInputStream(p2.toString());
+			in= new ObjectInputStream(fileIn);
+			
+			VirtualDisk test=(VirtualDisk)in.readObject();
+			
+			assertEquals(vd2,test);
+		}catch(Exception e){
+			e.printStackTrace();
+			assertFalse(true);
+		}finally{
+			
+			if(fileIn!=null){
+				try{
+					fileIn.close();
+				}catch(IOException e){}
+			}
+			
+			if(in!=null){
+				try{
+					in.close();
+				}catch(IOException e){}
+			}
+			
+			
+			//DELETING THE CREATED FILE CONTAINING THE VIRTUAL DISK
+			File file=new File(p2.toString());
+			file.delete();
+		}
+		
+	}
+	/**
+	 * testExportVfs2
+	 * When exporting a virtual disk 'vdName' to a location of the host file system, if a binary file named 'vdName'
+	 * already exists in this location then DuplicatedNameException is thrown.
+	 * @throws DuplicatedNameException
+	 * @throws InvalidInput
+	 * @throws IOException
+	 */
+	@Test (expected=DuplicatedNameException.class)
+	public void testExportVfs2() throws DuplicatedNameException, InvalidInput, IOException{
+		
+		vfs2.createVirtualDisk("testExportVfs2", 1000000);
+		vfs2.exportVfs("testExportVfs2", s);
+	}
+	
+	/*@Test
 	public void testSave() {
 		
 		FileInputStream filein=null;
@@ -93,31 +152,29 @@ public class VFSTest2 {
 				}catch(IOException e){}	
 			}
 		}
-	}
+	}*/
 	/**
 	 * TestExportFile.
 	 * Test of the basic functionality of ExportFile 
-	 * (Exporting /file1.txt, then importing it manually (FileInputStream) and comparing it to the initial one.
+	 * (Exporting /file1.txt using exportFile()-which was manually imported previously-.Then importing it 
+	 * manually, creating a Fichier 'test' and comparing it to the Fichier 'file1' of the Virtual Disk 'Root'.
 	 * The exported file is then deleted from the host file system.)
 	 */
 	@Test
 	public void testExportFile() {
 		File fileIn=null;
 		FileInputStream in=null;
+		File fileIn2=null;
+		FileInputStream in2=null;
 		try{
 
-			
-			vfs2.exportFile(s,"Root","/file1.txt");
+			//importing a file 'manually'
 			
 			Path p1=Paths.get(s);
-			Path p2=Paths.get("file1.txt");
-			Path p3=p1.resolve(p2);
+			Path p2=p1.resolve("testImportFile.txt");
 			
-			
-			fileIn=new File(p3.toString());
+			fileIn=new File(p2.toString());
 			in=new FileInputStream(fileIn);
-			
-			
 			
 			byte b;
 			ArrayList<Byte> data=new ArrayList<Byte>();
@@ -127,14 +184,35 @@ public class VFSTest2 {
 					
 			}
 			
+			//storing it inside 'Root', name:file1.txt
+			Fichier file1=new Fichier("file1.txt",data);
+			vfs2.getVirtualDisks().get("Root").addFile(file1);
+			
+			//applying exportFile
+			vfs2.exportFile(s,"Root","/file1.txt");
 			
 			
-			Fichier file1=vd2.getFileMap().get("file1.txt");
-			Fichier test=new Fichier("file1.txt","/file1.txt",data);
+			//importing manually the file exported with exportFile
+			Path p3=p1.resolve("file1.txt");
 			
+			
+			fileIn2=new File(p3.toString());
+			in2=new FileInputStream(fileIn2);
+			
+			byte b2;
+			ArrayList<Byte> data2=new ArrayList<Byte>();
+			while((b2=(byte)in2.read())!=-1){
+				
+				data2.add(b2);
+					
+			}
+			
+			//Creating a new Fichier with the expected values 
+			Fichier test=new Fichier("file1.txt","/file1.txt",data2);
+			
+			
+			//Comparing test and file1
 			assertEquals(test,file1);
-			
-			
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -144,10 +222,16 @@ public class VFSTest2 {
 				try{
 					in.close();
 				}catch(IOException e){}
-				//DELETING EXPORTED FILE, IN THE HOST FILE SYSTEM
-				fileIn.delete();
-				
 			}
+			
+			if(in2!=null){
+				try{
+					in2.close();
+				}catch(IOException e){}
+			}
+
+			//DELETING THE EXPORTED FILE
+			fileIn2.delete();
 		}
 		
 		
@@ -175,11 +259,12 @@ public class VFSTest2 {
 	
 	/**
 	 * TestImportFile
-	 * Test the basic functionality of import file 
-	 * (Importing the file 'testImportFile.txt'-which existed already inside the folder 
-	 * VFSTest2 of the host file system. Converting the content of the imported file to an 
-	 * string and comparing it to the expected content: 'testImportFile: this is a test.'-
-	 * it was saved in 'VFSTest2/testImportFile.txt' when this file was created.)
+	 * Test the basic functionality of import file (Importing the file 'testImportFile.txt'-which 
+	 * existed already inside the folder VFSTest2 of the host file system. Comparing the attributes 
+	 * of the Fichier 'testImportFile.txt'imported to the system to the expected ones: name, absolutePath 
+	 * and data- by converting the content of the imported file to an string and comparing it to the 
+	 * expected content: 'testImportFile: this is a test.'that  was saved in 'VFSTest2/testImportFile.txt'
+	 *  when this file was created.)
 	 */
 	
 	@Test
@@ -188,9 +273,12 @@ public class VFSTest2 {
 		
 			Path p=Paths.get(s).resolve("testImportFile.txt");
 			
-			vfs2.importFile(p.toString(),"Root","/");//Importing testImportFile to directory D2
+			vfs2.importFile(p.toString(),"Root","/");
 			
 			Fichier importedFile=vfs2.getVirtualDisks().get("Root").getFileMap().get("testImportFile.txt");
+			
+			assertEquals(importedFile.getName(),"testImportFile.txt");
+			assertEquals(importedFile.getAbsolutePath(),"/testImportFile.txt");
 			
 			ArrayList<Byte> data=importedFile.getData();
 			byte[] data2=new byte[(int)importedFile.getSize()];
@@ -235,7 +323,7 @@ public class VFSTest2 {
 	 * TestImportFile3.
 	 * When importing a file to a virtual disk, if its size is bigger than the amount of free space in the disk 
 	 * 'SizeException' is thrown.
-	 * (Importing a file of 41KB to the Virtual Disk "Root". This disk's free space is smaller than 1KB.)
+	 * (Importing a file of 41KB to the Virtual Disk "Root". This disk's free space is smaller or equal to 30KB (sizeMax))
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 * @throws InvalidInput
@@ -246,7 +334,14 @@ public class VFSTest2 {
 	public void testImportFile3() throws FileNotFoundException, IOException, InvalidInput, SizeException, DuplicatedNameException  {
 		
 		
-		Path p=Paths.get(s).resolve("testImportFile3.txt");//testImportFile3 size is 41KB. The virtual disk free space is smaller than 1KB (size)
+		long freeSpace=(vd2.getSizeMax()-vd2.getOccupiedSpace());
+		
+		Path p=Paths.get(s).resolve("testImportFile3.txt");
+		long size=Files.size(p);
+		
+		
+		assertTrue(size>freeSpace);//The file we want to import is bigger than the space available. 
+		
 		vfs2.importFile(p.toString(), "Root", "/");
 	}
 	
@@ -255,7 +350,6 @@ public class VFSTest2 {
 	 * Tests the main functionality of exportDirectory().
 	 * (Exporting directory 'D2' that contains a file-'file4.txt'- and a directory-'D3'-.Checking the creation in the host file system.
 	 * Deletion of the created items in the host file system when the method is finished)
-	 
 	 */
 	@Test
 	public void testExportDirectory() {
@@ -266,19 +360,19 @@ public class VFSTest2 {
 		try{
 			
 			
-			vfs2.exportDirectory(s, "Root", "/D2/");
+			vfs2.exportDirectory(s, "Root", "/D1/");
 			
 			Path p1=Paths.get(s);
-			Path p2=p1.resolve("D2");
+			Path p2=p1.resolve("D1");
 			
 			test=new File(p2.toString());
 			assertTrue(test.isDirectory());
 		 	
-			Path p3=p2.resolve("file4.txt");
+			Path p3=p2.resolve("file2.txt");
 			test2=new File(p3.toString());
 			assertTrue(test2.isFile());
 			
-			Path p4=p2.resolve("D3");
+			Path p4=p2.resolve("D2");
 			test3=new File(p4.toString());
 			assertTrue(test3.isDirectory());
 		
@@ -314,57 +408,113 @@ public class VFSTest2 {
 		vfs2.exportDirectory(s, "Root", "/testExportDirectory2");
 	}
 
-	/*@Test
+	
+	/**
+	 * TestImportDirectory
+	 * Test of the basic functionality of importDirectory.
+	 * (Importing an existing directory using  importDirectory()(testImportDirectory, which contains the file 
+	 * testImportDirectory(file)).Then, importing the file 'manually', creating a test Directory and a test Fichier and 
+	 * comparing them to the imported ones).
+	 */
+	@Test
 	public void testImportDirectory() {
+		File fileIn=null;
+		FileInputStream in=null;
+		
 		try{
 		
 		
 			Path p1=Paths.get(s);
-			Path p2=Paths.get("D3");
-			Path p3=p1.resolve(p2);
-		
-			File dir=new File(p3.toString());
-			dir.mkdir();
-			
-			Path p4=Paths.get("file6.pdf");
-			Path p5=p3.resolve(p4);
-			File file=new File(p5.toString());
-			file.createNewFile();
+			Path p2=p1.resolve("testImportDirectory");
 			
 			
-			vfs2.importDirectory(p3.toString(), "Root", "/D1/");
+			vfs2.importDirectory(p2.toString(), "Root", "/");
 			
-			Path p=Paths.get("/D1/");
+			//importing the file manually
 			
-			Directory d1=vfs2.goPath("Root",p, 1);
 			
-			assertTrue(d1.getDirectoryMap().containsKey("D3"));
+			Path p3=p2.resolve("testImportDirectory(file).txt");
 			
-			Directory d3=d1.getDirectoryMap().get("D3");
-			assertTrue(d3.getFileMap().containsKey("file6.pdf"));
-			 
-		}
-	catch(Exception e){
+			fileIn=new File(p3.toString());
+			in=new FileInputStream(fileIn);
+			
+			byte b;
+			ArrayList<Byte> data=new ArrayList<Byte>();
+			while((b=(byte)in.read())!=-1){
+				
+				data.add(b);
+					
+			}
+			
+			//Creating test elements
+			Fichier testFile=new Fichier("testImportDirectory(file).txt",data);
+			Directory testDirectory=new Directory("testImportDirectory","/testImportDirectory/");
+			testDirectory.addFile(testFile);
+			
+			Directory dir=vfs2.getVirtualDisks().get("Root").getDirectoryMap().get("testImportDirectory");
+			Fichier file=dir.getFileMap().get("testImportDirectory(file).txt");
+			
+			//Comparing
+			assertEquals(file,testFile);
+			assertEquals(dir,testDirectory);
+			
+		}catch(Exception e){
 			e.printStackTrace();
 			assertTrue(false);
+		}finally{
+			
+			if(in!=null){
+				try{
+					in.close();
+				}catch(IOException e){}
+			}
+			
 		}
 
 	}
 	
+	/**
+	 * TestImportDirectory2
+	 * When importing a non-existing directory from a location of the host file system, DirectoryNotFoundException is thrown.
+	 * @throws DirectoryNotFoundException
+	 * @throws FileNotFoundException
+	 * @throws InvalidInput
+	 * @throws DuplicatedNameException
+	 * @throws SizeException
+	 * @throws IOException
+	 */
+	@Test (expected=DirectoryNotFoundException.class)
+	public void testImportDirectory2() throws DirectoryNotFoundException, FileNotFoundException, InvalidInput, DuplicatedNameException, SizeException, IOException{
+		Path p1=Paths.get(s);
+		Path p2=p1.resolve("testImportDirectory2");
+		vfs2.importDirectory(p2.toString(),"Root","/");
+	}
 	
-	/*@Test 
+	/**
+	 * testFindFile
+	 * Testing the main functionality of findFile(): given a 'filename', a 'vdName' disk and a 'vfsPath',
+	 * the method returns an ArrayList<Fichier> of the files of name 'filename' inside the virtual disk 'vdname' starting 
+	 * the research in 'vfsPath'.
+	 */
+	@Test 
 	
 	public void testFindFile(){
 		try{
-			ArrayList<Fichier> list=vfs2.findFile("file2.png","Root");
 			
-			Fichier test=new Fichier("file2.png");
-			assertEquals(test,list.get(0));
+			vfs2.createFile("Root", "file3.jpg", "/");
+			vfs2.createFile("Root", "file3.jpg", "/D1/");
+			
+			ArrayList<Fichier> list=vfs2.findFile("file3.jpg", "Root", "/");
+			
+			assertEquals(2,list.size());
+			assertEquals("file3.jpg",list.get(0).getName());
+			assertEquals("file3.jpg",list.get(1).getName());
+			
 			
 		}catch(Exception e){
 			e.printStackTrace();
 			assertTrue(false);
 		}
-	}*/
+	}
 	
 }

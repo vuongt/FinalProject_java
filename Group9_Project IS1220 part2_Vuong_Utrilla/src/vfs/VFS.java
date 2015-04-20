@@ -242,18 +242,24 @@ public class VFS {
 		FileOutputStream fileOut=null;
 		ObjectOutputStream out=null;
 		
+		VirtualDisk vd=virtualDisks.get(vDName);
+		
+		//We create the complete hostPath containing the name of the virtual disk
+		Path p1=Paths.get(hostPath);
+		Path completeHostPath=p1.resolve(vDName);
+		
 		try{
-			VirtualDisk vd=virtualDisks.get(vDName);
-					
-			//We create the complete hostPath containing the name of the virtual disk
-			Path p1=Paths.get(hostPath);
-			Path completeHostPath=p1.resolve(vDName);
 		
 			File file=new File(completeHostPath.toString());//The file where we'll export the VD
 			boolean created=file.createNewFile();
 			//We check a file with the same name doesn't exist already in the host file system
+			System.out.println(created);
 			if(!created) throw new DuplicatedNameException("A file with name "+vDName+" already exists in this location of the host file system");
 			
+			
+			
+			//Adding the host path to the list of host paths to which the vfs has been exported
+			vd.getHostPath().add(completeHostPath.toString());
 			
 			fileOut=new FileOutputStream(file);
 			out=new ObjectOutputStream(fileOut);
@@ -261,14 +267,28 @@ public class VFS {
 			//Serialization
 			out.writeObject(vd);
 			
-			//Adding the host path to the list of host paths to which the vfs has been exported
-			vd.getHostPath().add(completeHostPath.toString());
+			
 			
 		}catch(IOException e){
+			//Removing the host path from the list of host paths to which the vfs has been exported
+			vd.getHostPath().remove(vd.getHostPath().size()-1);
 			throw new IOException();
 		}finally{
-			out.close();
-			fileOut.close();
+			if(out!=null){
+				try{
+					out.close();
+				}catch(IOException e){
+					
+				}
+			}
+			if(fileOut!=null){
+				try{
+					fileOut.close();
+				}catch(IOException e){
+					
+				}
+			}
+			
 		}
 	}
 	
