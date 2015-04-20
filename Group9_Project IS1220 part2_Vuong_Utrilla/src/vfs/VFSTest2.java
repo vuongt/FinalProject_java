@@ -17,7 +17,6 @@ public class VFSTest2 {
 	VFS vfs2;
 	VirtualDisk vd2;
 	String s="VFSTest2";
-	;
 	
 
 	@Before
@@ -87,6 +86,7 @@ public class VFSTest2 {
 			//DELETING THE CREATED FILE CONTAINING THE VIRTUAL DISK
 			File file=new File(p2.toString());
 			file.delete();
+			
 		}
 		
 	}
@@ -105,43 +105,52 @@ public class VFSTest2 {
 		vfs2.exportVfs("testExportVfs2", s);
 	}
 	
-	/*@Test
+	/**
+	 * testSave()
+	 * Testing the main functionality of save(): updating the file where a virtual disk 'vdName' was last exported.
+	 * (Creating a virtual disk and exporting it. Modifying the virtual disk and applying the method save(). Deserializing 
+	 * the virtual disk and comparing it to the initial one)
+	 */
+	@Test
 	public void testSave() {
 		
 		FileInputStream filein=null;
 		ObjectInputStream in=null;
+		File file=null;
 		try{
 			
-			vfs2.createFile("Root", "file4.pdf", "/D1/");
 			
 		
 			
 			
 			Path p1=Paths.get(s);
-			Path p2=Paths.get("Root");
-			Path p3=p1.resolve(p2);
+			Path p2=p1.resolve("RootBis");
 			
 			
-			File file=new File(p3.toString());
+			file=new File(p2.toString());
 			if(file.exists())file.delete();
 			
-			vfs2.exportVfs("Root",s);
+			vfs2.createVirtualDisk("RootBis", 1000);
+			vfs2.exportVfs("RootBis", s);
 			
-			vfs2.save("Root");
+			vfs2.createFile("RootBis", "file1.pdf", "/");
+			vfs2.save("RootBis");
 			
 			filein= new FileInputStream(file);
 			
 			in=new ObjectInputStream(filein);
 			
+			VirtualDisk vd=vfs2.getVirtualDisks().get("RootBis");
 			VirtualDisk test=(VirtualDisk)in.readObject();
 			
-			assertEquals(vd2,test);
+			assertEquals(vd,test);
 		}
 		catch(Exception e){
 			e.printStackTrace();
 			assertTrue(false);
 		}
 		finally{
+			
 			if(in!=null){
 				try{
 					in.close();
@@ -151,9 +160,30 @@ public class VFSTest2 {
 				try{
 					filein.close();
 				}catch(IOException e){}	
+				
+				file.delete();
+			
+			
+				
+			
 			}
 		}
-	}*/
+	}
+	
+	/**
+	 * testSave2()
+	 * When saving a file, if it hasn't been exported before then InvalidInput is thrown.
+	 * @throws DuplicatedNameException
+	 * @throws InvalidInput
+	 * @throws IOException
+	 */
+	@Test (expected=InvalidInput.class)
+	public void testSave2() throws DuplicatedNameException, InvalidInput, IOException{
+		
+		vfs2.createVirtualDisk("RootBisBis", 1000);
+		vfs2.save("RootBisBis");
+		
+	}
 	/**
 	 * TestExportFile.
 	 * Test of the basic functionality of ExportFile 
