@@ -10,12 +10,20 @@ public class LittleTest {
 	
 	
 	public static void main(String[] args){
-
-		Path p=Paths.get("/D2");
-		System.out.println(p.getParent().toString());//Host file system path of a non-existing file
-	
+		Scanner sc=new Scanner(System.in);
+		while(true){
+		System.out.println("go : ");
+		
+		
+		String s=sc.nextLine();
+		
+		System.out.println(s.contains("/jjk"));
+		
+		
 		
 		}
+		
+	}
 		
 		
 		
