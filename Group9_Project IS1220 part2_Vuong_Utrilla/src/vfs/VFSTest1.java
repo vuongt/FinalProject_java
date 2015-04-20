@@ -64,10 +64,37 @@ public class VFSTest1 {
 			assertTrue(false);}
 	}
 	
-	/*@Test(expected = InvalidInput.class)
-	public final void whenTryToGoUpFromTheRootThenExceptionIsThrown(){
+	//testToAbsolutePath
+	@Test (expected  = InvalidInput.class) 
+	public void whenTryToGoUpFromRootThenExcceptionIsThrown() throws InvalidInput{
 		vfs1.toAbsolutePath("Root","..");
-	}*/
+	}
+	
+	@Test 
+	public void testCheckPath() throws InvalidInput{
+		try{
+			assertFalse(vfs1.checkPath("Root","/D1/D11"));
+			assertTrue(vfs1.checkPath("Root", "/D1/file11"));
+		}
+		catch (InvalidInput e){
+			e.printStackTrace();
+			assertTrue(false);
+		}
+	}
+	//testCheckpath
+	@Test (expected = InvalidInput.class)
+	public void whenNoVirtualDiskIsFoundThenExceptionIsThrown() throws InvalidInput{
+		vfs1.checkPath("virtualdisk", "/");
+	}
+	
+	//testCheckpath
+	@Test (expected = InvalidInput.class)
+	public void whenThePathIsIncorrectThenExceptionIsThrown() throws InvalidInput{
+		vfs1.checkPath("Root", "/D1/D2");
+	}
+	
+	
+
 
 	@Test
 	public void testGoPath() throws InvalidInput {
@@ -79,6 +106,16 @@ public class VFSTest1 {
 		}
 		catch (Exception e) {assertTrue(false);}
 	}
+	
+	
+	//testGoPath
+	@Test (expected = InvalidInput.class)
+	public void whenTryingToGoFurtherThanTheLengthOfThePathThenExceptionIsThrown() throws InvalidInput{
+		Path p = Paths.get("/D1/D11");
+		vfs1.goPath("Root",p,4);
+	}
+		
+
 
 	@Test
 	public void testCreateVirtualDisk()  {
@@ -87,6 +124,20 @@ public class VFSTest1 {
 		assertTrue(vfs1.getVirtualDisks().containsKey("testdisk"));}
 		catch (Exception e) {assertTrue(false);}
 	}
+	
+	//testCreatVirtualDisk
+	@Test (expected = DuplicatedNameException.class)
+	public void whenVDNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput{
+		vfs1.createVirtualDisk("Root", 1000);
+	}
+		
+	//testCreateVirtualDisk
+	@Test (expected = InvalidInput.class)
+	public void whenTheSizeIsNegatifThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput{
+		vfs1.createVirtualDisk("Root2", -1000);
+	}
+		
+		
 
 	@Test
 	public void testDeleteVirtualDisk() throws DuplicatedNameException, InvalidInput, IOException {
@@ -106,6 +157,12 @@ public class VFSTest1 {
 		catch (Exception e) {assertTrue(false);}
 	}
 	
+	//testCreateFile
+	@Test (expected = DuplicatedNameException.class)
+	public void whenFileNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput{
+		vfs1.createFile("Root", "file1", "/");
+	}
+	
 	@Test
 	public void testCreateDirectory() throws InvalidInput {
 		try{vfs1.createDirectory("Root","D12","/D1/");
@@ -113,6 +170,12 @@ public class VFSTest1 {
 		catch (Exception e) {assertTrue(false);}
 	}
 	
+	//testCreateDirectory
+	@Test (expected = DuplicatedNameException.class)
+	public void whenDirectoryNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput{
+		vfs1.createDirectory("Root", "D1", "/");
+	}
+		
 	@Test
 	public void testDeleteFile() throws InvalidInput {
 		try{vfs1.deleteFile("Root","/D1/file11");
