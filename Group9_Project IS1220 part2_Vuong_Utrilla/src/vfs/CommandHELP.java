@@ -63,18 +63,18 @@ public class CommandHELP extends CommandBehaviour{
 		case "touch":
 			
 			System.out.println("Create a file named 'filename' inside the directoy of position 'vfspath' of the virtual disk 'vfsname'\n"
-					+ "Usage: cd vfsname vfspath filename");
+					+ "Usage: touch vfsname vfspath filename");
 			
 			break;
 		case "mkdir":
 			System.out.println("Create a directory named 'dirname' inside the directoy of position 'vfspath' of the virtual disk 'vfsname'\n"
-					+ "Usage: cd vfsname vfspath dirname");
+					+ "Usage: mkdir vfsname vfspath dirname");
 			
 			break;
 		case "rm":
 			
 			System.out.println("Remove the file or directory of position 'vfspath' of the virtual disk 'vfsname'\n"
-					+ "Usage: cd vfsname vfspath");
+					+ "Usage: rm vfsname vfspath");
 			break;
 			
 		case "cp":
@@ -86,35 +86,35 @@ public class CommandHELP extends CommandBehaviour{
 		case "exp":
 			
 			System.out.println("Export the file or directory of position 'vfspath' of the virtual disk 'vfsname'\n into the location 'hostPath' of the host file system.\n"
-					+ "Usage: cd hostpath vfsname vfspath\n"
+					+ "Usage: exp hostpath vfsname vfspath\n"
 					+ "hostpath is an absolute path of the host file system");
 			break;
 		case "impvfs":
 			
 			System.out.println("Import the file or directory of position 'hostpath' of the host file system\n into the location 'vfspath' of the virtual disk 'vfsname'.\n"
-					+ "Usage: cd hostpath vfsname vfspath\n"
+					+ "Usage: impvfs hostpath vfsname vfspath\n"
 					+ "hostpath is an absolute path of the host file system");
 			break;
 		case "crvfs":
 			
 			System.out.println("Create a virtual disk named 'vfsname' of maximal dimension 'dim' (bytes).\n"
-					+ "Usage: cd vfsname dim");
+					+ "Usage: crvfs vfsname dim");
 			break;
 		case "rmvfs":
 			
 			System.out.println("Delete a virtual disk named 'vfsname'.\n"
-					+ "Usage: cd vfsname ");
+					+ "Usage: rmvfs vfsname ");
 			break;
 		case "expvfs":
 			System.out.println("Export a virtual disk named 'vfsname' to the directory of location 'hostpath' of the host file system.\n"
-					+ "Usage: cd vfsname hostpath\n"
+					+ "Usage: expvfs vfsname hostpath\n"
 					+ "hostpath is an absolute path of the host file system ");
 			
 			break;
 		case "savevfs":
 			
 			System.out.println("Update the state of the virtual disk 'vfsname' into the last location of the host file system it was exported\n"
-					+ "Usage: cd vfsname");
+					+ "Usage: savevfs vfsname");
 			break;
 		case "free":
 			System.out.println("Show the free/occupied space of a virtual disk 'vfsname'\n"
