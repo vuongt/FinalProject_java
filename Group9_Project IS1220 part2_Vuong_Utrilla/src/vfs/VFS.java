@@ -331,8 +331,19 @@ public class VFS {
 		}catch(IOException e){
 			throw new IOException();
 		}finally{
-			out.close();
-			fileOut.close();	
+			
+			if(out!=null){
+				try{
+					out.close();
+				}catch(IOException e){}
+			}
+			
+			if(fileOut!=null){
+				try{
+					fileOut.close();
+				}catch(IOException e){}
+			}
+				
 		}
 		
 		
