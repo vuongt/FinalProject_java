@@ -347,7 +347,7 @@ public class Interface {
 			//(Application of strategy pattern)
 			//Handling of the different exceptions thrown by the vfs methods.
 			
-			if(!behaviour.equals(null)){
+			if(behaviour != null){// use != because if behaviour is really null then NullPointerException is thrown
 				try{
 					behaviour.go();
 					

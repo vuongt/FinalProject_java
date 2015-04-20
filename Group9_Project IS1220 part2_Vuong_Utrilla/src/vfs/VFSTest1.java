@@ -63,6 +63,11 @@ public class VFSTest1 {
 			e.printStackTrace();
 			assertTrue(false);}
 	}
+	
+	/*@Test(expected = InvalidInput.class)
+	public final void whenTryToGoUpFromTheRootThenExceptionIsThrown(){
+		vfs1.toAbsolutePath("Root","..");
+	}*/
 
 	@Test
 	public void testGoPath() throws InvalidInput {
