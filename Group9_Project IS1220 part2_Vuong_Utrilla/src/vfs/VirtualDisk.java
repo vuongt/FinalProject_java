@@ -27,6 +27,7 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 	}
 	
 	
+	
 	public VirtualDisk(String name, String currentPosition, long sizeMax,
 			ArrayList<String> hostPath,String absolutePath,
 			HashMap<String, Fichier> fileMap,
