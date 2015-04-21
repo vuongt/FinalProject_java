@@ -114,6 +114,7 @@ public class VFS {
 	
 	/**
 	 * This method check if a path is correct ( if all the directories and files exist in the virtual disk named vdName)
+	 * This method works on both absolute and relative path
 	 * @param vdName : name of the virtual disk we are looking at
 	 * @param vfsPath : path to check
 	 * @return : true if vfsPath is the path of a file
@@ -712,8 +713,8 @@ public class VFS {
 	 * @throws DuplicatedNameException 
 	 */
 	public void move(String vfsname, String oldpath, String newpath) throws InvalidInput, DuplicatedNameException{
-		Directory source = goPath(vfsname,Paths.get(oldpath),2);
-		Directory target = goPath(vfsname, Paths.get(newpath),1);
+		Directory source = goPath(vfsname,this.toAbsolutePath(vfsname, oldpath),2);
+		Directory target = goPath(vfsname,this.toAbsolutePath(vfsname, newpath),1);
 		String name = Paths.get(oldpath).getFileName().toString();
 		// can we exploit checkPath here ? 
 		if (source.getDirectoryMap().containsKey(name)){
@@ -730,10 +731,12 @@ public class VFS {
 	 * This method change the currentPosition of a virtual disk to a new position
 	 * @param vfsname : name of the virtual disk whose currentPosition is changed
 	 * @param path : the new currentPosition
+	 * @throws InvalidInput 
 	 */
 	//* @throws InvalidInput 
-	public void changePosition(String vdName, String path){//throws InvalidInput
-		this.getVirtualDisks().get(vdName).setCurrentPosition(path);
+	public void changePosition(String vdName, String path) throws InvalidInput{//throws InvalidInput
+		Path newPosition = toAbsolutePath(vdName,path);
+		this.getVirtualDisks().get(vdName).setCurrentPosition(newPosition.toString());
 		/*Path newPosition = toAbsolutePath(vdName,path);
 		int length=newPosition.getNameCount();
 		

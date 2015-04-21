@@ -1,0 +1,72 @@
+vfs:
+crvfs myVD 10000000
+mkdir myVD dir1 /
+mkdir myVD dir2 /
+impvfs eval/host/eval_1/Images myVD /dir1
+cd myVD dir1/Images
+ls myVD -l
+mv myVD flowers.jpg flowersrenamed.jpg
+ls myVD -l
+touch myVD file11 ./
+mv myVD ./file11 /
+pwd myVD
+cd myVD ../../
+pwd myVD
+ls myVD -lA virtual disk named myVD was created
+vfs:
+dir1 was created.
+vfs:
+dir2 was created.
+vfs:
+The directory was imported to the virtual disk
+vfs:
+Updated current position
+vfs:
+ItalieDORSO.jpg                    1185954                            f                                  
+
+flowers.jpg                        13128                              f                                  
+
+REVERSO.jpg                        930818                             f                                  
+
+tree-247122.jpg                    551996                             f                                  
+
+Winter-Tiger-Wild-Cat-Images.jpg   197625                             f                                  
+
+vfs:
+Your file is renamed
+vfs:
+flowersrenamed.jpg                 13128                              f                                  
+
+ItalieDORSO.jpg                    1185954                            f                                  
+
+REVERSO.jpg                        930818                             f                                  
+
+tree-247122.jpg                    551996                             f                                  
+
+Winter-Tiger-Wild-Cat-Images.jpg   197625                             f                                  
+
+vfs:
+file11 was created
+vfs:
+your file or directory is moved to /
+vfs:
+You are in the virtual disk named: myVD
+The current position is: /dir1/Images
+vfs:
+Updated current position
+vfs:
+You are in the virtual disk named: myVD
+The current position is: /
+vfs:
+
+file11                             0                                  f                                  
+
+dir1                               2879521                            d                                  
+
+dir2                               0                                  d                                  
+
+vfs:
+stop
+Would you like to close the system?(yes/no):
+yes
+**************************************************

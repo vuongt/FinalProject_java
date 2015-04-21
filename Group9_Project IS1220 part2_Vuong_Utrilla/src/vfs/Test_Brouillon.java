@@ -34,9 +34,7 @@ public class Test_Brouillon {
 		
 		vfs2.changePosition("Root", "/D1/D11");
 		Path p = Paths.get("/D1");
-		System.out.println(p.getParent());
-		
-		System.out.println(vfs2.toAbsolutePath("Root", "../file2").toString());
+		System.out.println(vfs2.toAbsolutePath("Root", "../../file2").toString());
 		
 	}
 		

@@ -155,8 +155,10 @@ public class Interface {
 				
 			case "mv":
 				//if the two paths are different and path Target is a directory,mv move the object whose path is pathSource to the DIRECTORY whose path is pathTarget
-				////if the two paths are different and path Target is a file,mv throws exception
+				//example of move mv vdName /dir1/file1 /dir2
+				//if the two paths are different and path Target is a file,mv throws exception
 				//if the parents of two paths are similar then mv renames the file/directory whose path is pathSource
+				//example of rename mv vdNAme /dir1/file1 dir1/file1renamed
 				if (st.countTokens()!= 3){
 					System.out.println("Invalid input.Type 'help mv' to display instructions.");
 					break;
@@ -387,7 +389,6 @@ public class Interface {
 					
 				}catch(Exception e){//For the moment, no further specialization in the treatment of exception
 					System.out.println(e.getMessage());
-					e.printStackTrace();
 				}finally{
 					
 					behaviour=null;//Reseting behaviour for the next iteration. 

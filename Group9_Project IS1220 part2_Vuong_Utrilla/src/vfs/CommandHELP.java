@@ -63,12 +63,12 @@ public class CommandHELP extends CommandBehaviour{
 		case "touch":
 			
 			System.out.println("Create a file named 'filename' inside the directoy of position 'vfspath' of the virtual disk 'vfsname'\n"
-					+ "Usage: touch vfsname vfspath filename");
+					+ "Usage: touch vfsname filename vfspath");
 			
 			break;
 		case "mkdir":
 			System.out.println("Create a directory named 'dirname' inside the directoy of position 'vfspath' of the virtual disk 'vfsname'\n"
-					+ "Usage: mkdir vfsname vfspath dirname");
+					+ "Usage: mkdir vfsname dirname vfspath");
 			
 			break;
 		case "rm":
@@ -77,9 +77,20 @@ public class CommandHELP extends CommandBehaviour{
 					+ "Usage: rm vfsname vfspath");
 			break;
 			
-		case "cp":
-			break;
 		case "mv":
+			System.out.println("if the two paths are different and path Target is a directory,\n" +
+					"mv move the object whose path is pathSource to the DIRECTORY whose path is pathTarget\n"+
+				"example of move mv vdName /dir1/file1 /dir2 \n" +
+				"if the two paths are different and path Target is a file,mv throws exception \n"+
+				"if the parents of two paths are similar then mv renames the file/directory whose path is pathSource\n" +
+				"example of rename mv vdNAme /dir1/file1 dir1/file1renamed\n " +
+				"Usage : mv vdName sourcepath targetpath");
+			break;
+		case "cp":
+			System.out.println("copy file/directory to a directory (copy object) \n"+
+				"copy the content of a file to an other file (the content of the destination file will be replaced by the source file's)\n"+
+				"throws exception when user want to copy a directory to a file. \n" +
+				"Usage : cp vdName pathsource pathtarget");
 			break;
 			
 			
