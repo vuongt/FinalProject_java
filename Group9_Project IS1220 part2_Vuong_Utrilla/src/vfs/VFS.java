@@ -2,12 +2,13 @@ package vfs;
 
 
 import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.nio.file.Files;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -448,10 +449,12 @@ public class VFS {
 		FileOutputStream out=null;
 		try{			
 			Path pVfs=toAbsolutePath(vDName,vfsPath);//Path in the vfs
-			Directory dir=goPath(vDName,pVfs,2);//this is the directory which contains the file to export
-	
-			Fichier fileToExport = dir.getFileMap().get(pVfs.getFileName().toString());
 			
+			Directory dir=goPath(vDName,pVfs,2);//this is the directory which contains the file to export
+			
+		
+			Fichier fileToExport = dir.getFileMap().get(pVfs.getFileName().toString());
+
 			//We create the hostPath containing the name of the file
 			
 			Path p1=Paths.get(hostPath);
@@ -465,20 +468,24 @@ public class VFS {
 			//We check a file with the same name doesn't exist already in the host file system (createNewFile returns false in this case)
 			if(!created) throw new DuplicatedNameException(pVfs.getFileName().toString()+" exits already in the specified location of the host file system.");//We check a file with the same name doesn't exist in the same location
 			//Creating the byte stream
+			
+			//output stream
 			out=new FileOutputStream(exportedFile);
 			
-			//Copying the content
+			//Copying the content to a byte[] in order to export it
+			ArrayList<Byte> preData=fileToExport.getData();
 			
-			int i;//NOW IT'S IMPOSSIBLE FOR IT TO BE NULL SINCE WE DO A CHECKPATH BEFORE...IF WE ERASE IT THE CODE GIVES NO PROBLEM
-			/*if(fileToExport.equals(null)) {
-				out.close();
-				throw new InvalidInput("No file");*/
-			//}else{
-				for(i=0;i<fileToExport.getSize();i++){
-					out.write((fileToExport.getData().get(i)));
-				//}
+			byte[] data=new byte[preData.size()];
+			int i=0;
+			for(Byte b:preData){
+				data[i]=b;
+				i++;
 			}
+			   //exporting it
+			out.write(data);
+			
 		}catch(IOException e){
+			e.printStackTrace();
 			throw new IOException();
 		}finally{
 			if(out!=null){
@@ -507,21 +514,21 @@ public class VFS {
    public void importFile(String hostPath,String vDName, String vfsPath) throws FileNotFoundException,IOException,InvalidInput,SizeException,DuplicatedNameException{
 	   FileInputStream in=null;
 	   try{
-		   
 			VirtualDisk vd=virtualDisks.get(vDName);
 			
 			File file=new File(hostPath); //We create a file object associated to the one given by the user
 			in=new FileInputStream(file);//We create a byte stream. It will throw FileNotFoundException if the file doesn't exist
 			
 			Path pVfs=toAbsolutePath(vDName,vfsPath);
+			Path pHost=Paths.get(hostPath);//The user enters an ABSOLUTE host path
 			
 			Directory dir=goPath(vDName,pVfs,1);//We get the directory of the virtual disk where the file goes
 			
-			Path pHost=Paths.get(hostPath);//The user enters an ABSOLUTE host path
-			
-			
 			//The SIZE of the imported file
-			long size=Files.size(pHost);
+			long size=file.length();
+			System.out.println("file "+file.length());
+			
+			
 			
 			if((vd.getSizeMax() - vd.getOccupiedSpace())< size) {
 				in.close();
@@ -532,11 +539,17 @@ public class VFS {
 			String fileName=pHost.getFileName().toString();
 			
 			//The DATA of the file
-			byte b;
+			byte[] preData=new byte[(int)size];
+			in.read(preData);
+			System.out.println("predata "+preData.length);
+			     //converting it to ArrayList<Byte> (in order to compare to arrays of bytes more easily)
 			ArrayList<Byte> data=new ArrayList<Byte>();
-			while((b=(byte)in.read())!=-1){
-				data.add(b);
+			int i;
+			for(i=0;i<(int)size;i++){
+				data.add(preData[i]);
 			}
+			System.out.println("data empty "+ data.isEmpty());
+			System.out.println("data "+ data.size());
 			
 			dir.addFile(new Fichier(fileName,data));//We add the file into the vfs
 			
@@ -640,24 +653,34 @@ public class VFS {
 	
 	   //We import the directories and files contained in the directory
 	   int i;
+	  
 	   for(i=0;i<dirToImport.list().length;i++){
 		   
 		   //We create the  new host path of the new item to be imported
 		   
 		   Path p1=Paths.get(hostPathString);
 		   Path newHostPath=p1.resolve(dirToImport.list()[i]);
-		   
+		
 		 //We create the new vfs path into which the elements will be imported
-		   String newVfsPath=vfsPathString + importedDirectory.getName();
+		   String newVfsPath;
+		   if(vfsPathString.endsWith("/")){
+			  newVfsPath=vfsPathString +  importedDirectory.getName();
+		   }else{
+			  newVfsPath=vfsPathString + "/"+  importedDirectory.getName();
+		   }
+
 		   
 		   //We check whether the item is a file or a directory
 		   File item=new File(newHostPath.toString());
 		   
-		   if(item.isFile())			   
+		   if(item.isFile()){	
+			 
 			   importFile(newHostPath.toString(),vDName,newVfsPath);
-			   
-		   else if(item.isDirectory())			   
+			  
+		   } else if(item.isDirectory()){	   
 			   importDirectory(newHostPath.toString(),vDName,newVfsPath);
+			  
+		   }
 			   
 	   }
    }
@@ -753,13 +776,14 @@ public class VFS {
 	public ArrayList<ArrayList<String>>show(String vfsname, String arg, String vfsPath) throws InvalidInput{
 		Path path;
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
-		if (vfsPath == "") path = Paths.get(this.getVirtualDisks().get("vfsname").getCurrentPosition());
+
+		if (vfsPath == "") path = Paths.get(this.getVirtualDisks().get(vfsname).getCurrentPosition());
 		else {
 		path = Paths.get(vfsPath);
 		}
 		
 		Directory currentDirectory = goPath(vfsname,path,1);
-		
+	
 			
 		if (arg == "-l"|| arg == ""){
 			for ( Fichier file : currentDirectory.getFileMap().values()){

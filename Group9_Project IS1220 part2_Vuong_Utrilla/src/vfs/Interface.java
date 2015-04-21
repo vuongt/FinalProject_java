@@ -1,4 +1,5 @@
 
+
 package vfs;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -329,6 +330,7 @@ public class Interface {
 					System.out.println("Invalid input. Type 'help stop' to display instructions.");
 					break;
 				}
+				break;
 				
 			default:
 				

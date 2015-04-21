@@ -18,7 +18,7 @@ public class CommandLS extends CommandBehaviour{
 		}else if(intarg==1){
 			this.arg="-l";
 		}
-		this.vfsPath = vfs.getVirtualDisks().get(vdName).getCurrentPosition();
+		this.vfsPath = "";
 	}
 	
 	//ls vdName [vdsPath]---->intarg=0
@@ -36,12 +36,22 @@ public class CommandLS extends CommandBehaviour{
 
 	@Override
 	public void go() throws InvalidInput, IOException, DuplicatedNameException {
-		vfs.checkPath(vdName, vfsPath);
+		if(vfsPath==""){
+			vfs.checkPath(vdName, "/");
+		}else{
+			vfs.checkPath(vdName, vfsPath);
+		}
+
 		ArrayList<ArrayList<String>> list = vfs.show(vdName, arg, vfsPath);
+	
 		for (ArrayList<String> smallList : list){
 			for (String s :smallList){
-				System.out.println(s);}
+				System.out.format("%-50s",s);}
 			System.out.println("\n");
+		}
+		
+		if(list.isEmpty()){
+			System.out.println("Empty directory");
 		}
 	}
 }

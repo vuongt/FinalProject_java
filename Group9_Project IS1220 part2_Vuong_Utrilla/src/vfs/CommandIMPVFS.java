@@ -1,6 +1,7 @@
 package vfs;
 
 import java.io.IOException;
+import java.io.File;
 import java.io.FileNotFoundException;
 
 public class CommandIMPVFS extends CommandBehaviour{
@@ -21,14 +22,22 @@ public class CommandIMPVFS extends CommandBehaviour{
 	@Override
 
 	public void go() throws InvalidInput, IOException, DuplicatedNameException,FileNotFoundException, DirectoryNotFoundException, SizeException {
-	if (vfs.checkPath(vdName, vfsPath)){
+	
+	File fileOrDir=new File(hostPath);
+	
+		
+	if (fileOrDir.isFile()){
 		vfs.importFile(hostPath, vdName, vfsPath);// the path correspond to a file
 		System.out.println("The file was imported to the virtual disk");
-	}else {
+	}else if(fileOrDir.isDirectory()){
+		
 		vfs.importDirectory(hostPath, vdName, vfsPath);// the path correspond to a directory
 		System.out.println("The directory was imported to the virtual disk");
 
- }
+	}else{//Not file or directory. Exception is thrown. 
+		throw new FileNotFoundException("The element "+hostPath+" doesn't exist in the host file system.");
+		
+	}
 
 	}
 

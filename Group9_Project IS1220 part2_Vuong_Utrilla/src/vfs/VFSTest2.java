@@ -2,8 +2,10 @@ package vfs;
 
 import static org.junit.Assert.*;
 
+
 import org.junit.Test;
 import org.junit.Before;
+
 
 import java.io.*;
 import java.nio.file.Files;
@@ -199,51 +201,53 @@ public class VFSTest2 {
 		FileInputStream in2=null;
 		try{
 
-			//importing a file 'manually'
+			//importing an existing file 'manually'
 			
 			Path p1=Paths.get(s);
-			Path p2=p1.resolve("testImportFile.txt");
+			Path p2=p1.resolve("testExportFile.pdf");
 			
 			fileIn=new File(p2.toString());
 			in=new FileInputStream(fileIn);
 			
-			byte b;
+			byte[] preData=new byte[(int)fileIn.length()];
+			in.read(preData);
+			
 			ArrayList<Byte> data=new ArrayList<Byte>();
-			while((b=(byte)in.read())!=-1){
-				
-				data.add(b);
-					
+			int i;
+			for(i=0;i<preData.length;i++){
+				data.add(preData[i]);
 			}
 			
 			//storing it inside 'Root', name:file1.txt
-			Fichier file1=new Fichier("file1.txt",data);
+			Fichier file1=new Fichier("file1.pdf",data);
 			vfs2.getVirtualDisks().get("Root").addFile(file1);
 			
 			//applying exportFile
-			vfs2.exportFile(s,"Root","/file1.txt");
+			vfs2.exportFile(s,"Root","/file1.pdf");
 			
 			
 			//importing manually the file exported with exportFile
-			Path p3=p1.resolve("file1.txt");
+			Path p3=p1.resolve("file1.pdf");
 			
 			
 			fileIn2=new File(p3.toString());
 			in2=new FileInputStream(fileIn2);
 			
-			byte b2;
-			ArrayList<Byte> data2=new ArrayList<Byte>();
-			while((b2=(byte)in2.read())!=-1){
-				
-				data2.add(b2);
-					
-			}
+			byte[] preData2=new byte[(int)fileIn2.length()];
 			
+			in2.read(preData2);
+			
+			ArrayList<Byte> data2=new ArrayList<Byte>();
+			
+			for(i=0;i<preData2.length;i++){
+				data2.add(preData2[i]);
+			}
 			//Creating a new Fichier with the expected values 
-			Fichier test=new Fichier("file1.txt","/file1.txt",data2);
+			Fichier expected=new Fichier("file1.pdf","/file1.pdf",data2);
 			
 			
 			//Comparing test and file1
-			assertEquals(test,file1);
+			assertEquals(expected,file1);
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -291,15 +295,14 @@ public class VFSTest2 {
 	/**
 	 * TestImportFile
 	 * Test the basic functionality of import file (Importing the file 'testImportFile.txt'-which 
-	 * existed already inside the folder VFSTest2 of the host file system. Comparing the attributes 
-	 * of the Fichier 'testImportFile.txt'imported to the system to the expected ones: name, absolutePath 
-	 * and data- by converting the content of the imported file to an string and comparing it to the 
-	 * expected content: 'testImportFile: this is a test.'that  was saved in 'VFSTest2/testImportFile.txt'
-	 *  when this file was created.)
+	 * existed already inside the folder VFSTest2 of the host file system. Creating an expected Fichier 
+	 * to compare ir to the imported file- introducing the expected attributes name, absolutePath 
+	 * and data- by importing it 'manually'.)
 	 */
 	
 	@Test
 	public void testImportFile() {
+		FileInputStream fileIn=null;
 		try{
 		
 			Path p=Paths.get(s).resolve("testImportFile.txt");
@@ -308,24 +311,38 @@ public class VFSTest2 {
 			
 			Fichier importedFile=vfs2.getVirtualDisks().get("Root").getFileMap().get("testImportFile.txt");
 			
-			assertEquals(importedFile.getName(),"testImportFile.txt");
-			assertEquals(importedFile.getAbsolutePath(),"/testImportFile.txt");
+			String expectedName="testImportFile.txt";
+			String expectedAbsolutePath="/testImportFile.txt";
 			
-			ArrayList<Byte> data=importedFile.getData();
-			byte[] data2=new byte[(int)importedFile.getSize()];
-			int i=0;
-			for(Byte b:data){
-				data2[i]=b;
-				i++;
+			File file=new File(p.toString());
+			fileIn=new FileInputStream(file);
+			byte[] preData=new byte[(int)file.length()];
+			
+			fileIn.read(preData);
+			
+			ArrayList<Byte> expectedData=new ArrayList<Byte>();
+			int i;
+			for(i=0;i<(int)file.length();i++){
+				expectedData.add(preData[i]);
 			}
 			
-			String contentImportedFile=new String(data2);
-			assertEquals(contentImportedFile,"testImportFile: this is a test.");
+			Fichier expectedFile=new Fichier(expectedName,expectedAbsolutePath,expectedData);
+			
+			assertEquals(importedFile,expectedFile);
+			
 			
 			
 		}catch(Exception e){
 			e.printStackTrace();
 			assertTrue(false);
+		}finally{
+			if(fileIn!=null){
+				try{
+					fileIn.close();
+				}catch(IOException e){
+					
+				}
+			}
 		}
 		
 	}
@@ -449,8 +466,8 @@ public class VFSTest2 {
 	 */
 	@Test
 	public void testImportDirectory() {
-		File fileIn=null;
-		FileInputStream in=null;
+		File file=null;
+		FileInputStream fileIn=null;
 		
 		try{
 		
@@ -466,37 +483,39 @@ public class VFSTest2 {
 			
 			Path p3=p2.resolve("testImportDirectory(file).txt");
 			
-			fileIn=new File(p3.toString());
-			in=new FileInputStream(fileIn);
+			file=new File(p3.toString());
+			fileIn=new FileInputStream(file);
+			byte[] preData=new byte[(int)file.length()];
 			
-			byte b;
-			ArrayList<Byte> data=new ArrayList<Byte>();
-			while((b=(byte)in.read())!=-1){
-				
-				data.add(b);
-					
+			fileIn.read(preData);
+			
+			ArrayList<Byte> expectedData=new ArrayList<Byte>();
+			int i;
+			for(i=0;i<(int)file.length();i++){
+				expectedData.add(preData[i]);
 			}
 			
 			//Creating test elements
-			Fichier testFile=new Fichier("testImportDirectory(file).txt",data);
-			Directory testDirectory=new Directory("testImportDirectory","/testImportDirectory/");
-			testDirectory.addFile(testFile);
+			Fichier expectedFile=new Fichier("testImportDirectory(file).txt",expectedData);
+			Directory expectedDirectory=new Directory("testImportDirectory","/testImportDirectory/");
+			expectedDirectory.addFile(expectedFile);
 			
-			Directory dir=vfs2.getVirtualDisks().get("Root").getDirectoryMap().get("testImportDirectory");
-			Fichier file=dir.getFileMap().get("testImportDirectory(file).txt");
+			Directory impDir=vfs2.getVirtualDisks().get("Root").getDirectoryMap().get("testImportDirectory");
+			Fichier impFile=impDir.getFileMap().get("testImportDirectory(file).txt");
 			
 			//Comparing
-			assertEquals(file,testFile);
-			assertEquals(dir,testDirectory);
+			assertEquals(impFile,expectedFile);
+			
+			assertEquals(impDir,expectedDirectory);
 			
 		}catch(Exception e){
 			e.printStackTrace();
 			assertTrue(false);
 		}finally{
 			
-			if(in!=null){
+			if(fileIn!=null){
 				try{
-					in.close();
+					fileIn.close();
 				}catch(IOException e){}
 			}
 			
