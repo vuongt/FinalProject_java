@@ -387,6 +387,7 @@ public class Interface {
 					
 				}catch(Exception e){//For the moment, no further specialization in the treatment of exception
 					System.out.println(e.getMessage());
+					e.printStackTrace();
 				}finally{
 					
 					behaviour=null;//Reseting behaviour for the next iteration. 

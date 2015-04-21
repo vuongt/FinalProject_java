@@ -21,12 +21,16 @@ public class CommandCP extends CommandBehaviour {
 		boolean sourceIsFile = vfs.checkPath(vdName, source);
 		boolean targetIsFile = vfs.checkPath(vdName, target);
 		if (targetIsFile){
-			if (sourceIsFile) vfs.copyContentFile(vdName,source,target);
+			if (sourceIsFile) {
+				vfs.copyContentFile(vdName,source,target);
+				System.out.println("the content of "+ source +" is copied to " + target);
+			}
 			else throw new InvalidInput("Cannot copy a directory to a file");
 		}
 		
 		else {
 			vfs.copy(vdName, source, target);
+			System.out.println(source + " is copied to " + target);
 		}
 		
 	}

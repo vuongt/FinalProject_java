@@ -6,11 +6,12 @@ public class CommandPWD extends CommandBehaviour {
 
 	public CommandPWD(VFS vfs, String vdName) {
 		super(vfs);
+		this.vdName = vdName;
 	}
 
 	@Override
 	public void go() throws InvalidInput {
-		vfs.checkPath(vdName, "/");
+		vfs.checkPath(this.vdName, "/");
 
 		System.out.println("You are in the virtual disk named: " + vdName);
 		System.out.println("The current position is: " + vfs.getVirtualDisks().get(vdName).getCurrentPosition());
