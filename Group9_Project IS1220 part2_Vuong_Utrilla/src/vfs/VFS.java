@@ -873,4 +873,21 @@ public class VFS {
 		}
 		
 	}
+	
+	/**
+	 * Copy the content of a FILE to an other FILE
+	 * Before the method is called, sourcePath and targetPath must be checked to be path of files.
+	 * @param vdName : name of the virtual disk
+	 * @param sourcePath : path of the source file 
+	 * @param targetPath : path of the target file
+	 * @throws InvalidInput 
+	 */
+	public void copyContentFile(String vdName,String sourcePath,String targetPath) throws InvalidInput{
+		Path source = Paths.get(sourcePath);
+		Path target = Paths.get(targetPath);
+		Fichier sourceFile = this.goPath(vdName, source, 2).getFileMap().get(source.getFileName().toString());
+		Fichier targetFile = this.goPath(vdName, target, 2).getFileMap().get(target.getFileName().toString());
+		targetFile.getData().clear();
+		targetFile.getData().addAll(sourceFile.getData());
+	}
 }
