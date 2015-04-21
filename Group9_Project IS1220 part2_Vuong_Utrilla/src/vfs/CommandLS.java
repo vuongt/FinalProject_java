@@ -46,7 +46,7 @@ public class CommandLS extends CommandBehaviour{
 	
 		for (ArrayList<String> smallList : list){
 			for (String s :smallList){
-				System.out.format("%-50s",s);}
+				System.out.format("%-35s",s);}
 			System.out.println("\n");
 		}
 		

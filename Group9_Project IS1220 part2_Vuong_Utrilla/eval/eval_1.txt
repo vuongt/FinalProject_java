@@ -1,0 +1,73 @@
+vfs:
+crvfs eval_1 10000000
+A virtual disk named eval_1 was created
+vfs:
+impvfs eval\host\eval_1\Images eval_1 .
+The directory was imported to the virtual disk
+vfs:
+impvfs eval\host\eval_1\Shakespeare eval_1 .
+The directory was imported to the virtual disk
+vfs:
+impvfs eval\host\eval_1\Sleep_Away.mp3 eval_1 .
+The file was imported to the virtual disk
+vfs:
+impvfs eval\host\eval_1\Sleep_Away.mp3 eval_1 Shakespeare
+Not enough free space in the virtual disk.
+vfs:
+ls eval_1 
+Sleep_Away.mp3                     f                                  
+
+Shakespeare                        d                                  
+
+Images                             d                                  
+
+vfs:
+ls eval_1 -l
+Sleep_Away.mp3                     4842585                            f                                  
+
+Shakespeare                        877290                             d                                  
+
+Images                             2879521                            d                                  
+
+vfs:
+ls eval_1 -l Images
+flowers.jpg                        13128                              f                                  
+
+REVERSO.jpg                        930818                             f                                  
+
+tree-247122.jpg                    551996                             f                                  
+
+ItalieDORSO.jpg                    1185954                            f                                  
+
+Winter-Tiger-Wild-Cat-Images.jpg   197625                             f                                  
+
+vfs:
+ls eval_1 -l Shakespeare
+hamletact1.txt                     41069                              f                                  
+
+hamlet.pdf                         836221                             f                                  
+
+vfs:
+free eval_1
+Occupied space of the virtual disk eval_1 :8599396
+Free space of the virtual disk eval_1 :1400604
+vfs:
+find eval_1 ItalieDORSO.jpg
+1 file(s) found.Their absolute path in eval_1 are : 
+/Images/ItalieDORSO.jpg
+vfs:
+find eval_1 NonExistingZip.zip
+No file named 'NonExistingZip.zip' was found
+vfs:
+help expvfs
+Export a virtual disk named 'vfsname' to the directory of location 'hostpath' of the host file system.
+Usage: expvfs vfsname hostpath
+hostpath is an absolute path of the host file system 
+vfs:
+expvfs eval_1 eval
+The virtual disk named eval_1 was exported toeval
+vfs:
+stop
+Would you like to close the system?(yes/no):
+yes
+**************************************************

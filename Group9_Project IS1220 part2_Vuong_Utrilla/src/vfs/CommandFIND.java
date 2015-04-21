@@ -28,9 +28,10 @@ public class CommandFIND extends CommandBehaviour{
 		ArrayList<Fichier> result = vfs.findFile(searchFile, vdName, vfsPath);
 
 		
-		if(!result.equals(null)){
-			System.out.println(result.size() + " files found" +
-					"Their absolute path in " + vdName + "are : ");
+		if(result!=null){
+
+			System.out.println(result.size() + " file(s) found" +
+					".Their absolute path in " + vdName + " are : ");
 			for (Fichier f : result){
 				System.out.println(f.getAbsolutePath());
 			}

@@ -254,7 +254,7 @@ public class VFS {
 			File file=new File(completeHostPath.toString());//The file where we'll export the VD
 			boolean created=file.createNewFile();
 			//We check a file with the same name doesn't exist already in the host file system
-			System.out.println(created);
+			
 			if(!created) throw new DuplicatedNameException("A file with name "+vDName+" already exists in this location of the host file system");
 			
 			
@@ -526,7 +526,7 @@ public class VFS {
 			
 			//The SIZE of the imported file
 			long size=file.length();
-			System.out.println("file "+file.length());
+			
 			
 			
 			
@@ -541,15 +541,13 @@ public class VFS {
 			//The DATA of the file
 			byte[] preData=new byte[(int)size];
 			in.read(preData);
-			System.out.println("predata "+preData.length);
+			
 			     //converting it to ArrayList<Byte> (in order to compare to arrays of bytes more easily)
 			ArrayList<Byte> data=new ArrayList<Byte>();
 			int i;
 			for(i=0;i<(int)size;i++){
 				data.add(preData[i]);
 			}
-			System.out.println("data empty "+ data.isEmpty());
-			System.out.println("data "+ data.size());
 			
 			dir.addFile(new Fichier(fileName,data));//We add the file into the vfs
 			

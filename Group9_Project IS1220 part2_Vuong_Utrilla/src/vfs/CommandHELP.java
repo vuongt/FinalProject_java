@@ -125,8 +125,9 @@ public class CommandHELP extends CommandBehaviour{
 					+ "Usage: pwd vfsname");
 			break;
 		case "find":
-			System.out.println("Search if a file named 'vfsname' exists in a virtual disk 'vfsname'\n"
-					+ "Usage: find vfsname filename");
+			System.out.println("Search if a file named 'vfsname' exists in the location 'vfspath' of a virtual disk 'vfsname'\n"
+					+ "Usage: find vfsname filename [vfspath]\n"
+					+ "If no vfspath is specified the search traverses the entire virtual disk");
 			break;
 		case "stop":
 			System.out.println("Close the vfs\n"
