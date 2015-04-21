@@ -153,13 +153,34 @@ public class Interface {
 				behaviour=new CommandRM(vfs,vdName,vfsPath);
 				break;
 				
-			//FALTA	
-			case "rename"://rename file or directory
+			case "mv":
+				//if the two paths are different and path Target is a directory,mv move the object whose path is pathSource to the DIRECTORY whose path is pathTarget
+				////if the two paths are different and path Target is a file,mv throws exception
+				//if the parents of two paths are similar then mv renames the file/directory whose path is pathSource
+				if (st.countTokens()!= 3){
+					System.out.println("Invalid input.Type 'help mv' to display instructions.");
+					break;
+				}
+				vdName = st.nextToken();
+				String pathSource = st.nextToken();
+				String pathTarget = st.nextToken();
+				
+				behaviour = new CommandMV(vfs,vdName,pathSource,pathTarget);
 				break;
-			case "mv"://move file/dir
-				break;
-			case "cp"://copy file/dir
-				break;	
+			case "cp":
+				//copy file/directory to a directory (copy object)
+				//copy the content of a file to an other file (the content of the destination file will be replaced by the source file's)
+				//throws exception when user want to copy a directory to a file
+				if (st.countTokens()!= 3){
+					System.out.println("Invalid input.Type 'help mv' to display instructions.");
+					break;
+				}
+				vdName = st.nextToken();
+				String stringSource = st.nextToken();
+				String stringTarget = st.nextToken();
+				
+				behaviour = new CommandMV(vfs,vdName,stringSource,stringTarget);
+				break;		
 				
 				
 			case "exp"://export file or directory
