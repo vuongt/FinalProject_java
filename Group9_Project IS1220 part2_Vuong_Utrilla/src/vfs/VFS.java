@@ -123,10 +123,7 @@ public class VFS {
 	 */
 	public boolean checkPath(String vdName, String vfsPath) throws InvalidInput, InvalidNameException{
 		boolean isFile;
-		
-		if(vfsPath==null||vfsPath.contains("|")||vfsPath.contains("\\")||vfsPath.contains(":")||vfsPath.contains("*")||vfsPath.contains("?")||vfsPath.contains("\"")||vfsPath.contains("<")||vfsPath.contains(">")){
-			throw new InvalidNameException(vfsPath+ " has an invalid syntax");
-		}
+	
 		
 		// We check if the virtual disk named vdName exists
 		if(!this.getVirtualDisks().containsKey(vdName))

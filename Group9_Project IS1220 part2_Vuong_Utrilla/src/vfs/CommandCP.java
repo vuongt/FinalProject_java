@@ -19,8 +19,11 @@ public class CommandCP extends CommandBehaviour {
 	@Override
 	public void go() throws InvalidInput, DuplicatedNameException, InvalidNameException {
 		boolean sourceIsFile = vfs.checkPath(vdName, source);
+		System.out.println("aqui");
 		boolean targetIsFile = vfs.checkPath(vdName, target);
+		System.out.println("a1ui");
 		if (targetIsFile){
+			
 			if (sourceIsFile) {
 				vfs.copyContentFile(vdName,source,target);
 				System.out.println("the content of "+ source +" is copied to " + target);
@@ -29,6 +32,7 @@ public class CommandCP extends CommandBehaviour {
 		}
 		
 		else {
+			System.out.println("aqui");
 			vfs.copy(vdName, source, target);
 			System.out.println(source + " is copied to " + target);
 		}
