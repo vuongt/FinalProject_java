@@ -1,31 +1,31 @@
 package vfs;
 
-public class InvalidSyntaxException extends Exception{
+public class InvalidNameException extends Exception{
 
 	private static final long serialVersionUID = 500L;
 
-	public InvalidSyntaxException() {
+	public InvalidNameException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public InvalidSyntaxException(String arg0, Throwable arg1, boolean arg2,
+	public InvalidNameException(String arg0, Throwable arg1, boolean arg2,
 			boolean arg3) {
 		super(arg0, arg1, arg2, arg3);
 		// TODO Auto-generated constructor stub
 	}
 
-	public InvalidSyntaxException(String arg0, Throwable arg1) {
+	public InvalidNameException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 		// TODO Auto-generated constructor stub
 	}
 
-	public InvalidSyntaxException(String arg0) {
+	public InvalidNameException(String arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
-	public InvalidSyntaxException(Throwable arg0) {
+	public InvalidNameException(Throwable arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}

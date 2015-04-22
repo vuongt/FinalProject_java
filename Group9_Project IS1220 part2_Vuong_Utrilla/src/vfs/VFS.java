@@ -867,12 +867,12 @@ public class VFS {
 	/**
 	 * Checks if a name is correct (characters |/\:*?"<> not allowed).
 	 * @param name, the tested name
-	 * @throws InvalidSyntaxException, unfollowed rules.
+	 * @throws InvalidNameException, unfollowed rules.
 	 */
-	public void checkSyntax(String name) throws InvalidSyntaxException{
+	public void checkName(String name) throws InvalidNameException{
 		
 		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
-			throw new InvalidSyntaxException(name+ " has an invalid syntax for this VFS");
+			throw new InvalidNameException(name+ " has an invalid syntax for this VFS");
 		}
 		
 	}

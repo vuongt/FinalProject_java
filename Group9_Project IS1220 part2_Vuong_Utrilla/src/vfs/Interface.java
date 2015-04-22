@@ -2,6 +2,7 @@
 
 package vfs;
 import java.io.FileNotFoundException;
+import java.nio.file.InvalidPathException;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -155,10 +156,8 @@ public class Interface {
 				
 			case "mv":
 				//if the two paths are different and path Target is a directory,mv move the object whose path is pathSource to the DIRECTORY whose path is pathTarget
-				//example of move mv vdName /dir1/file1 /dir2
-				//if the two paths are different and path Target is a file,mv throws exception
+				////if the two paths are different and path Target is a file,mv throws exception
 				//if the parents of two paths are similar then mv renames the file/directory whose path is pathSource
-				//example of rename mv vdNAme /dir1/file1 dir1/file1renamed
 				if (st.countTokens()!= 3){
 					System.out.println("Invalid input.Type 'help mv' to display instructions.");
 					break;
@@ -314,6 +313,7 @@ public class Interface {
 				}
 				
 				
+				
 				break;
 				
 			case "help":
@@ -382,10 +382,16 @@ public class Interface {
 				}catch(FileNotFoundException e){//To distinguish from IOException
 					System.out.println(e.getMessage());
 					
+				}catch(InvalidPathException e){
+					System.out.println("Invalid path: "+ e.getMessage());
+					
+					
 				}catch(IOException e){
 					System.out.println("An I/O exception occurred while trying to connect with the host file system.");
-					
-				//catch(PathSyntaxException e) show instructions!!!!
+				
+				}catch(InvalidNameException e){
+					System.out.println(e.getMessage());
+					System.out.println("Invalid file/directory name characters: '|','\','/','?','*','\"',':','<','>'");
 					
 				}catch(Exception e){//For the moment, no further specialization in the treatment of exception
 					System.out.println(e.getMessage());

@@ -12,7 +12,8 @@ public class CommandCRVFS extends CommandBehaviour {
 		this.sizeMax = sizeMax;
 	}
 	
-	public void go() throws DuplicatedNameException,InvalidInput{
+	public void go() throws DuplicatedNameException,InvalidInput, InvalidNameException{
+		vfs.checkName(vdName);
 		vfs.createVirtualDisk(vdName, sizeMax);
 		System.out.println("A virtual disk named " + vdName + " was created");
 	}
