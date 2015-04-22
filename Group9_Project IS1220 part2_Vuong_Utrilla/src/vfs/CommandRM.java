@@ -12,7 +12,7 @@ public class CommandRM extends CommandBehaviour{
 	}
 
 	@Override
-	public void go() throws InvalidInput {
+	public void go() throws InvalidInput, InvalidNameException {
 
 			if (vfs.checkPath(vdName, vfsPath)){
 	 			vfs.deleteFile(vdName, vfsPath);// the path correspond to a file

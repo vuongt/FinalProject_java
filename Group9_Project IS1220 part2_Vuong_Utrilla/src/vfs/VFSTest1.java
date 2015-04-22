@@ -71,28 +71,33 @@ public class VFSTest1 {
 	}
 	
 	@Test 
-	public void testCheckPath() throws InvalidInput{
+	public void testCheckPath() throws InvalidInput, InvalidNameException{
 		try{
 			assertFalse(vfs1.checkPath("Root","/D1/D11"));
 			assertTrue(vfs1.checkPath("Root", "/D1/file11"));
 		}
-		catch (InvalidInput e){
+		catch (Exception e){
 			e.printStackTrace();
 			assertTrue(false);
 		}
 	}
 	//testCheckpath
 	@Test (expected = InvalidInput.class)
-	public void whenNoVirtualDiskIsFoundThenExceptionIsThrown() throws InvalidInput{
+	public void whenNoVirtualDiskIsFoundThenExceptionIsThrown() throws InvalidInput, InvalidNameException{
 		vfs1.checkPath("virtualdisk", "/");
 	}
 	
 	//testCheckpath
 	@Test (expected = InvalidInput.class)
-	public void whenThePathIsIncorrectThenExceptionIsThrown() throws InvalidInput{
+	public void whenThePathIsIncorrectThenExceptionIsThrown() throws InvalidInput, InvalidNameException{
 		vfs1.checkPath("Root", "/D1/D2");
 	}
 	
+	//testCheckPath
+	@Test (expected = InvalidNameException.class)
+	public void whenInvalidCharactersAreUsedThenExceptionIsThrown() throws InvalidInput, InvalidNameException{
+		vfs1.checkPath("Root", "/?/");
+	}
 	
 
 
@@ -127,13 +132,13 @@ public class VFSTest1 {
 	
 	//testCreatVirtualDisk
 	@Test (expected = DuplicatedNameException.class)
-	public void whenVDNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput{
+	public void whenVDNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput, InvalidNameException{
 		vfs1.createVirtualDisk("Root", 1000);
 	}
 		
 	//testCreateVirtualDisk
 	@Test (expected = InvalidInput.class)
-	public void whenTheSizeIsNegatifThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput{
+	public void whenTheSizeIsNegatifThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput, InvalidNameException{
 		vfs1.createVirtualDisk("Root2", -1000);
 	}
 		
@@ -159,7 +164,7 @@ public class VFSTest1 {
 	
 	//testCreateFile
 	@Test (expected = DuplicatedNameException.class)
-	public void whenFileNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput{
+	public void whenFileNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput, InvalidNameException{
 		vfs1.createFile("Root", "file1", "/");
 	}
 	
@@ -172,7 +177,7 @@ public class VFSTest1 {
 	
 	//testCreateDirectory
 	@Test (expected = DuplicatedNameException.class)
-	public void whenDirectoryNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput{
+	public void whenDirectoryNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidInput, InvalidNameException{
 		vfs1.createDirectory("Root", "D1", "/");
 	}
 		

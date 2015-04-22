@@ -14,7 +14,7 @@ public class CommandEXPVFS extends CommandBehaviour {
 	}
 
 	@Override
-	public void go() throws InvalidInput, IOException, DuplicatedNameException{
+	public void go() throws InvalidInput, IOException, DuplicatedNameException, InvalidNameException{
 		vfs.checkPath(vdName,"/");
 		vfs.exportVfs(vdName, hostPath);
 		System.out.println("The virtual disk named " + vdName + " was exported to " + hostPath);

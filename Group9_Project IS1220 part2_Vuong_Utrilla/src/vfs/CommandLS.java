@@ -35,7 +35,7 @@ public class CommandLS extends CommandBehaviour{
 	}
 
 	@Override
-	public void go() throws InvalidInput, IOException, DuplicatedNameException {
+	public void go() throws InvalidInput, IOException, DuplicatedNameException, InvalidNameException {
 		if(vfsPath==""){
 			vfs.checkPath(vdName, "/");
 		}else{

@@ -11,7 +11,7 @@ public class CommandFREE extends CommandBehaviour{
 	}
 
 	@Override
-	public void go() throws InvalidInput{
+	public void go() throws InvalidInput, InvalidNameException{
 		vfs.checkPath(vdName, "/");
 		System.out.println("Occupied space of the virtual disk " + vdName + " :"
 

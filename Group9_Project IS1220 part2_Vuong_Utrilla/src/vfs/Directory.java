@@ -10,16 +10,22 @@ public class Directory implements Serializable, Item {
 	protected HashMap<String,Directory> directoryMap;
 	private static final long serialVersionUID = 445;
 	
-	public Directory(String name){
+	public Directory(String name) throws InvalidNameException{
 		super();
+		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
+			throw new InvalidNameException(name+ " has an invalid syntax");
+		}
 		this.name= name;
 		this.fileMap= new HashMap<String,Fichier>();
 		this.directoryMap = new HashMap<String,Directory>();
 		this.absolutePath = "";
 	}
 	
-	public Directory(String name, String absolutePath) {
+	public Directory(String name, String absolutePath) throws InvalidNameException {
 		super();
+		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
+			throw new InvalidNameException(name+ " has an invalid syntax");
+		}
 		this.name = name;
 		this.absolutePath = absolutePath;
 		this.fileMap = new HashMap<String,Fichier>();
@@ -28,8 +34,11 @@ public class Directory implements Serializable, Item {
 	
 	public Directory(String name, String absolutePath,
 			HashMap<String, Fichier> fileMap,
-			HashMap<String, Directory> directoryMap) {
+			HashMap<String, Directory> directoryMap) throws InvalidNameException {
 		super();
+		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
+			throw new InvalidNameException(name+ " has an invalid syntax");
+		}
 		this.name = name;
 		this.absolutePath = absolutePath;
 		this.fileMap = fileMap;
@@ -39,7 +48,7 @@ public class Directory implements Serializable, Item {
 	
 
 
-	public void addFile(String name) throws DuplicatedNameException{
+	public void addFile(String name) throws DuplicatedNameException, InvalidNameException{
 		if (this.getFileMap().containsKey(name)) throw new DuplicatedNameException("there is already a file named " + name+ "in this directory");
 		else {
 			Fichier file = new Fichier(name);
@@ -56,7 +65,7 @@ public class Directory implements Serializable, Item {
 			}
 	}
 	
-	public void addDirectory(String name) throws DuplicatedNameException{
+	public void addDirectory(String name) throws DuplicatedNameException, InvalidNameException{
 		if (this.getDirectoryMap().containsKey(name)) throw new DuplicatedNameException("There is already a directory named " + name+ "in this directory");
 		else {
 			Directory d = new Directory(name);
@@ -116,7 +125,10 @@ public class Directory implements Serializable, Item {
 	}
 	
 
-	public void setName(String name) {
+	public void setName(String name) throws InvalidNameException {
+		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
+			throw new InvalidNameException(name+ " has an invalid syntax");
+		}
 		this.name = name;
 	}
 

@@ -13,7 +13,7 @@ public class CommandRMVFS extends CommandBehaviour{
 		this.vdName = vdName;
 	}
 	
-	public void go() throws InvalidInput, IOException{
+	public void go() throws InvalidInput, IOException, InvalidNameException{
 		vfs.checkPath(vdName,"/");
 		vfs.deleteVirtualDisk(vdName);
 		System.out.println(vdName + " was deleted");

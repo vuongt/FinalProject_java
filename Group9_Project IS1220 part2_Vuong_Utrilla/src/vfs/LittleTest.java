@@ -16,10 +16,7 @@ public class LittleTest {
 		Scanner sc=new Scanner(System.in);
 		String s=sc.nextLine();
 		Path p=Paths.get(s);
-		System.out.println(p.getName(0));
-		System.out.println(p.getName(1));
-		System.out.println(p.getName(2));
-		System.out.println(p.toString());
+		System.out.println(p.getParent());
 		
 		
 		

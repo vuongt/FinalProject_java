@@ -13,7 +13,7 @@ public class CommandSAVEVFS extends CommandBehaviour{
 	@Override
 
 	public void go() throws InvalidInput, IOException, DuplicatedNameException,
-			  SizeException {
+			  SizeException, InvalidNameException {
 
 		vfs.checkPath(vdName, "/");
 		vfs.save(vdName);

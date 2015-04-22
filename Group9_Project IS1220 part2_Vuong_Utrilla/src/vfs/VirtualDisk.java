@@ -14,8 +14,9 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 	
 	/**
 	 * create a virtual disk with fixed size (in bytes)
+	 * @throws InvalidNameException 
 	 */
-	public VirtualDisk(String name, long size) throws InvalidInput{
+	public VirtualDisk(String name, long size) throws InvalidInput, InvalidNameException{
 		super(name);
 
 		if (size < 0 ) throw new InvalidInput("The size must be positive.");
@@ -31,7 +32,7 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 	public VirtualDisk(String name, String currentPosition, long sizeMax,
 			ArrayList<String> hostPath,String absolutePath,
 			HashMap<String, Fichier> fileMap,
-			HashMap<String, Directory> directoryMap) throws InvalidInput {
+			HashMap<String, Directory> directoryMap) throws InvalidInput, InvalidNameException {
 		super(name,absolutePath,fileMap,directoryMap);
 		this.currentPosition = currentPosition;
 

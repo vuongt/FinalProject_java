@@ -10,7 +10,7 @@ public class CommandPWD extends CommandBehaviour {
 	}
 
 	@Override
-	public void go() throws InvalidInput {
+	public void go() throws InvalidInput, InvalidNameException {
 		vfs.checkPath(this.vdName, "/");
 
 		System.out.println("You are in the virtual disk named: " + vdName);

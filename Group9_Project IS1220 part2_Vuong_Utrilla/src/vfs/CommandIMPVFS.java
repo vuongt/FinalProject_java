@@ -21,7 +21,7 @@ public class CommandIMPVFS extends CommandBehaviour{
 
 	@Override
 
-	public void go() throws InvalidInput, IOException, DuplicatedNameException,FileNotFoundException, DirectoryNotFoundException, SizeException {
+	public void go() throws InvalidInput, IOException, DuplicatedNameException,FileNotFoundException, DirectoryNotFoundException, SizeException, InvalidNameException {
 	
 	File fileOrDir=new File(hostPath);
 	

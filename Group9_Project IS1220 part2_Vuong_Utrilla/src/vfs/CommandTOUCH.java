@@ -15,7 +15,7 @@ public class CommandTOUCH extends CommandBehaviour {
 	}
 	
 	public void go() throws InvalidInput,DuplicatedNameException, InvalidNameException{
-		vfs.checkName(fileName);
+	
 		vfs.checkPath(vdName, vfsPath);
 		vfs.createFile(vdName, fileName, vfsPath);
 

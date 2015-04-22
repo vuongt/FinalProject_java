@@ -13,7 +13,7 @@ public class CommandMKDIR extends CommandBehaviour {
 	}
 	
 	public void go() throws InvalidInput,DuplicatedNameException, InvalidNameException{
-		vfs.checkName(dirName);
+	
 		vfs.checkPath(vdName, vfsPath);
 		vfs.createDirectory(vdName, dirName, vfsPath);
 		System.out.println(dirName+" was created.");

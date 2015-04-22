@@ -12,9 +12,10 @@ public class Test_Brouillon {
 	 * @param args
 	 * @throws InvalidInput 
 	 * @throws DuplicatedNameException 
+	 * @throws InvalidNameException 
 	 * @throws IOException 
 	 */
-	public static void main(String[] args) throws InvalidInput, DuplicatedNameException {
+	public static void main(String[] args) throws InvalidInput, DuplicatedNameException, InvalidNameException {
 		VFS vfs2=new VFS();
 		VirtualDisk vd2 = new VirtualDisk("Root",1000);
 		vfs2.getVirtualDisks().put("Root",vd2 );

@@ -10,7 +10,7 @@ public class DirectoryTest {
 	Directory D1;
 
 	@Before
-	public void initialize() throws DuplicatedNameException,InvalidInput{
+	public void initialize() throws DuplicatedNameException,InvalidInput,InvalidNameException{
 		try{
 			D1 = new Directory("D1");
 			Directory D11 = new Directory("D11");
@@ -22,56 +22,55 @@ public class DirectoryTest {
 	}
 	
 	@Test
-	public void testAddFile() throws DuplicatedNameException {
+	public void testAddFile() throws DuplicatedNameException, InvalidNameException {
 		D1.addFile("file12");
 		assertTrue(D1.getFileMap().containsKey("file12"));
 	}
 	//testAddFile
 	@Test (expected = DuplicatedNameException.class)
-	public void whenFileNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException{
+	public void whenFileNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidNameException{
 		D1.addFile("file11");
 	}
 		
-	
 	@Test
-	public void testAddFilebis() throws DuplicatedNameException {
+	public void testAddFilebis() throws DuplicatedNameException, InvalidNameException {
 		Fichier file12 = new Fichier("file12");
 		D1.addFile(file12);
 		assertTrue(D1.getFileMap().containsKey("file12"));
 	}
 	//testAddFilebis
 	@Test (expected = DuplicatedNameException.class)
-	public void whenFileNameIsDuplicatedThenExceptionIsThrownbis() throws DuplicatedNameException{
+	public void whenFileNameIsDuplicatedThenExceptionIsThrownbis() throws DuplicatedNameException, InvalidNameException{
 		Fichier file11bis = new Fichier("file11");
 		D1.addFile(file11bis);
 	}
 	
 	@Test 
-	public void testAddDirectory() throws DuplicatedNameException{
+	public void testAddDirectory() throws DuplicatedNameException, InvalidNameException{
 		D1.addDirectory("D12");
 		assertTrue(D1.getDirectoryMap().containsKey("D12"));
 	}
 	//testAddDirectory
 	@Test (expected = DuplicatedNameException.class)
-	public void whenDirectoryNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException{
+	public void whenDirectoryNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidNameException{
 		D1.addDirectory("D11");
 	}
 	
 	@Test 
-	public void testAddDirectorybis() throws DuplicatedNameException{
+	public void testAddDirectorybis() throws DuplicatedNameException, InvalidNameException{
 		Directory D12 = new Directory("D12");
 		D1.addDirectory(D12);
 		assertTrue(D1.getDirectoryMap().containsKey("D12"));
 	}
 	//testAddDirectory
 	@Test (expected = DuplicatedNameException.class)
-	public void whenDirectoryNameIsDuplicatedThenExceptionIsThrownbis() throws DuplicatedNameException{
+	public void whenDirectoryNameIsDuplicatedThenExceptionIsThrownbis() throws DuplicatedNameException, InvalidNameException{
 		Directory D11bis = new Directory("D11");
 		D1.addDirectory(D11bis);
 	}
 	
 	@Test
-	public void testGetAbsolutepath() throws InvalidInput, DuplicatedNameException{
+	public void testGetAbsolutepath() throws InvalidInput, DuplicatedNameException, InvalidNameException{
 		VFS vfs1 = new VFS();
 		VirtualDisk Root = new VirtualDisk("Root",1000);
 		vfs1.getVirtualDisks().put("Root", Root);

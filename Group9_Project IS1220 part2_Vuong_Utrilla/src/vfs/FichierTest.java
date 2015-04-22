@@ -7,7 +7,7 @@ import org.junit.Test;
 public class FichierTest {
 
 	@Test
-	public void testGetAbsolutePath() throws DuplicatedNameException, InvalidInput {
+	public void testGetAbsolutePath() throws DuplicatedNameException, InvalidInput, InvalidNameException {
 		Fichier file11 = new Fichier("file11");
 		VFS vfs1 = new VFS();
 		VirtualDisk Root = new VirtualDisk("Root",1000);

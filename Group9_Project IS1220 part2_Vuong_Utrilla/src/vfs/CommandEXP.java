@@ -19,7 +19,7 @@ public class CommandEXP extends CommandBehaviour{
 
 	@Override
 
-	public void go() throws InvalidInput, IOException, DuplicatedNameException{
+	public void go() throws InvalidInput, IOException, DuplicatedNameException, InvalidNameException{
 
 		if (vfs.checkPath(vdName, vfsPath)){
 			vfs.exportFile(hostPath, vdName, vfsPath);// the path correspond to a file

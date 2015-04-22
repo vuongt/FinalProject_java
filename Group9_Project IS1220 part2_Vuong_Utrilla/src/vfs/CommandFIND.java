@@ -22,7 +22,7 @@ public class CommandFIND extends CommandBehaviour{
 
 	@Override
 
-	public void go() throws InvalidInput {
+	public void go() throws InvalidInput, InvalidNameException {
 
 		vfs.checkPath(vdName, vfsPath);
 		ArrayList<Fichier> result = vfs.findFile(searchFile, vdName, vfsPath);

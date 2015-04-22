@@ -2,13 +2,11 @@ package vfs;
 
 
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -121,9 +119,14 @@ public class VFS {
 	 * false if vfsPath is the path of a directory
 	 * if there are a file and a directory with the same name, it returns false ( we will take the path of the directory)
 	 * @throws InvalidInput 
+	 * @throws InvalidNameException 
 	 */
-	public boolean checkPath(String vdName, String vfsPath) throws InvalidInput{
+	public boolean checkPath(String vdName, String vfsPath) throws InvalidInput, InvalidNameException{
 		boolean isFile;
+		
+		if(vfsPath==null||vfsPath.contains("|")||vfsPath.contains("\\")||vfsPath.contains(":")||vfsPath.contains("*")||vfsPath.contains("?")||vfsPath.contains("\"")||vfsPath.contains("<")||vfsPath.contains(">")){
+			throw new InvalidNameException(vfsPath+ " has an invalid syntax");
+		}
 		
 		// We check if the virtual disk named vdName exists
 		if(!this.getVirtualDisks().containsKey(vdName))
@@ -208,8 +211,9 @@ public class VFS {
 	 * @param size : the fixed size of the virtual disk
 	 * @throws DuplicatedNameException : when there is already a virtual disk named "name"
 	 * @throws InvalidInput
+	 * @throws InvalidNameException 
 	 */
-	public void createVirtualDisk(String name, long size) throws DuplicatedNameException, InvalidInput{
+	public void createVirtualDisk(String name, long size) throws DuplicatedNameException, InvalidInput, InvalidNameException{
 		if (virtualDisks.containsKey(name))
 			throw new DuplicatedNameException("A virtual disk of name '"+name+"' already exists.");
 		else this.virtualDisks.put(name,new VirtualDisk(name,size));
@@ -358,8 +362,9 @@ public class VFS {
 	 * @param fileName : name  of the file
 	 * @param vfsPath : path(absolute or not) of the file
 	 * @throws InvalidInput
+	 * @throws InvalidNameException 
 	 */
-	public void createFile(String vfsName,String fileName,String vfsPath) throws InvalidInput,DuplicatedNameException {
+	public void createFile(String vfsName,String fileName,String vfsPath) throws InvalidInput,DuplicatedNameException, InvalidNameException {
 		Path path = toAbsolutePath(vfsName,vfsPath);
 		goPath(vfsName,path,1).addFile(fileName);
 	}
@@ -371,8 +376,9 @@ public class VFS {
 	 * @param vfsPath : path ( absolute or not) of the directory
 	 * @throws InvalidInput
 	 * @throws DuplicatedNameException
+	 * @throws InvalidNameException 
 	 */
-	public void createDirectory(String vfsName, String directoryName,String vfsPath) throws InvalidInput,DuplicatedNameException{
+	public void createDirectory(String vfsName, String directoryName,String vfsPath) throws InvalidInput,DuplicatedNameException, InvalidNameException{
 		Path path = toAbsolutePath(vfsName,vfsPath);
 		goPath(vfsName,path,1).addDirectory(directoryName);
 	}
@@ -405,8 +411,9 @@ public class VFS {
 	 * @param vfsPath: path of the file to rename (which contains the old name at the end)
 	 * @param newName: new name of the file
 	 * @throws InvalidInput
+	 * @throws InvalidNameException 
 	 */
-	public void renameFile(String vfsName, String vfsPath, String newName) throws InvalidInput {
+	public void renameFile(String vfsName, String vfsPath, String newName) throws InvalidInput, InvalidNameException {
 		Path path = toAbsolutePath(vfsName,vfsPath);
 		String oldName = path.getFileName().toString();
 		Fichier temp = goPath(vfsName,path,2).getFileMap().get(oldName);
@@ -422,8 +429,9 @@ public class VFS {
 	 * @param vfsPath the path of the directory, the old name of the directory is at the end of the path
 	 * @param newName the new name of the directory
 	 * @throws InvalidInput
+	 * @throws InvalidNameException 
 	 */
-	public void renameDirectory(String vfsName, String vfsPath, String newName) throws InvalidInput{
+	public void renameDirectory(String vfsName, String vfsPath, String newName) throws InvalidInput, InvalidNameException{
 		Path path = toAbsolutePath(vfsName,vfsPath);
 		String oldName = path.getFileName().toString();
 		Directory temp = goPath(vfsName,path,2).getDirectoryMap().get(oldName);
@@ -511,8 +519,9 @@ public class VFS {
 	 * @throws InvalidInput
 	 * @throws SizeException
 	 * @throws DuplicatedNameException
+	 * @throws InvalidNameException 
 	 */
-   public void importFile(String hostPath,String vDName, String vfsPath) throws FileNotFoundException,IOException,InvalidInput,SizeException,DuplicatedNameException{
+   public void importFile(String hostPath,String vDName, String vfsPath) throws FileNotFoundException,IOException,InvalidInput,SizeException,DuplicatedNameException, InvalidNameException{
 	   FileInputStream in=null;
 	   try{
 			VirtualDisk vd=virtualDisks.get(vDName);
@@ -628,9 +637,10 @@ public class VFS {
     * @throws SizeException
     * @throws FileNotFoundException
     * @throws IOException
+ * @throws InvalidNameException 
     */
 
-   public void importDirectory(String hostPathString,String vDName, String vfsPathString) throws InvalidInput,DuplicatedNameException,DirectoryNotFoundException,SizeException,FileNotFoundException,IOException{
+   public void importDirectory(String hostPathString,String vDName, String vfsPathString) throws InvalidInput,DuplicatedNameException,DirectoryNotFoundException,SizeException,FileNotFoundException,IOException, InvalidNameException{
 
 	   //if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk
 	   
@@ -716,7 +726,7 @@ public class VFS {
 		Directory source = goPath(vfsname,this.toAbsolutePath(vfsname, oldpath),2);
 		Directory target = goPath(vfsname,this.toAbsolutePath(vfsname, newpath),1);
 		String name = Paths.get(oldpath).getFileName().toString();
-		// can we exploit checkPath here ? 
+		 
 		if (source.getDirectoryMap().containsKey(name)){
 			target.addDirectory(source.getDirectoryMap().get(name));
 			source.getDirectoryMap().remove(name);
@@ -869,16 +879,10 @@ public class VFS {
 	 * @param name, the tested name
 	 * @throws InvalidNameException, unfollowed rules.
 	 */
-	public void checkName(String name) throws InvalidNameException{
-		
-		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
-			throw new InvalidNameException(name+ " has an invalid syntax for this VFS");
-		}
-		
-	}
+	
 	
 	/**
-	 * Copy the content of a FILE to an other FILE
+	 * Copy the content of a FILE to another FILE
 	 * Before the method is called, sourcePath and targetPath must be checked to be path of files.
 	 * @param vdName : name of the virtual disk
 	 * @param sourcePath : path of the source file 

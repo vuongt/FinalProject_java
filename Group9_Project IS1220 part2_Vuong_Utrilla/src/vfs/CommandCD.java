@@ -12,7 +12,7 @@ public class CommandCD extends CommandBehaviour{
 		this.vfsPath=vfsPath;
 	}
 	
-	public void go() throws InvalidInput{
+	public void go() throws InvalidInput, InvalidNameException{
 		vfs.checkPath(vdName, vfsPath);
 		vfs.changePosition(vdName, vfsPath);
 		System.out.println("Updated current position");

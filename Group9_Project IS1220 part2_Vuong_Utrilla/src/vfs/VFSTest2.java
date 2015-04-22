@@ -99,9 +99,10 @@ public class VFSTest2 {
 	 * @throws DuplicatedNameException
 	 * @throws InvalidInput
 	 * @throws IOException
+	 * @throws InvalidNameException 
 	 */
 	@Test (expected=DuplicatedNameException.class)
-	public void testExportVfs2() throws DuplicatedNameException, InvalidInput, IOException{
+	public void testExportVfs2() throws DuplicatedNameException, InvalidInput, IOException, InvalidNameException{
 		
 		vfs2.createVirtualDisk("testExportVfs2", 1000000);
 		vfs2.exportVfs("testExportVfs2", s);
@@ -178,9 +179,10 @@ public class VFSTest2 {
 	 * @throws DuplicatedNameException
 	 * @throws InvalidInput
 	 * @throws IOException
+	 * @throws InvalidNameException 
 	 */
 	@Test (expected=InvalidInput.class)
-	public void testSave2() throws DuplicatedNameException, InvalidInput, IOException{
+	public void testSave2() throws DuplicatedNameException, InvalidInput, IOException, InvalidNameException{
 		
 		vfs2.createVirtualDisk("RootBisBis", 1000);
 		vfs2.save("RootBisBis");
@@ -282,9 +284,10 @@ public class VFSTest2 {
 	 * @throws DuplicatedNameException 
 	 * @throws InvalidInput 
 	 * @throws IOException 
+	 * @throws InvalidNameException 
 	 */
 	@Test (expected= DuplicatedNameException.class)
-	public void testExportFile2() throws InvalidInput, DuplicatedNameException, IOException {
+	public void testExportFile2() throws InvalidInput, DuplicatedNameException, IOException, InvalidNameException {
 					//Adding a file to export
 					vfs2.createFile("Root", "testExportFile2.txt", "/");
 					vfs2.exportFile(s,"Root","/testExportFile2.txt");//testExportFile2.txt exists already in this location of the host file system 
@@ -356,9 +359,10 @@ public class VFSTest2 {
 	 * @throws InvalidInput
 	 * @throws SizeException
 	 * @throws DuplicatedNameException
+	 * @throws InvalidNameException 
 	 */
 	@Test (expected=FileNotFoundException.class)
-	public void testImportFile2() throws FileNotFoundException, IOException, InvalidInput, SizeException, DuplicatedNameException {
+	public void testImportFile2() throws FileNotFoundException, IOException, InvalidInput, SizeException, DuplicatedNameException, InvalidNameException {
 
 					
 					Path p=Paths.get(s).resolve("testImportFile2.txt");//Host file system path of a non-existing file
@@ -377,9 +381,10 @@ public class VFSTest2 {
 	 * @throws InvalidInput
 	 * @throws SizeException
 	 * @throws DuplicatedNameException
+	 * @throws InvalidNameException 
 	 */
 	@Test (expected=SizeException.class)
-	public void testImportFile3() throws FileNotFoundException, IOException, InvalidInput, SizeException, DuplicatedNameException  {
+	public void testImportFile3() throws FileNotFoundException, IOException, InvalidInput, SizeException, DuplicatedNameException, InvalidNameException  {
 		
 		
 		long freeSpace=(vd2.getSizeMax()-vd2.getOccupiedSpace());
@@ -448,9 +453,10 @@ public class VFSTest2 {
 	 * @throws InvalidInput
 	 * @throws DuplicatedNameException
 	 * @throws IOException
+	 * @throws InvalidNameException 
 	 */
 	@Test (expected=DuplicatedNameException.class)
-	public void testExportDirectory2() throws InvalidInput, DuplicatedNameException, IOException{
+	public void testExportDirectory2() throws InvalidInput, DuplicatedNameException, IOException, InvalidNameException{
 		
 		vfs2.createDirectory("Root", "testExportDirectory2", "/");
 		vfs2.exportDirectory(s, "Root", "/testExportDirectory2");
@@ -532,9 +538,10 @@ public class VFSTest2 {
 	 * @throws DuplicatedNameException
 	 * @throws SizeException
 	 * @throws IOException
+	 * @throws InvalidNameException 
 	 */
 	@Test (expected=DirectoryNotFoundException.class)
-	public void testImportDirectory2() throws DirectoryNotFoundException, FileNotFoundException, InvalidInput, DuplicatedNameException, SizeException, IOException{
+	public void testImportDirectory2() throws DirectoryNotFoundException, FileNotFoundException, InvalidInput, DuplicatedNameException, SizeException, IOException, InvalidNameException{
 		Path p1=Paths.get(s);
 		Path p2=p1.resolve("testImportDirectory2");
 		vfs2.importDirectory(p2.toString(),"Root","/");

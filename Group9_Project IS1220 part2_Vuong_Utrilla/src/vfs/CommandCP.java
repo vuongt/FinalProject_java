@@ -17,7 +17,7 @@ public class CommandCP extends CommandBehaviour {
 	
 	
 	@Override
-	public void go() throws InvalidInput, DuplicatedNameException {
+	public void go() throws InvalidInput, DuplicatedNameException, InvalidNameException {
 		boolean sourceIsFile = vfs.checkPath(vdName, source);
 		boolean targetIsFile = vfs.checkPath(vdName, target);
 		if (targetIsFile){

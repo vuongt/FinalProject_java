@@ -16,7 +16,7 @@ public class CommandMV extends CommandBehaviour{
 	}
 
 	@Override
-	public void go() throws InvalidInput, DuplicatedNameException {
+	public void go() throws InvalidInput, DuplicatedNameException, InvalidNameException {
 		Path source = vfs.toAbsolutePath(vdName,this.pathSource);
 		Path target = vfs.toAbsolutePath(vdName,this.pathTarget);
 		
