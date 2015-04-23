@@ -1,18 +1,53 @@
-vfs:
+  #COMMANDS
+
+#Creating a virtual disk of size 10MB
 crvfs myVD 10000000
+
+#Creating directories dir1 and dir2
 mkdir myVD dir1 /
 mkdir myVD dir2 /
-impvfs eval/host/eval_1/Images myVD /dir1
+
+#Importing directory Images from the host file system into dir1
+impvfs eval/host/eval_2/Images myVD /dir1
+
+#Changing current position to dir1/Images
 cd myVD dir1/Images
+
+#Listing the contents inside current postition 
+#  Expected :Names, types and sizes of the contents of /dir1/Images 
+#  (Winter-Tiger-Wild-Cat-Images.jpg,ItalieDORSO.jpg,tree-247122.jpg,REVERSO.jpg,flowers.jpg-->all files) 
+
+
 ls myVD -l
+
+#Renaming the file flowers.jpg and listing the contents inside current position
+# ( Expected: similar display .File flowers.jpg renamed to flowersrenamed.jpg)
+
 mv myVD flowers.jpg flowersrenamed.jpg
 ls myVD -l
+
+#Creating file11 inside current position
 touch myVD file11 ./
+
+#Moving file11 to the root
 mv myVD ./file11 /
+
+#Displaying current postion (Expected: /dir1/Images)
 pwd myVD
+
+#Changing current position to root 
 cd myVD ../../
+
+#Displaying current position (Expected: / (Root))
 pwd myVD
-ls myVD -lA virtual disk named myVD was created
+
+#Listing the contents inside current position
+# (Expected: Names, sizes and types of the items inside Root-directory d1 (not empty),file file11 (empty),directory d2(empty))
+ls myVD -l
+
+  #RESULTS
+vfs:
+A virtual disk named myVD was created
 vfs:
 dir1 was created.
 vfs:

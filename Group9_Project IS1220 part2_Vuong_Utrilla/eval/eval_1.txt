@@ -1,3 +1,54 @@
+  #COMMANDS
+
+#Creating a virtual disk of 10MB
+crvfs eval_1 10000000
+
+#Importing directories Images and Shakespeare, and file Sleep_Away.mp3
+#(these last file is imported to two different locations. For the second one an error message is received-Not enough space)
+impvfs eval\host\eval_1\Images eval_1 .
+impvfs eval\host\eval_1\Shakespeare eval_1 .
+impvfs eval\host\eval_1\Sleep_Away.mp3 eval_1 .
+impvfs eval\host\eval_1\Sleep_Away.mp3 eval_1 Shakespeare
+
+#Listings:
+#Listing the contents in the root 
+(Expected: Images d,Shakespeare d,Sleep_Away.mp3)
+ls eval_1 
+
+#Listing the contents in the root 
+(Expected:Similar output,the size of each element included)
+ls eval_1 -l
+
+#Listing the contents inside Images 
+Expected: Names, types and sizes of the elements inside /Images. 
+(Winter-Tiger-Wild-Cat-Images.jpg,ItalieDORSO.jpg,tree-247122.jpg,REVERSO.jpg,flowers.jpg--> All files)
+
+ls eval_1 -l Images
+
+#Listing the contents inside Shakespeare 
+(Expected: Names, types and sizes of the elements inside /Images.
+hamletact1.txt,hamlet.pdf-->All files)
+ls eval_1 -l Shakespeare
+
+#Displaying free space in the disk. (Expected: free space<dim of Sleep_Away.mp3)
+free eval_1
+
+#Search of file ItalieDORSO.jpg (Expected: found. Path:/Images/ItalieDORSO.jpg)
+find eval_1 ItalieDORSO.jpg
+
+#Search of NonExistingZip.zip (Expected:file not found)
+find eval_1 NonExistingZip.zip
+
+#help command 
+help expvfs
+
+#Exporting of the vfs (Expected creation of file eval_1.bin inside directory eval_1 of the host file system)
+expvfs eval_1 eval
+stop
+yes
+
+ #RESULT
+
 vfs:
 crvfs eval_1 10000000
 A virtual disk named eval_1 was created

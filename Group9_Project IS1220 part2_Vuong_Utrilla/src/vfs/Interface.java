@@ -393,7 +393,7 @@ public class Interface {
 					System.out.println(e.getMessage());
 					System.out.println("Invalid file/directory name characters: '|','\','/','?','*','\"',':','<','>'");
 					
-				}catch(Exception e){//For the moment, no further specialization in the treatment of exception
+				}catch(Exception e){//For the moment, no further specialization in the treatment of the rest of exception
 					System.out.println(e.getMessage());
 				}finally{
 					
