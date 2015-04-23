@@ -43,7 +43,7 @@ public class CommandLS extends CommandBehaviour{
 		}
 
 		ArrayList<ArrayList<String>> list = vfs.show(vdName, arg, vfsPath);
-	
+		
 		for (ArrayList<String> smallList : list){
 			for (String s :smallList){
 				System.out.format("%-35s",s);}

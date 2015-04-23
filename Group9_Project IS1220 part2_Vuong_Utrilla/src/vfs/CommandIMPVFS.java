@@ -24,6 +24,7 @@ public class CommandIMPVFS extends CommandBehaviour{
 	public void go() throws InvalidInput, IOException, DuplicatedNameException,FileNotFoundException, DirectoryNotFoundException, SizeException, InvalidNameException {
 	
 	File fileOrDir=new File(hostPath);
+	vfs.checkPath(vdName, "/");
 	
 		
 	if (fileOrDir.isFile()){

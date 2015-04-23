@@ -409,15 +409,16 @@ public class VFS {
 	 * @param newName: new name of the file
 	 * @throws InvalidInput
 	 * @throws InvalidNameException 
+	 * @throws DuplicatedNameException 
 	 */
-	public void renameFile(String vfsName, String vfsPath, String newName) throws InvalidInput, InvalidNameException {
+	public void renameFile(String vfsName, String vfsPath, String newName) throws InvalidInput, InvalidNameException, DuplicatedNameException {
 		Path path = toAbsolutePath(vfsName,vfsPath);
 		String oldName = path.getFileName().toString();
 		Fichier temp = goPath(vfsName,path,2).getFileMap().get(oldName);
 		if (! temp.equals(null)) {
 			temp.setName(newName);
-			goPath(vfsName,path,2).getFileMap().remove(oldName);
-			goPath(vfsName,path,2).getFileMap().put(newName, temp);}
+			goPath(vfsName,path,2).addFile(oldName);
+			goPath(vfsName,path,2).addFile(temp);}
 	}
 	
 	/**
@@ -427,15 +428,16 @@ public class VFS {
 	 * @param newName the new name of the directory
 	 * @throws InvalidInput
 	 * @throws InvalidNameException 
+	 * @throws DuplicatedNameException 
 	 */
-	public void renameDirectory(String vfsName, String vfsPath, String newName) throws InvalidInput, InvalidNameException{
+	public void renameDirectory(String vfsName, String vfsPath, String newName) throws InvalidInput, InvalidNameException, DuplicatedNameException{
 		Path path = toAbsolutePath(vfsName,vfsPath);
 		String oldName = path.getFileName().toString();
 		Directory temp = goPath(vfsName,path,2).getDirectoryMap().get(oldName);
 		if (! temp.equals(null)) {
 			temp.setName(newName);
-			goPath(vfsName,path,2).getDirectoryMap().remove(oldName);
-			goPath(vfsName,path,2).getDirectoryMap().put(newName, temp);
+			goPath(vfsName,path,2).deleteDirectory(oldName);
+			goPath(vfsName,path,2).addDirectory(temp);
 		}
 	}
 	
@@ -787,7 +789,7 @@ public class VFS {
 
 		if (vfsPath == "") path = Paths.get(this.getVirtualDisks().get(vfsname).getCurrentPosition());
 		else {
-		path = Paths.get(vfsPath);
+		path =toAbsolutePath(vfsname, vfsPath);
 		}
 		
 		Directory currentDirectory = goPath(vfsname,path,1);

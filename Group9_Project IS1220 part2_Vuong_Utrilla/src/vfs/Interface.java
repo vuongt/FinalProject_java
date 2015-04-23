@@ -69,7 +69,7 @@ public class Interface {
 					
 					}else{//The second token is read as a vfspath, no argument 'arg'
 						intarg=0;
-						vfsPath=st.nextToken();
+						vfsPath=argOrPath;
 						
 						//update of behaviour
 						behaviour=new CommandLS(vfs,vdName,intarg,vfsPath);
@@ -180,7 +180,7 @@ public class Interface {
 				String stringSource = st.nextToken();
 				String stringTarget = st.nextToken();
 				
-				behaviour = new CommandMV(vfs,vdName,stringSource,stringTarget);
+				behaviour = new CommandCP(vfs,vdName,stringSource,stringTarget);
 				break;		
 				
 				
