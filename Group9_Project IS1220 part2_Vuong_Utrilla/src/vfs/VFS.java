@@ -417,7 +417,7 @@ public class VFS {
 		Fichier temp = goPath(vfsName,path,2).getFileMap().get(oldName);
 		if (! temp.equals(null)) {
 			temp.setName(newName);
-			goPath(vfsName,path,2).addFile(oldName);
+			goPath(vfsName,path,2).deleteFile(oldName);
 			goPath(vfsName,path,2).addFile(temp);}
 	}
 	
