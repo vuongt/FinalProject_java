@@ -104,7 +104,9 @@ public class CommandMV extends CommandBehaviour{
 			}
 			
 		}
-		/*Path source = vfs.toAbsolutePath(vdName,this.pathSource);
+		
+		/* An altenative 
+		Path source = vfs.toAbsolutePath(vdName,this.pathSource);
 		Path target = vfs.toAbsolutePath(vdName,this.pathTarget);
 		
 		if (target.getParent() == null) { //the destination is root, then it can only be a "move" situation
@@ -113,10 +115,11 @@ public class CommandMV extends CommandBehaviour{
 		}
 		else{
 			boolean sourceIsFile = vfs.checkPath(this.vdName,this.pathSource);
-			boolean targetIsFile = vfs.checkPath(this.vdName,target.getParent().toString());
 			if (source.getParent() == null) throw new InvalidInput("you cannot move or rename the root");
 			else{
 				if (source.getParent().equals(target.getParent())){
+				//rename situation
+				//if source.getparent is correct (cause we did checkpath before), target.getParent is correct too
 					String newName = target.getFileName().toString();
 					if (sourceIsFile) {
 						vfs.renameFile(vdName, pathSource, newName);
@@ -127,7 +130,8 @@ public class CommandMV extends CommandBehaviour{
 						System.out.println("Your directory is renamed");
 					}
 				}
-				else {
+				else {//move situation
+					boolean targetIsFile = vfs.checkPath(this.vdName,this.pathTarget);
 					if (targetIsFile) throw new InvalidInput("the destination must be a directory");
 					else {
 						vfs.move(vdName, pathSource, pathTarget);
