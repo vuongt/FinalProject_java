@@ -10,11 +10,20 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
+/**
+ * VFS:
+ * Class that represents a single-file Virtual File System.
+ *
+ */
 public class VFS {
-	private HashMap<String,VirtualDisk> virtualDisks;
+	private HashMap<String,VirtualDisk> virtualDisks;//Values:virtual disks created in this vfs.
+	 												//Keys: names of the virtual disks
 
-
+	/**
+	 * Create a VFS.
+	 * Initialization: 
+	 * virtualDisks: empty map
+	 */
 	public VFS(){
 		super();
 		this.virtualDisks = new HashMap<String, VirtualDisk>();
@@ -22,13 +31,13 @@ public class VFS {
 	}
 	
 	/**
-	 * This method test if a path is absolute. 
-	 * Note that the an absolute path in vfs is absolute if it starts with the root notation "/"
+	 * This method tests if a path is absolute. 
+	 * Note that  an absolute path in vfs is absolute if it starts with the root notation "/"
 	 * @param path 
 	 * @return true if path is absolute
 	 */
 	public boolean isAbsolute(String path){
-
+		if(path==""){ return false;}
 		if (path.substring(0,1).equals("/")) {
 			return true;
 		}
@@ -56,15 +65,16 @@ public class VFS {
 			 * ../london
 			 * ./././london
 			 * ../../london 
+			 * .././london 
 			 * and so on...
-			 * it can't resolve path such as london/../picture or london/./picture
+			 * 
 			 */
 			/*
 			 * ATTENTION: About the method getParent: 
-			 * it will return null if the path don't have a parent, (it means that if the path is root "/")
+			 * it will return null if the path doesn't have a parent, (it means that if the path is root "/")
 			 * if the path is "/Dir1", it will return "/"
-			 * instead of verifying if the path is root, i will check if its parent is null
-			 * I do this to fix the NullPointerException
+			 * instead of verifying if the path is root, we will check if its parent is null
+			 *  to avoid the NullPointerException
 			 */
 			Path currentPath = Paths.get(this.getVirtualDisks().get(vfsName).getCurrentPosition());
 				
@@ -168,7 +178,7 @@ public class VFS {
 	 * @param vfsname : name of the virtual disk
 	 * @param path : a given path of type Path
 	 * @param n : an integer positive
-	 * @return the directory at the n-th position counting from the end of the path. If n is  bigger than the size of the path, then this method return root
+	 * @return the directory at the n-th position counting from the end of the path. If n is  bigger than the size of the path, then this method returns root
 	 * @throws InvalidInput
 	 */
 	public Directory goPath(String vdName,Path path, int n)throws InvalidInput{
@@ -222,15 +232,8 @@ public class VFS {
 	 * @param name
 	 
 	 */
-	//@throws IOException 
-	public void deleteVirtualDisk(String name){//IOException
+	public void deleteVirtualDisk(String name){
 			this.virtualDisks.remove(name);
-			//delete the virtual disk file in the host file system
-			/*for (String pathString : hostPath){
-				Path path = Paths.get(pathString);
-				Files.delete(path);
-			}
-		}*/
 		}
 	
 	
@@ -239,7 +242,7 @@ public class VFS {
 	 * @param vDName : name of the virtual disk to export
 	 * @param hostPath : path to the directory in the host file system where we will export the virtual disk
 	 * @throws IOException
-	 * @throws DuplicatedNameException
+	 * @throws DuplicatedNameException: when a binary file named 'vdName' already exists in the location of the host file system.
 	 */
 	public void exportVfs(String vDName,String hostPath) throws IOException,DuplicatedNameException{
 		FileOutputStream fileOut=null;
@@ -254,12 +257,12 @@ public class VFS {
 		try{
 		
 			File file=new File(completeHostPath.toString());//The file where we'll export the VD
-			boolean created=file.createNewFile();
+			
 			//We check a file with the same name doesn't exist already in the host file system
 			
-			if(!created) throw new DuplicatedNameException("A file with name "+vDName+" already exists in this location of the host file system");
+			if(file.isFile()) throw new DuplicatedNameException("A file with name "+vDName+" already exists in this location of the host file system");
 			
-			
+			file.createNewFile();
 			
 			//Adding the host path to the list of host paths to which the vfs has been exported
 			vd.getHostPath().add(completeHostPath.toString());
@@ -300,8 +303,8 @@ public class VFS {
 	/**
 	 * We save the state of a virtualdisk in the last hostpath where it was exported, erasing the previous contents of the file.
 	 *  If the file where it was exported has been deleted, it creates a new one
-	 * @param vfsname, the name of the virtualDisk 
-	 * @throws InvalidInput
+	 * @param vfsname: the name of the virtualDisk 
+	 * @throws InvalidInput, if the method is applied to a VirtualDisk that hasn't been exported before
 	 * @throws IOException
 	 */
 	public void save(String vfsname) throws InvalidInput,IOException{
@@ -320,14 +323,14 @@ public class VFS {
 			File fileToUpdate=new File(hostPath);
 			
 			//We check if the file to which the vfs was exported still exists. If it doesn't, we create a new one.
-			if(!fileToUpdate.exists()) fileToUpdate.createNewFile();
+			if(!fileToUpdate.isFile()) fileToUpdate.createNewFile();
 			
 			fileOut=new FileOutputStream(fileToUpdate);
 			
 			//We erase the possible previous contents
 			fileOut.write((new String()).getBytes());
 			
-			//Serialization
+			//reSerialization
 			out=new ObjectOutputStream(fileOut);
 			out.writeObject(vd);
 			
@@ -360,6 +363,7 @@ public class VFS {
 	 * @param vfsPath : path(absolute or not) of the file
 	 * @throws InvalidInput
 	 * @throws InvalidNameException 
+	 * @throws DuplicatedNameException
 	 */
 	public void createFile(String vfsName,String fileName,String vfsPath) throws InvalidInput,DuplicatedNameException, InvalidNameException {
 		Path path = toAbsolutePath(vfsName,vfsPath);
@@ -444,12 +448,12 @@ public class VFS {
 	
 	/**
 	 * Exports a file to an specific location the host file system
-     * @param hostPath, the path in the host file system where the file has to be exported.
-     * @param vDName, the name of the VirtualDisk.
-     * @param vfsPath, the path of the VFS, including the name of the file.
+     * @param hostPath: the path in the host file system where the file has to be exported.
+     * @param vDName: the name of the VirtualDisk.
+     * @param vfsPat:, the path of the VFS, including the name of the file.
 	 * @throws IOException
 	 * @throws InvalidInput
-	 * @throws DuplicatedNameException
+	 * @throws DuplicatedNameException, if a file with the same name already exists in the location 'hostpath' of the vfs.
 	 */
 
 	public void exportFile(String hostPath,String vDName, String vfsPath) throws IOException,InvalidInput, DuplicatedNameException{
@@ -470,11 +474,11 @@ public class VFS {
 			
 			//We create the File object that'll be linked to the new file in the host file system
 			File exportedFile=new File(completeHostPath.toString());
+			//We check a file with the same name doesn't exist already in the host file system
+			if(exportedFile.isFile()) throw new DuplicatedNameException(pVfs.getFileName().toString()+" exits already in the specified location of the host file system.");
 			
-			
-			boolean created=exportedFile.createNewFile();//We create the file in the host system
+			exportedFile.createNewFile();//We create the file in the host system
 			//We check a file with the same name doesn't exist already in the host file system (createNewFile returns false in this case)
-			if(!created) throw new DuplicatedNameException(pVfs.getFileName().toString()+" exits already in the specified location of the host file system.");//We check a file with the same name doesn't exist in the same location
 			//Creating the byte stream
 			
 			//output stream
@@ -510,13 +514,13 @@ public class VFS {
 	
 	/**
 	 * Import a file from the host file system to an specific location of the VFS
-	 * @param hostPath, the path of the host file system,including the name of the file.
-	 * @param vDName, the name of the VirtualDisk.
-	 * @param vfsPath, the path inside the VFS where it has to be imported.
-	 * @throws FileNotFoundException
+	 * @param hostPath: the path of the host file system,including the name of the file.
+	 * @param vDName: the name of the VirtualDisk.
+	 * @param vfsPath: the path inside the VFS where it has to be imported.
+	 * @throws FileNotFoundException, if the imported file is not found in the host file system
 	 * @throws IOException
 	 * @throws InvalidInput
-	 * @throws SizeException
+	 * @throws SizeException, if the imported file is bigger than the free space of the virtual disk
 	 * @throws DuplicatedNameException
 	 * @throws InvalidNameException 
 	 */
@@ -535,9 +539,6 @@ public class VFS {
 			
 			//The SIZE of the imported file
 			long size=file.length();
-			
-			
-			
 			
 			if((vd.getSizeMax() - vd.getOccupiedSpace())< size) {
 				in.close();
@@ -578,18 +579,16 @@ public class VFS {
    
 	 /**
 	  *Export a directory and all its content into an specific location of the host file system.
-	  * @param hostPath, the path in the host file system where the directory has to be exported.
-	  * @param vDName, the name of the VirtualDisk.
-	  * @param vfsPathString, the path of the VFS, including the name of the directory.
+	  * @param hostPath: the path in the host file system where the directory has to be exported.
+	  * @param vDName: the name of the VirtualDisk.
+	  * @param vfsPathString: the path of the VFS, including the name of the directory.
 	  * @throws IOException
 	  * @throws InvalidInput
+	  * @throws DuplicatedNameException, if a directory with the same name already exists in the location of the vfs
 	  */
 
    public void exportDirectory(String hostPath,String vDName, String vfsPathString) throws IOException,InvalidInput,DuplicatedNameException{
 
-	   
-		//if(!virtualDisks.containsKey(vDName)) throw new InvalidInput("None existing disk.");//We look for the disk
-		
 		
 		//We create the vfsPath
 		Path vfsPath=toAbsolutePath(vDName,vfsPathString);
@@ -608,6 +607,8 @@ public class VFS {
 		if(dir.isDirectory()) throw new DuplicatedNameException("A directory with name "+dirToExport.getName()+" already exists in this location of the host file system");//We check the directory doesn't exist already in this location
 		dir.mkdir();
 
+		int lstring=vfsPathString.length();
+		if(vfsPathString.endsWith("/")){vfsPathString=vfsPathString.substring(0,lstring-1);}
 		//We export the files contained in the directory
 		for(Fichier f:dirToExport.getFileMap().values()){
 			
@@ -627,12 +628,12 @@ public class VFS {
    }
    /**
     * Imports a directory and all its content to an specific location of the VFS, from the host file system.
-	 * @param hostPath, the path of the host file system, including the name of the directory
-	 * @param vDName, the name of the VirtualDisk
-	 * @param vfsPath, the path inside the VFS where it has to be imported
+	 * @param hostPath: the path of the host file system, including the name of the directory
+	 * @param vDName: the name of the VirtualDisk
+	 * @param vfsPath: the path inside the VFS where it has to be imported
     * @throws InvalidInput
     * @throws DuplicatedNameException
-    * @throws DirectoryNotFoundException
+    * @throws DirectoryNotFoundException, it the directory doesn't exist in the host file system
     * @throws SizeException
     * @throws FileNotFoundException
     * @throws IOException
@@ -694,7 +695,7 @@ public class VFS {
    }
 	/**
 	 * to copy within the virtual disk named vfsName, the content of a file /directory whose absolute name is sourcePath 
-	 * into a file/directory whose absolute name is targetPath
+	 * into a directory whose absolute name is targetPath
 	 * @param vfsName : name of the virtual disk
 	 * @param sourcePath : the path of the file/directory to copy, which contains the name of the file/directory at the end
 	 * @param targetPath : the path of the DIRECTORY where the file/directory to copy is put.
@@ -709,7 +710,7 @@ public class VFS {
 			target.addDirectory(source.getDirectoryMap().get(name));
 		if (source.getFileMap().containsKey(name))
 			target.addFile(source.getFileMap().get(name));
-		//else throw new InvalidInput("The file/directory you want to copy doesn't exist");
+		
 	}
 	
 	
@@ -746,30 +747,6 @@ public class VFS {
 	public void changePosition(String vdName, String path) throws InvalidInput{//throws InvalidInput
 		Path newPosition = toAbsolutePath(vdName,path);
 		this.getVirtualDisks().get(vdName).setCurrentPosition(newPosition.toString());
-		/*Path newPosition = toAbsolutePath(vdName,path);
-		int length=newPosition.getNameCount();
-		
-		//We check if the newPosition path is correct
-		if(length==0){//new position is the root
-			if(!this.getVirtualDisks().containsKey(vdName)){
-				throw new InvalidInput("None existing virtual disk.");
-			}
-		}else{//new position is a bigger path
-			/*if(!this.getVirtualDisks().containsKey(vdName)){
-				throw new InvalidInput("None existing virtual disk.");
-			}
-			Directory destination=this.getVirtualDisks().get(vdName);
-			int i;
-			for(i=0;i<length;i++){
-				String currentDirectory=newPosition.getName(i).toString();
-				if(!destination.getDirectoryMap().containsKey(currentDirectory)){
-					throw new InvalidInput("Invalid vfs path.")
-				}
-				destination=destination.getDirectoryMap().get(currentDirectory);
-			}			
-		}*/
-			
-		//The path is correct, then we change current position
 	}
 	
 	
@@ -780,7 +757,7 @@ public class VFS {
 	 * arg = "" : we list names and types of elements
 	 * arg = "-l" : we list names and type and size of elements
 	 * @param vfsPath : the path of the directory we are looking at
-	 * @return : an array of information (String), depends on arg
+	 * @return : an array of arrays, each of them containing information of a file (ArrayList<ArrayList<String>>), depends on arg
 	 * @throws InvalidInput
 	 */
 	public ArrayList<ArrayList<String>>show(String vfsname, String arg, String vfsPath) throws InvalidInput{
@@ -824,9 +801,9 @@ public class VFS {
 	
 	/**
 	 * Search for a file inside a VFS with a given name, starting from an specified location in the virtualDisk
-	 * @param nameFile, the name of the file
-	 * @param vDName, the name of the VirtualDisk
-	 * @param vfsPath, the path where the search has to start.
+	 * @param nameFile: the name of the file
+	 * @param vDName: the name of the VirtualDisk
+	 * @param vfsPath: the path where the search has to start.
 	 * @return the list of found files (Fichier), null if none where found
 	 * @throws InvalidInput
 	 */
@@ -873,12 +850,6 @@ public class VFS {
 		return virtualDisks;
 	}
 
-	/**
-	 * Checks if a name is correct (characters |/\:*?"<> not allowed).
-	 * @param name, the tested name
-	 * @throws InvalidNameException, unfollowed rules.
-	 */
-	
 	
 	/**
 	 * Copy the content of a FILE to another FILE

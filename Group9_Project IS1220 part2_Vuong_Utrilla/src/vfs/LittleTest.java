@@ -13,11 +13,8 @@ public class LittleTest {
 	public static void main(String[] args){
 		
 	try{
-		Scanner sc=new Scanner(System.in);
-		String s=sc.nextLine();
-		Path p=Paths.get(s);
-		System.out.println(p.getParent());
-		
+		File file=new File("C:\\Users\\Candela\\Desktop\\carpeta\\file5.txt");
+		System.out.println(file.isFile());
 		
 		
 		

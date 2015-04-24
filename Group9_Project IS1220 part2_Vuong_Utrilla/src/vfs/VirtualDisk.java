@@ -2,19 +2,28 @@ package vfs;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+/**
+ * Virtual disk:
+ * Class that represents a virtual disk of the vfs.
+ * Extends directory, implements Serializable, Item
+ *
+ *
+ */
 public class VirtualDisk extends Directory implements Serializable, Item {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 444;
 	private String currentPosition;
 	private long sizeMax;
-	private ArrayList<String> hostPath;
+	private ArrayList<String> hostPath;//list of the hostPaths the virtual disk is exported to
 	
 	/**
-	 * create a virtual disk with fixed size (in bytes)
-	 * @throws InvalidNameException 
+	 * Create a VirtualDisk
+	 * Initialization:
+	 * hostPath:empty string.
+	 * @param name
+	 * @param size
+	 * @throws InvalidInput
+	 * @throws InvalidNameException
 	 */
 	public VirtualDisk(String name, long size) throws InvalidInput, InvalidNameException{
 		super(name);
@@ -28,7 +37,18 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 	}
 	
 	
-	
+	/**
+	 * Create a VirtualDisk
+	 * @param name
+	 * @param currentPosition
+	 * @param sizeMax
+	 * @param hostPath
+	 * @param absolutePath
+	 * @param fileMap
+	 * @param directoryMap
+	 * @throws InvalidInput
+	 * @throws InvalidNameException
+	 */
 	public VirtualDisk(String name, String currentPosition, long sizeMax,
 			ArrayList<String> hostPath,String absolutePath,
 			HashMap<String, Fichier> fileMap,
@@ -43,7 +63,10 @@ public class VirtualDisk extends Directory implements Serializable, Item {
 		this.absolutePath = "/";
 	}
 
-
+	/**
+	 * Computes the occupied space (addition of the size of each element contained in the virtual disk)
+	 * @return occupied space in bytes 
+	 */
 	public long getOccupiedSpace() {
 		return this.getSize();
 	}

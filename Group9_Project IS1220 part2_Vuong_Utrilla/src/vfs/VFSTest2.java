@@ -12,7 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-
+/**
+ * VFSTest2.
+ * Second JUnit to test the methods from the class VFS.(I/O methods and findFile())
+ *
+ */
 public class VFSTest2 {
 	
 	
@@ -20,7 +24,9 @@ public class VFSTest2 {
 	VirtualDisk vd2;
 	String s="VFSTest2";
 	
-
+	/**
+	 * Initialization
+	 */
 	@Before
 	public void method(){
 		try{
@@ -46,8 +52,7 @@ public class VFSTest2 {
 	 * testExportVfs
 	 * testing the main functionality of exportVfs.
 	 * (Exporting the virtual disk 'Root'using exportVfs()- which is based on serialization. Then deserializing 
-	 * 'manually' the serialized object and comparing it to the first v
-	 * irtual disk.
+	 * 'manually' the serialized object and comparing it to the first virtual disk.
 	 */
 	@Test
 	public void testExportVfs(){
@@ -96,6 +101,7 @@ public class VFSTest2 {
 	 * testExportVfs2
 	 * When exporting a virtual disk 'vdName' to a location of the host file system, if a binary file named 'vdName'
 	 * already exists in this location then DuplicatedNameException is thrown.
+	 * (applying 'expvfs' to a virtual disk named 'testExportVfs2'. The hostpath already contains a binary file with that name)
 	 * @throws DuplicatedNameException
 	 * @throws InvalidInput
 	 * @throws IOException
@@ -110,16 +116,19 @@ public class VFSTest2 {
 	
 	/**
 	 * testSave()
-	 * Testing the main functionality of save(): updating the file where a virtual disk 'vdName' was last exported.
-	 * (Creating a virtual disk and exporting it. Modifying the virtual disk and applying the method save(). Deserializing 
-	 * the virtual disk and comparing it to the initial one)
+	 * Testing the main functionality of save(): updating the last file where a virtual disk 'vdName' was last exported.
+	 * (Creating a virtual disk and exporting it to two different locations. Modifying the virtual disk and applying the method save(). Deserializing 
+	 * both virtual disks and comparing them to the initial one)
 	 */
 	@Test
 	public void testSave() {
 		
 		FileInputStream filein=null;
+		FileInputStream filein2=null;
 		ObjectInputStream in=null;
+		ObjectInputStream in2=null;
 		File file=null;
+		File file2=null;
 		try{
 			
 			
@@ -128,25 +137,34 @@ public class VFSTest2 {
 			
 			Path p1=Paths.get(s);
 			Path p2=p1.resolve("RootBis");
+			Path p3=p1.resolve("testSave");
+			Path p4=p3.resolve("RootBis");
 			
 			
 			file=new File(p2.toString());
 			if(file.exists())file.delete();
+			file2=new File(p4.toString());
+			if(file2.exists())file.delete();
 			
 			vfs2.createVirtualDisk("RootBis", 1000);
+			vfs2.exportVfs("RootBis",p3.toString());
 			vfs2.exportVfs("RootBis", s);
-			
+
 			vfs2.createFile("RootBis", "file1.pdf", "/");
 			vfs2.save("RootBis");
+			VirtualDisk vd=vfs2.getVirtualDisks().get("RootBis");
 			
 			filein= new FileInputStream(file);
-			
 			in=new ObjectInputStream(filein);
-			
-			VirtualDisk vd=vfs2.getVirtualDisks().get("RootBis");
 			VirtualDisk test=(VirtualDisk)in.readObject();
 			
 			assertEquals(vd,test);
+			
+			filein2= new FileInputStream(file2);
+			in2=new ObjectInputStream(filein2);
+			VirtualDisk test2=(VirtualDisk)in2.readObject();
+			
+			assertFalse(vd.equals(test2));
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -156,20 +174,32 @@ public class VFSTest2 {
 			
 			if(in!=null){
 				try{
+					
 					in.close();
 				}catch(IOException e){}
 			}
 			if(filein!=null){
 				try{
+					
 					filein.close();
 				}catch(IOException e){}	
-				
-				file.delete();
-			
-			
-				
 			
 			}
+			if(in2!=null){
+				try{
+					
+					in2.close();
+				}catch(IOException e){}
+			}
+			if(filein2!=null){
+				try{
+					
+					filein2.close();
+				}catch(IOException e){}	
+			
+			}
+			file.delete();
+			file2.delete();
 		}
 	}
 	
@@ -191,8 +221,8 @@ public class VFSTest2 {
 	/**
 	 * TestExportFile.
 	 * Test of the basic functionality of ExportFile 
-	 * (Exporting /file1.txt using exportFile()-which was manually imported previously-.Then importing it 
-	 * manually, creating a Fichier 'test' and comparing it to the Fichier 'file1' of the Virtual Disk 'Root'.
+	 * (Exporting /file1.txt using exportFile()-which was previously manually imported -.Then importing 
+	 * manually the exported file, creating a Fichier 'test' and comparing it to the Fichier 'file1' of the Virtual Disk 'Root'.
 	 * The exported file is then deleted from the host file system.)
 	 */
 	@Test
@@ -203,7 +233,7 @@ public class VFSTest2 {
 		FileInputStream in2=null;
 		try{
 
-			//importing an existing file 'manually'
+			//importing an existing file 'manually', to have a non-empty file to export
 			
 			Path p1=Paths.get(s);
 			Path p2=p1.resolve("testExportFile.pdf");
@@ -299,8 +329,8 @@ public class VFSTest2 {
 	 * TestImportFile
 	 * Test the basic functionality of import file (Importing the file 'testImportFile.txt'-which 
 	 * existed already inside the folder VFSTest2 of the host file system. Creating an expected Fichier 
-	 * to compare it to the imported file - in this expected Fichier we introduce the expected attributes name, absolutePath 
-	 * and data, that's 'manually' imported into the vfs.)
+	 * to compare it to the imported file - in this expected Fichier we introduce the expected attributes 
+	 * name, absolutePath and data, which 'manually' imported from the host file system.)
 	 */
 	
 	@Test
@@ -386,22 +416,23 @@ public class VFSTest2 {
 	@Test (expected=SizeException.class)
 	public void testImportFile3() throws FileNotFoundException, IOException, InvalidInput, SizeException, DuplicatedNameException, InvalidNameException  {
 		
-		
+		//freespace
 		long freeSpace=(vd2.getSizeMax()-vd2.getOccupiedSpace());
-		
+		//size of the file to import
 		Path p=Paths.get(s).resolve("testImportFile3.txt");
 		long size=Files.size(p);
 		
 		
 		assertTrue(size>freeSpace);//The file we want to import is bigger than the space available. 
-		
+		//throws size exception
 		vfs2.importFile(p.toString(), "Root", "/");
 	}
 	
 	/**
 	 * testExportDirectory.
 	 * Tests the main functionality of exportDirectory().
-	 * (Exporting directory 'D2' that contains a file-'file4.txt'- and a directory-'D3'-.Checking the creation in the host file system.
+	 * (Exporting directory 'D2' that contains a file-'file4.txt'- and a directory-'D3'-.
+	 * Checking the creation of the exported items in the host file system.
 	 * Deletion of the created items in the host file system when the method is finished)
 	 */
 	@Test
@@ -450,6 +481,7 @@ public class VFSTest2 {
 	 * testExportDirectory2.
 	 * When we export a directory to a host system's location, if there's already a directory with the same name, 
 	 * then DuplicatedNameException is thrown.
+	 * (Exporting "testExportDirectory2" to a location of the host file system where a directory with this name exists already)
 	 * @throws InvalidInput
 	 * @throws DuplicatedNameException
 	 * @throws IOException
@@ -466,7 +498,7 @@ public class VFSTest2 {
 	/**
 	 * TestImportDirectory
 	 * Test of the basic functionality of importDirectory.
-	 * (Importing an existing directory using  importDirectory()(testImportDirectory, which contains the file 
+	 * (Importing an existing directory using  importDirectory()( the directory is 'testImportDirectory', which contains the file 
 	 * testImportDirectory(file)).Then, importing the file 'manually', creating a test Directory and a test Fichier and 
 	 * comparing them to the imported ones).
 	 */
@@ -506,6 +538,7 @@ public class VFSTest2 {
 			Directory expectedDirectory=new Directory("testImportDirectory","/testImportDirectory/");
 			expectedDirectory.addFile(expectedFile);
 			
+			//imported elements
 			Directory impDir=vfs2.getVirtualDisks().get("Root").getDirectoryMap().get("testImportDirectory");
 			Fichier impFile=impDir.getFileMap().get("testImportDirectory(file).txt");
 			
@@ -532,6 +565,7 @@ public class VFSTest2 {
 	/**
 	 * TestImportDirectory2
 	 * When importing a non-existing directory from a location of the host file system, DirectoryNotFoundException is thrown.
+	 * (importing testImportDirectory2, which doesn't exist in the host file system
 	 * @throws DirectoryNotFoundException
 	 * @throws FileNotFoundException
 	 * @throws InvalidInput
@@ -552,6 +586,8 @@ public class VFSTest2 {
 	 * Testing the main functionality of findFile(): given a 'filename', a 'vdName' disk and a 'vfsPath',
 	 * the method returns an ArrayList<Fichier> of the files of name 'filename' inside the virtual disk 'vdname' starting 
 	 * the research in 'vfsPath'.
+	 * (Creating two files with the same name in different locations of the host file system. Applying the method and 
+	 * checking the returned list has two files of name "file3.jpg")
 	 */
 	@Test 
 	
