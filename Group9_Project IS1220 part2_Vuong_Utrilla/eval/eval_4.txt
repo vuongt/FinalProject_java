@@ -1,0 +1,73 @@
+ #COMMANDS
+
+#Display of a general help message
+#(Expected: message indicating the syntax of a command,the list of commands)
+help
+
+#Creation of a virtual disk
+crvfs eval_4 10000000
+
+#Wrong usage of the command mkdir (wrong number of arguments)
+#(Expected: error message. Message indicating the existance of 'help mkdir')
+mkdir d1 .
+
+#Display of the instructions of a specific command
+(Expected: message indicating the syntax of the command)
+help mkdir
+
+#Creating a directory with a name that contains a forbidden character
+#(Expected: error message. Message indicating the invalid characters)
+mkdir eval_4 Salut** .
+
+
+ #RESULTS
+vfs:
+help
+******************VFS INTERFACE******************
+
+CLUI command: <commandName> <Argument1> <Argument2> ...
+
+
+Type 'help <commandName>' to get the instructions of each command.
+
+
+COMMANDS:
+ls      List the elements in a position of a virtual disk
+cd      Change current position of a virtual disk
+touch   Create a file
+mkdir   Create a directory
+rm      Remove a file/directory
+cp      Copy a file/directory inside a directory
+         Copy the content of a file into another existing file
+mv      Move a file/directory inside a directory
+        Rename a file/directory
+exp     Export a file/directory into the host file system
+impvfs  Import a file/directory into the host file system
+crvfs   Create a new virtual disk
+rmvfs   Remove a virtual disk
+expvfs  Export a virtual disk
+savevfs Save the state of a virtual disk
+free    Show the free/occupied space of a virtual disk
+pwd     Show the current position in a virtual disk
+find    Find a file in a virtual disk
+stop    Close the vfs
+help    Help instructions
+vfs:
+crvfs eval_4 10000000
+A virtual disk named eval_4 was created
+vfs:
+mkdir d1 .
+Invalid input. Type 'help mkdir' to display instructions.
+vfs:
+help mkdir
+Create a directory named 'dirname' inside the directoy of position 'vfspath' of the virtual disk 'vfsname'
+Usage: mkdir vfsname dirname vfspath
+vfs:
+mkdir eval_4 Salut** .
+Salut** has an invalid syntax
+Invalid file/directory name characters: '|','','/','?','*','"',':','<','>'
+vfs:
+stop
+Would you like to close the system?(yes/no):
+yes
+**************************************************

@@ -3,14 +3,14 @@
 #Creating a virtual disk of size 10MB
 crvfs myVD 10000000
 
-#Creating directories dir1 and dir2
+#Creating directories dir1 and dir2 (Absolute paths)
 mkdir myVD dir1 /
 mkdir myVD dir2 /
 
-#Importing directory Images from the host file system into dir1
+#Importing directory Images from the host file system into dir1 (Absolute path)
 impvfs eval/host/eval_2/Images myVD /dir1
 
-#Changing current position to dir1/Images
+#Changing current position to dir1/Images (Relative path)
 cd myVD dir1/Images
 
 #Listing the contents inside current postition 
@@ -20,22 +20,23 @@ cd myVD dir1/Images
 
 ls myVD -l
 
-#Renaming the file flowers.jpg and listing the contents inside current position
+#Renaming the file flowers.jpg and listing the contents inside current position (Relative path after having changed current position)
 # ( Expected: similar display .File flowers.jpg renamed to flowersrenamed.jpg)
 
 mv myVD flowers.jpg flowersrenamed.jpg
 ls myVD -l
 
-#Creating file11 inside current position
+#Creating file11 inside current position (Relative path using operator ./)
 touch myVD file11 ./
 
-#Moving file11 to the root
+#Moving file11 to the root (Mixed: relative path -operator .- and absolute path in the same command)
 mv myVD ./file11 /
 
-#Displaying current postion (Expected: /dir1/Images)
+#Displaying current postion 
+#(Expected: /dir1/Images)
 pwd myVD
 
-#Changing current position to root 
+#Changing current position to root (Relative path applying operator .. several times) 
 cd myVD ../../
 
 #Displaying current position (Expected: / (Root))

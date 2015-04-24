@@ -1,0 +1,152 @@
+
+ #COMMANDES
+
+#Create a virtual disk
+crvfs eval_3 10000000
+
+#Create a directory d1
+mkdir eval_3 d1 .
+
+#Importing directory Images 
+impvfs eval\host\eval_3\Images eval_3 .
+
+#Copying one of the imported images(flowers.jpg) into d1
+cp eval_3 Images/flowers.jpg d1
+
+#Creating a new file tiger.jpg(image) in d1. 
+#Copying the contents of one on the imported images (Winter-Tiger-Wild-Cat-Images.jpg)into the new file
+
+touch eval_3 tiger.jpg d1
+cp eval_3 Images/Winter-Tiger-Wild-Cat-Images.jpg d1/tiger.jpg
+
+#Displaying the contents of the imported directory and of the directory d1, to 
+# verify both cp commands were performed right 
+# (Expected:Names, types and sizes of the elements are displayed.
+# In both directories, a file flowers.jpg of the same size.
+# Files tiger.jpg of d1 and Winter-Tiger-Wild-Cat-Images.jpg of Images have the same size)
+
+ls eval_3 -l Images
+ls eval_3 -l d1
+
+#Changing the name of the directory d1 to 'Nature'
+mv eval_3 d1 Nature
+
+#Deleting the imported directory
+rm eval_3 Images
+
+#Displaying the contents of the virtual disk
+#(expected: only one folder named 'Nature')
+ls eval_3 .
+
+#Creating a new directory d2
+mkdir eval_3 d2 .
+
+#Importing directory 'Books'
+impvfs eval\host\eval_3\Books eval_3 .
+
+#Changing current position to Books
+cd eval_3 Books
+
+#Displaying the contents in Books
+ls eval_3 -l
+
+#Moving a file (hamlet.pdf) from Books to d2
+mv eval_3 hamlet.pdf /d2
+
+#Moving directory d2 into Books
+mv eval_3 /d2 /Books
+
+#Renaming directory d2 to Shakespeare
+mv eval_3 d2 Shakespeare
+
+#Listing the contents inside Books (expected: Names,sizes and types of the elements inside Books:file VELADAS.pdf, directory Shakespeare)
+#Lsiting the contents inside Shakespeare (expected:Name,type and type of the file hamlet.pdf)
+ls eval_3 -l
+ls eval_3 -l Shakespeare
+stop
+yes
+
+ #RESULT:
+
+vfs:
+crvfs eval_3 10000000
+A virtual disk named eval_3 was created
+vfs:
+mkdir eval_3 d1 .
+d1 was created.
+vfs:
+impvfs eval\host\eval_3\Images eval_3 .
+The directory was imported to the virtual disk
+vfs:
+cp eval_3 Images/flowers.jpg d1
+Images/flowers.jpg is copied to d1
+vfs:
+touch eval_3 tiger.jpg d1
+tiger.jpg was created
+vfs:
+cp eval_3 Images/Winter-Tiger-Wild-Cat-Images.jpg d1/tiger.jpg
+the content of Images/Winter-Tiger-Wild-Cat-Images.jpg is copied to d1/tiger.jpg
+vfs:
+ls eval_3 -l Images
+ls eval_3 -l d1
+flowers.jpg                        13128                              f                                  
+
+tree-247122.jpg                    551996                             f                                  
+
+Winter-Tiger-Wild-Cat-Images.jpg   197625                             f                                  
+
+vfs:
+
+flowers.jpg                        13128                              f                                  
+
+tiger.jpg                          197625                             f                                  
+
+vfs:
+mv eval_3 d1 Nature
+Your directory is renamed
+vfs:
+rm eval_3 Images
+The directory is deleted
+vfs:
+ls eval_3 .
+Nature                             d                                  
+
+vfs:
+mkdir eval_3 d2 .
+d2 was created.
+vfs:
+impvfs eval\host\eval_3\Books eval_3 .
+The directory was imported to the virtual disk
+vfs:
+cd eval_3 Books
+Updated current position
+vfs:
+ls eval_3 -l
+VELADAS.pdf                        28935                              f                                  
+
+hamlet.pdf                         836221                             f                                  
+
+vfs:
+mv eval_3 hamlet.pdf /d2
+your file/directory is moved to \d2
+vfs:
+mv eval_3 /d2 /Books
+your file/directory is moved to \Books
+vfs:
+mv eval_3 d2 Shakespeare
+Your directory is renamed
+vfs:
+ls eval_3 -l
+VELADAS.pdf                        28935                              f                                  
+
+Shakespeare                        836221                             d                                  
+
+vfs:
+ls eval_3 -l Shakespeare
+hamlet.pdf                         836221                             f                                  
+
+vfs:
+stop
+Would you like to close the system?(yes/no):
+yes
+**************************************************

@@ -299,8 +299,8 @@ public class VFSTest2 {
 	 * TestImportFile
 	 * Test the basic functionality of import file (Importing the file 'testImportFile.txt'-which 
 	 * existed already inside the folder VFSTest2 of the host file system. Creating an expected Fichier 
-	 * to compare ir to the imported file- introducing the expected attributes name, absolutePath 
-	 * and data- by importing it 'manually'.)
+	 * to compare it to the imported file - in this expected Fichier we introduce the expected attributes name, absolutePath 
+	 * and data, that's 'manually' imported into the vfs.)
 	 */
 	
 	@Test

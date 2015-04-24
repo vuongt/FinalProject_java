@@ -16,7 +16,7 @@ public class Fichier implements Serializable, Item{
 
 	public Fichier(String name) throws InvalidNameException {
 		super();
-		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
+		if(name==null||name.contains("|")||name.contains("/")||name.contains(" ")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
 			throw new InvalidNameException(name+ " has an invalid syntax");
 		}
 		this.name = name;
@@ -25,7 +25,7 @@ public class Fichier implements Serializable, Item{
 	}
 	public Fichier(String name, ArrayList<Byte> data) throws InvalidNameException {
 		super();
-		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
+		if(name==null||name.contains("|")||name.contains("/")||name.contains(" ")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
 			throw new InvalidNameException(name+ " has an invalid syntax");
 		}
 		this.name = name;
@@ -35,7 +35,7 @@ public class Fichier implements Serializable, Item{
 	
 	public Fichier(String name,String absolutePath,  ArrayList<Byte> data) throws InvalidNameException {
 		super();
-		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
+		if(name==null||name.contains("|")||name.contains("/")||name.contains(" ")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
 			throw new InvalidNameException(name+ " has an invalid syntax");
 		}
 		this.name = name;
@@ -44,7 +44,7 @@ public class Fichier implements Serializable, Item{
 	}
 	
 	public void setName(String name) throws InvalidNameException {
-		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
+		if(name==null||name.contains("|")||name.contains("/")||name.contains("\\")||name.contains(" ")||name.contains(":")||name.contains("*")||name.contains("?")||name.contains("\"")||name.contains("<")||name.contains(">")){
 			throw new InvalidNameException(name+ " has an invalid syntax");
 		}
 		this.name = name;
