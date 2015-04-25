@@ -1,5 +1,9 @@
 package vfs;
-
+/**
+ * CommandCD:
+ * Commands a change of the attribute 'currentPosition' of a determined Virtual Disk on a VFS
+ *
+ */
 public class CommandCD extends CommandBehaviour{
 
 	

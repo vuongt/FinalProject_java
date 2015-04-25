@@ -1,10 +1,11 @@
 package vfs;
-
+/**
+ * SizeException:
+ * Signals the a file or directory to add to a virtual disk occupies a bigger space than the free space of the virtual disk. 
+ */
 public class SizeException extends Exception{
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	public SizeException() {

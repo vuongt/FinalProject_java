@@ -1,5 +1,9 @@
 package vfs;
-
+/**
+ * CommandCP:
+ * 
+ * 
+ */
 
 public class CommandCP extends CommandBehaviour {
 

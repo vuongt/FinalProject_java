@@ -1,5 +1,10 @@
 package vfs;
 
+/**
+ * InvalidInput:
+ * Signals an argument introduced has a wrong content.
+ * 
+ */
 public class InvalidInput extends Exception {
 
 	/**

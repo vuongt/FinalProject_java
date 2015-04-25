@@ -1,5 +1,10 @@
 package vfs;
-
+/**
+ * 
+ * InvalidNameException:
+ * Signals a name of an element uses an invalid character (|/\?*: "<>)
+ *
+ */
 public class InvalidNameException extends Exception{
 
 	private static final long serialVersionUID = 500L;
