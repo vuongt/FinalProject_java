@@ -78,11 +78,11 @@ public class CommandMV extends CommandBehaviour{
 					String newName = target.getFileName().toString();
 					if (sourceIsFile) {
 						vfs.renameFile(vdName, pathSource, newName);
-						System.out.println("Your file is renamed");
+						System.out.println("Your file is renamed to "+ newName);
 					}
 					else {
 						vfs.renameDirectory(vdName, pathSource, newName);
-						System.out.println("Your directory is renamed");
+						System.out.println("Your directory is renamed to  "+newName);
 					}
 			
 				

@@ -1,5 +1,9 @@
 package vfs;
-
+/**
+ * CommandFREE:
+ * Commands the display of the occupied/free space of a determined VirtualDisk in a VFS
+ *
+ */
 
 public class CommandFREE extends CommandBehaviour{
 	private String vdName;

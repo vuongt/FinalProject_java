@@ -17,7 +17,7 @@ public class CommandCD extends CommandBehaviour{
 	}
 	
 	public void go() throws InvalidInput, InvalidNameException{
-		vfs.checkPath(vdName, vfsPath);
+		if(vfs.checkPath(vdName, vfsPath)){throw new InvalidInput("Current position has to point to the location of a directory.");}
 		vfs.changePosition(vdName, vfsPath);
 		System.out.println("Updated current position");
 		

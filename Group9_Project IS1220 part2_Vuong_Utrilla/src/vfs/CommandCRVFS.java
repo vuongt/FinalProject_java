@@ -1,5 +1,8 @@
 package vfs;
-
+/**
+ * CommandCRVFS:
+ * Commands the creation of a NewVirtualDisk to a VFS.
+ */
 public class CommandCRVFS extends CommandBehaviour {
 
 	private String vdName;

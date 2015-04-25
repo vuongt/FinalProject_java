@@ -2,7 +2,12 @@ package vfs;
 
 import java.io.IOException;
 
-
+/**
+ * CommandBehaviour:
+ *	Depending of the arguments introduced by an external user into Interface, it can commit two functionalities to a 
+ *VFS: the exportation of a file or the exportation of a directory to the host file system
+ *
+ */
 
 public class CommandEXP extends CommandBehaviour{
 	private String hostPath;

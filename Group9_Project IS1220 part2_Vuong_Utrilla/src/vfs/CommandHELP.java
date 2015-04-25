@@ -1,5 +1,10 @@
 package vfs;
-
+/**
+ * CommandHELP:
+ * Depending on the inputs given by an external user, it can command two functions:
+ * display of a general help-message or display of the help-message of a specific command.
+ *(in each case, different constructors are used)
+ */
 public class CommandHELP extends CommandBehaviour{
 
 	
@@ -80,7 +85,7 @@ public class CommandHELP extends CommandBehaviour{
 			break;
 			
 		case "mv":
-			System.out.println("if the two paths are different and path Target is a directory,\n" +
+			System.out.println("If the both paths parent's are different and path Target is a directory,\n" +
 					"mv move the object whose path is pathSource to the DIRECTORY whose path is pathTarget\n"+
 				"example of move mv vdName /dir1/file1 /dir2 \n" +
 				"if the two paths are different and path Target is a file,mv throws exception \n"+
@@ -89,9 +94,9 @@ public class CommandHELP extends CommandBehaviour{
 				"Usage : mv vdName sourcepath targetpath");
 			break;
 		case "cp":
-			System.out.println("copy file/directory to a directory (copy object) \n"+
-				"copy the content of a file to an other file (the content of the destination file will be replaced by the source file's)\n"+
-				"throws exception when user want to copy a directory to a file. \n" +
+			System.out.println("Copy file/directory to a directory (copy object) \n"+
+				"Copy the content of a file to an other file (the content of the destination file will be replaced by the source file's)\n"+
+				"Copying a directory into a file is forbidden. \n" +
 				"Usage : cp vdName pathsource pathtarget");
 			break;
 			

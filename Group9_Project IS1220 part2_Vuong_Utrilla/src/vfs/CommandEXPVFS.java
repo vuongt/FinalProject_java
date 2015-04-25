@@ -1,6 +1,11 @@
 package vfs;
 
 import java.io.IOException;
+/**
+ * CommandEXPVFS:
+ * Commands the exportation of a determined VirtualDisk of a VFS.
+ *
+ */
 
 public class CommandEXPVFS extends CommandBehaviour {
 	

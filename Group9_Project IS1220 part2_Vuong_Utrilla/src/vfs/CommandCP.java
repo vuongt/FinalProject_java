@@ -1,7 +1,9 @@
 package vfs;
 /**
  * CommandCP:
- * 
+ * Depending on the inputs introduced by the external user, it can command two functionalities to a VFS:
+ * the copy of a file/directory to a location of a VirtualDisk or the copy of the content of a file into 
+ * another file of the VirtualDisk
  * 
  */
 
@@ -29,7 +31,7 @@ public class CommandCP extends CommandBehaviour {
 			
 			if (sourceIsFile) {
 				vfs.copyContentFile(vdName,source,target);
-				System.out.println("the content of "+ source +" is copied to " + target);
+				System.out.println("The content of "+ source +" is copied to " + target);
 			}
 			else throw new InvalidInput("Cannot copy a directory to a file");
 		}
