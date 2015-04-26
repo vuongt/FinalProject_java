@@ -93,12 +93,6 @@ public class VFSTest1 {
 		vfs1.checkPath("Root", "/D1/D2");
 	}
 	
-	//testCheckPath
-	@Test (expected = InvalidNameException.class)
-	public void whenInvalidCharactersAreUsedThenExceptionIsThrown() throws InvalidInput, InvalidNameException{
-		vfs1.checkPath("Root", "/?/");
-	}
-	
 
 
 	@Test
@@ -258,7 +252,8 @@ public class VFSTest1 {
 		try { 
 			vfs1.changePosition("Root", "/D1/D11/");			
 			System.out.println(vfs1.getVirtualDisks().get("Root").getCurrentPosition());
-			assertEquals("/D1/D11/",vfs1.getVirtualDisks().get("Root").getCurrentPosition());
+			String expected=Paths.get("/D1/D11/").toString();
+			assertEquals(expected,vfs1.getVirtualDisks().get("Root").getCurrentPosition());
 		}
 		catch (Exception e) {assertTrue(false);}
 	}
