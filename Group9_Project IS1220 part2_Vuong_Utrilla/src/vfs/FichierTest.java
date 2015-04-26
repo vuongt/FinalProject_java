@@ -5,7 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class FichierTest {
-
+	
+	/**
+	 * Test the construction of AbsolutePath
+	 * @throws DuplicatedNameException
+	 * @throws InvalidInput
+	 * @throws InvalidNameException
+	 */
 	@Test
 	public void testGetAbsolutePath() throws DuplicatedNameException, InvalidInput, InvalidNameException {
 		Fichier file11 = new Fichier("file11");

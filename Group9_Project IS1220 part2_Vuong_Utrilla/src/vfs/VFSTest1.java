@@ -32,7 +32,10 @@ public class VFSTest1 {
 		}
 		catch (Exception e) {assertTrue(false);}
 	}
-	
+	/**
+	 * Test if a vfs path is absolute
+	 * a path is absolute if it starts with /
+	 */
 	@Test
 	public void testIsAbsolute() {
 			try {
@@ -45,6 +48,9 @@ public class VFSTest1 {
 			
 	}
 
+	/**
+	 * Convert a vfs path to a absolute path and conpare to known result
+	 */
 	@Test
 	public void testToAbsolutePath() {
 		try {
@@ -70,6 +76,11 @@ public class VFSTest1 {
 		vfs1.toAbsolutePath("Root","..");
 	}
 	
+	/**
+	 * Check if a path is correct
+	 * @throws InvalidInput
+	 * @throws InvalidNameException
+	 */
 	@Test 
 	public void testCheckPath() throws InvalidInput, InvalidNameException{
 		try{
@@ -94,7 +105,10 @@ public class VFSTest1 {
 	}
 	
 
-
+/**
+ * go to a directory by a path
+ * @throws InvalidInput
+ */
 	@Test
 	public void testGoPath() throws InvalidInput {
 		try { 
@@ -115,7 +129,9 @@ public class VFSTest1 {
 	}
 		
 
-
+	/**
+	 * create a virtual disk and verify whether it exists
+	 */
 	@Test
 	public void testCreateVirtualDisk()  {
 		try{
@@ -137,7 +153,12 @@ public class VFSTest1 {
 	}
 		
 		
-
+	/**
+	 * Delete a virtual disk
+	 * @throws DuplicatedNameException
+	 * @throws InvalidInput
+	 * @throws IOException
+	 */
 	@Test
 	public void testDeleteVirtualDisk() throws DuplicatedNameException, InvalidInput, IOException {
 		try{
@@ -146,7 +167,10 @@ public class VFSTest1 {
 		catch (Exception e) {assertTrue(false);}
 	}
 		
-
+	/**
+	 * create a file and verify if it really exists in FileMap
+	 * @throws InvalidInput
+	 */
 	@Test
 	public void testCreateFile() throws InvalidInput {
 		try {
@@ -162,6 +186,11 @@ public class VFSTest1 {
 		vfs1.createFile("Root", "file1", "/");
 	}
 	
+	
+	/**
+	 * create a directory and verify if it really exists in DirectoryMap
+	 * @throws InvalidInput
+	 */
 	@Test
 	public void testCreateDirectory() throws InvalidInput {
 		try{vfs1.createDirectory("Root","D12","/D1/");

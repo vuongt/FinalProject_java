@@ -21,6 +21,11 @@ public class DirectoryTest {
 		catch(Exception e){assertTrue(false);}
 	}
 	
+	/**
+	 * Add a file to FileMap
+	 * @throws DuplicatedNameException
+	 * @throws InvalidNameException
+	 */
 	@Test
 	public void testAddFile() throws DuplicatedNameException, InvalidNameException {
 		D1.addFile("file12");
@@ -31,7 +36,13 @@ public class DirectoryTest {
 	public void whenFileNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidNameException{
 		D1.addFile("file11");
 	}
-		
+	
+	
+	/**
+	 * Add a file to FileMap
+	 * @throws DuplicatedNameException
+	 * @throws InvalidNameException
+	 */
 	@Test
 	public void testAddFilebis() throws DuplicatedNameException, InvalidNameException {
 		Fichier file12 = new Fichier("file12");
@@ -44,7 +55,11 @@ public class DirectoryTest {
 		Fichier file11bis = new Fichier("file11");
 		D1.addFile(file11bis);
 	}
-	
+	/**
+	 * Add a directory to DirectoryMap
+	 * @throws DuplicatedNameException
+	 * @throws InvalidNameException
+	 */
 	@Test 
 	public void testAddDirectory() throws DuplicatedNameException, InvalidNameException{
 		D1.addDirectory("D12");
@@ -55,7 +70,11 @@ public class DirectoryTest {
 	public void whenDirectoryNameIsDuplicatedThenExceptionIsThrown() throws DuplicatedNameException, InvalidNameException{
 		D1.addDirectory("D11");
 	}
-	
+	/**
+	 * Add a directory to DirectoryMap
+	 * @throws DuplicatedNameException
+	 * @throws InvalidNameException
+	 */
 	@Test 
 	public void testAddDirectorybis() throws DuplicatedNameException, InvalidNameException{
 		Directory D12 = new Directory("D12");
@@ -69,6 +88,12 @@ public class DirectoryTest {
 		D1.addDirectory(D11bis);
 	}
 	
+	/**
+	 * Test if the construction of Absolute Path works
+	 * @throws InvalidInput
+	 * @throws DuplicatedNameException
+	 * @throws InvalidNameException
+	 */
 	@Test
 	public void testGetAbsolutepath() throws InvalidInput, DuplicatedNameException, InvalidNameException{
 		VFS vfs1 = new VFS();
@@ -81,6 +106,11 @@ public class DirectoryTest {
 		assertEquals(D12.getAbsolutePath(),expected);
 	}
 	
+	/**
+	 * Import a 2 file to the virtual disk and calculate the size of a directory containing 2 files. Compare the result to the sum of size of the 2 sizes
+	 * @throws InvalidInput
+	 * @throws DuplicatedNameException
+	 */
 	@Test
 	public void testGetSize() throws InvalidInput, DuplicatedNameException{
 		try { 
