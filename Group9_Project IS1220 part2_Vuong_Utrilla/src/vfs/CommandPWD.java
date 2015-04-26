@@ -1,6 +1,10 @@
 package vfs;
 
-
+/**
+ * CommandPWD:
+ * Commands the display of the current position in a Virtual Disk of a VFS. 
+ *
+ */
 public class CommandPWD extends CommandBehaviour {
 	private String vdName;
 

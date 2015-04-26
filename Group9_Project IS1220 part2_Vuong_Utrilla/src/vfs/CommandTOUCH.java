@@ -1,5 +1,9 @@
 package vfs;
-
+/**
+ * CommandTOUCH:
+ * Commands the creation of a file (Object of Fichier) in a Virtual Disk of a VFS. 
+ *
+ */
 public class CommandTOUCH extends CommandBehaviour {
 
 	

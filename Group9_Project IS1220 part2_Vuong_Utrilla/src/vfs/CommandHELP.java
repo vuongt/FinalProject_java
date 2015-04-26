@@ -85,19 +85,18 @@ public class CommandHELP extends CommandBehaviour{
 			break;
 			
 		case "mv":
-			System.out.println("If the both paths parent's are different and path Target is a directory,\n" +
-					"mv move the object whose path is pathSource to the DIRECTORY whose path is pathTarget\n"+
-				"example of move mv vdName /dir1/file1 /dir2 \n" +
-				"if the two paths are different and path Target is a file,mv throws exception \n"+
-				"if the parents of two paths are similar then mv renames the file/directory whose path is pathSource\n" +
-				"example of rename mv vdNAme /dir1/file1 dir1/file1renamed\n " +
+			System.out.println("Move the file/directory whose path is pathSource to the DIRECTORY whose path is pathTarget\n"+
+				"example: mv vdName /dir1/file1 /dir2 \n\n" +
+				"Renames the file/directory whose path is pathSource\n"+
+				"*For that, parents of both paths (target and source) have to coincide\n" +
+				"example: mv vdNAme /dir1/file1 dir1/file1renamed\n\n" +
 				"Usage : mv vdName sourcepath targetpath");
 			break;
 		case "cp":
 			System.out.println("Copy file/directory to a directory (copy object) \n"+
 				"Copy the content of a file to an other file (the content of the destination file will be replaced by the source file's)\n"+
-				"Copying a directory into a file is forbidden. \n" +
-				"Usage : cp vdName pathsource pathtarget");
+				"Usage : cp vdName pathsource pathtarget \n"+
+				"Copying a directory into a file is forbidden.");
 			break;
 			
 			

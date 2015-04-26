@@ -1,5 +1,5 @@
 
- #COMMANDES
+ #COMMANDS
 
 #Create a virtual disk
 crvfs eval_3 10000000

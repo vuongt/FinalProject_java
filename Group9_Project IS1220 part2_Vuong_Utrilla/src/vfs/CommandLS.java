@@ -2,14 +2,20 @@ package vfs;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+/**
+ * CommandLS:
+ * Commands the display of the content of a directory of a Virtual Disk, in different ways: from current postion/from 
+ * a determined vfsPath, with/without displaying the sixe of each element.
+ * 
+ *
+ */
 public class CommandLS extends CommandBehaviour{
 	private String vdName;
 	private String arg;
 	private String vfsPath;
 	
-	//ls vdName vdsPath---->intarg=0
-	//ls vdName -l vfsPath---->intarg=1
+	//ls vdName ---->intarg=0
+	//ls vdName -l ---->intarg=1
 	public CommandLS(VFS vfs,String vdName,int intarg){
 		super(vfs);
 		this.vdName = vdName;
@@ -21,8 +27,8 @@ public class CommandLS extends CommandBehaviour{
 		this.vfsPath = "";
 	}
 	
-	//ls vdName [vdsPath]---->intarg=0
-	//ls vdName -l [vfsPath]---->intarg=1
+	//ls vdName vdsPath---->intarg=0
+	//ls vdName -l vfsPath---->intarg=1
 	public CommandLS(VFS vfs, String vdName,int intarg, String vfsPath){
 		super(vfs);
 		this.vdName = vdName;

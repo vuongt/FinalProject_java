@@ -1,7 +1,12 @@
 package vfs;
 
 import java.nio.file.Path;
-
+/**
+ * CommandMV:
+ * Depending on the arguments introduced by the user, it commands two functionalities of a VFS: moving files or directories inside a Virtual Disk, 
+ * renaming files or directories inside a Virtual Disk.
+ *
+ */
 
 public class CommandMV extends CommandBehaviour{
 	private String vdName;
@@ -27,7 +32,7 @@ public class CommandMV extends CommandBehaviour{
 		int i=pathTarget.lastIndexOf("/");
 		
 			
-		if(pathTarget=="/"&&i==(pathTarget.length()-1)){//It ends up with /.
+		if(pathTarget!="/"&&i==(pathTarget.length()-1)){//It ends up with /.
 			pathTarget=pathTarget.substring(0, i);//We take it away
 			i=pathTarget.lastIndexOf("/");
 			
@@ -53,8 +58,6 @@ public class CommandMV extends CommandBehaviour{
 			System.out.println("your file or directory is moved to " + target.toString());
 		}
 		else{
-			//here you said boolean targetIsFile = vfs.checkPath(this.vdName,target.getParent().toString()); 
-			//but this is not the last element, it will always be false. Plus, calling checkPath with sth that went through a Paths.get gives problems in windows
 			boolean lastElementExistsInVfs=true;
 			boolean targetIsFile=false;
 			//if we run checkPath through targetPath
@@ -92,54 +95,23 @@ public class CommandMV extends CommandBehaviour{
 				//LastElement of target exists.
 				//	It has to be a move operation. 
 				//  For that target has to be a directory. 
-				//  If this condition is not accomplished, then invalid Input.(last element exists and we can't move anything into a file)
+				//  If this condition is not accomplished, then invalid Input.(last element exists and we can't move anything into a file.)
 			}else{
 			
 			
-				if (targetIsFile) throw new InvalidInput("Invalid Input: "+pathTarget+" is a file in this virtual disk. The destination must be a directory");
-				else {
+				if (targetIsFile){
+		
+					throw new InvalidInput("Invalid Input: "+pathTarget+" is a file in this virtual disk.");
+		
+				}else {
 					vfs.move(vdName, pathSource, pathTarget);
-					System.out.println("your file/directory is moved to " + target.toString());
+					System.out.println("Your file/directory is moved to " + target.toString());
 				}
 			}
 			
 		}
 		
-		/* An altenative 
-		Path source = vfs.toAbsolutePath(vdName,this.pathSource);
-		Path target = vfs.toAbsolutePath(vdName,this.pathTarget);
 		
-		if (target.getParent() == null) { //the destination is root, then it can only be a "move" situation
-			vfs.move(vdName, pathSource, pathTarget);
-			System.out.println("your file or directory is moved to " + target.toString());
-		}
-		else{
-			boolean sourceIsFile = vfs.checkPath(this.vdName,this.pathSource);
-			if (source.getParent() == null) throw new InvalidInput("you cannot move or rename the root");
-			else{
-				if (source.getParent().equals(target.getParent())){
-				//rename situation
-				//if source.getparent is correct (cause we did checkpath before), target.getParent is correct too
-					String newName = target.getFileName().toString();
-					if (sourceIsFile) {
-						vfs.renameFile(vdName, pathSource, newName);
-						System.out.println("Your file is renamed");
-					}
-					else {
-						vfs.renameDirectory(vdName, pathSource, newName);
-						System.out.println("Your directory is renamed");
-					}
-				}
-				else {//move situation
-					boolean targetIsFile = vfs.checkPath(this.vdName,this.pathTarget);
-					if (targetIsFile) throw new InvalidInput("the destination must be a directory");
-					else {
-						vfs.move(vdName, pathSource, pathTarget);
-						System.out.println("your file/directory is moved to " + target.toString());
-					}
-				}
-			}
-		}*/
 		
 	}
 

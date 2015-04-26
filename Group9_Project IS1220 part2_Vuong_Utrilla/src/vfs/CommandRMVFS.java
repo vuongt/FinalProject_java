@@ -3,7 +3,11 @@ package vfs;
 
 import java.io.IOException;
 
-
+/**
+ * CommandRMVFS:
+ * Commands the deletion of a VirtualDisk from a VFS. 
+ *
+ */
 public class CommandRMVFS extends CommandBehaviour{
 
 	private String vdName;

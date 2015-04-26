@@ -1,5 +1,9 @@
 package vfs;
-
+/**
+ * CommandSAVE:
+ * For a Virtual Disk that has been exported, it commands the update of the last file of the host file system where it was
+ * exported. 
+ */
 import java.io.IOException;
 
 public class CommandSAVEVFS extends CommandBehaviour{

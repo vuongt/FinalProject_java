@@ -1,5 +1,11 @@
 package vfs;
-
+/**
+ * CommandRM:
+ * Depending on the arguments introduced, it commands two different functionalities: remove a file or remove a directory 
+ * from a Virtual Disk of a VFS.
+ * 
+ *
+ */
 public class CommandRM extends CommandBehaviour{
 	
 	public String vdName;

@@ -1,5 +1,10 @@
 package vfs;
-
+/**
+ * CommandMKDIR:
+ * Commands the creation of a directory in a Virtual Disk of a VFS. 
+ * 
+ *
+ */
 public class CommandMKDIR extends CommandBehaviour {
 	
 	private String vdName;
